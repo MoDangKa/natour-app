@@ -4,7 +4,7 @@ import {
   validateNoExtraFields,
 } from './validationMiddleware';
 
-const commonValidations = {
+const requireValidations = {
   name: check('name').isString().withMessage('Name must be a string'),
   duration: check('duration')
     .isFloat({ gt: 0 })
@@ -18,13 +18,22 @@ const commonValidations = {
   price: check('price')
     .isFloat({ gt: 0 })
     .withMessage('Price must be greater than 0'),
+  ratingsAverage: check('ratingsAverage')
+    .isFloat({ gt: 0, lt: 5 })
+    .withMessage('Ratings average must be a float number between 0 and 5'),
+  description: check('description')
+    .isString()
+    .withMessage('Description must be a string'),
+  imageCover: check('imageCover')
+    .isString()
+    .withMessage('Image cover must be a string'),
+};
+
+const commonValidations = {
   priceDiscount: check('priceDiscount')
     .optional()
     .isFloat({ gt: 0 })
     .withMessage('Price discount must be greater than 0'),
-  ratingsAverage: check('ratingsAverage')
-    .isFloat({ gt: 0, lt: 5 })
-    .withMessage('Ratings average must be a float number between 0 and 5'),
   ratingsQuantity: check('ratingsQuantity')
     .optional()
     .isInt({ gt: 0 })
@@ -33,12 +42,6 @@ const commonValidations = {
     .optional()
     .isString()
     .withMessage('Summary must be a string'),
-  description: check('description')
-    .isString()
-    .withMessage('Description must be a string'),
-  imageCover: check('imageCover')
-    .isString()
-    .withMessage('Image cover must be a string'),
   images: check('images')
     .optional()
     .isArray()
@@ -85,24 +88,16 @@ const fields = [
 
 export const validateCreateTour = [
   validateNoExtraFields(fields),
+  ...Object.values(requireValidations),
   ...Object.values(commonValidations),
   handleValidationErrors,
 ];
 
 export const validateUpdateTour = [
   validateNoExtraFields(fields),
-  commonValidations.name.optional(),
-  commonValidations.duration.optional(),
-  commonValidations.maxGroupSize.optional(),
-  commonValidations.difficulty.optional(),
-  commonValidations.price.optional(),
-  commonValidations.priceDiscount,
-  commonValidations.ratingsAverage.optional(),
-  commonValidations.ratingsQuantity,
-  commonValidations.summary,
-  commonValidations.description.optional(),
-  commonValidations.imageCover.optional(),
-  commonValidations.images,
-  commonValidations.startDates,
+  ...Object.values(requireValidations).map((validation) =>
+    validation.optional(),
+  ),
+  ...Object.values(commonValidations),
   handleValidationErrors,
 ];
