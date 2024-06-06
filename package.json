@@ -2,18 +2,18 @@
   "name": "Natours",
   "version": "1.0.0",
   "description": "Learning node, express and mongoDB",
-  "main": "dist/server.js",
+  "main": "dist/app.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:serve\"",
-    "dev:serve": "nodemon -r tsconfig-paths/register ./src/server.ts",
+    "dev:serve": "nodemon -r tsconfig-paths/register ./src/app.ts",
     "alpha": "concurrently \"npm run alpha:serve\"",
-    "alpha:serve": "cross-env NODE_ENV=production nodemon -r tsconfig-paths/register ./src/server.ts",
+    "alpha:serve": "cross-env NODE_ENV=production nodemon -r tsconfig-paths/register ./src/app.ts",
     "clean": "del-cli dist",
     "build": "npm run clean && npm run build:ts && npm run build:assets",
     "build:ts": "tsc",
     "build:assets": "cpx \"src/**/*.{html,json,env}\" dist",
     "prod": "concurrently \"npm run prod:serve\"",
-    "prod:serve": "cross-env NODE_ENV=production nodemon -r tsconfig-paths/register ./dist/server.js"
+    "prod:serve": "cross-env NODE_ENV=production nodemon -r tsconfig-paths/register ./dist/app.js"
   },
   "author": "Thanaphon Phumthan",
   "license": "MIT",
@@ -46,5 +46,8 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }

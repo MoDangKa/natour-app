@@ -5,7 +5,7 @@ import { check, validationResult } from 'express-validator';
 const validateAdditionalParams = (expectedParams: string[]) =>
   check('*').custom((value, { req }) => {
     const additionalParams = Object.keys(req.body).filter(
-      (key) => !expectedParams.includes(key),
+      (key) => !expectedParams.includes(key)
     );
     if (additionalParams.length > 0) {
       return Promise.reject('Invalid additional parameters provided');
@@ -16,45 +16,26 @@ const validateAdditionalParams = (expectedParams: string[]) =>
 const handleValidationErrors = (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const statusCode = 400;
     const errorMessage = `Validation Error: ${JSON.stringify(errors.array())}`;
-    apiLogError(req.ip, req.method, req.originalUrl, statusCode, errorMessage);
-    return res
-      .status(statusCode)
-      .json({ status: 'fail', errors: errors.array() });
+    apiLogError(req.ip, req.method, req.originalUrl, errorMessage);
+    return res.status(400).json({ status: 'fail', errors: errors.array() });
   }
   next();
 };
 
 export const validateId = [
-  check('id').notEmpty().withMessage('Param id must be required'),
+  check('id').isNumeric().withMessage('Param id must be a number'),
   handleValidationErrors,
 ];
 
 export const validateTour = [
-  check('name')
-    .notEmpty()
-    .withMessage('Name is required')
-    .isString()
-    .withMessage('Name must be a string'),
-  check('duration')
-    .notEmpty()
-    .withMessage('Duration is required')
-    .isFloat({ gt: 0 })
-    .withMessage('Duration must be a positive number'),
-  check('difficulty')
-    .notEmpty()
-    .withMessage('Difficulty is required')
-    .isString()
-    .withMessage('Difficulty must be a string'),
+  check('name').isString().notEmpty().withMessage('Name is required'),
+  check('duration').isNumeric().withMessage('Duration must be a number'),
   check('price').isFloat({ gt: 0 }).withMessage('Price must be greater than 0'),
-  check('rating')
-    .isFloat({ gt: 0, lt: 5 })
-    .withMessage('Rating must be a float number between 0 and 5'),
   handleValidationErrors,
 ];
 

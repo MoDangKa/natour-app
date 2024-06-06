@@ -1,4 +1,32 @@
-import { tourSchema } from '@/schemas/tourSchema';
 import mongoose from 'mongoose';
 
-export const Tour = mongoose.model('tour', tourSchema);
+const tourSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      require: [true, 'A tour must have a name'],
+      unique: true,
+    },
+    duration: {
+      type: Number,
+      default: 0,
+    },
+    difficulty: {
+      type: String,
+      default: 'easy',
+    },
+    price: {
+      type: Number,
+      default: 0,
+    },
+    rating: {
+      type: Number,
+      default: 4.5,
+    },
+  },
+  { collection: 'tours' },
+);
+
+const Tour = mongoose.model('tour', tourSchema);
+
+export default Tour;
