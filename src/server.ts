@@ -15,17 +15,13 @@ if (dotenvResult.error) {
   process.exit(1);
 }
 
-let database =
+const database =
   process.env.NODE_ENV === 'development'
     ? process.env.DATABASE_LOCAL
     : process.env.DATABASE?.replace(
         '<PASSWORD>',
         process.env.DATABASE_PASSWORD || '',
       );
-database = database?.replace(
-  '<DATABASE_NAME>',
-  process.env.DATABASE_NAME || '',
-);
 
 if (!database) {
   console.error('Database connection URL is missing or invalid.');
@@ -82,7 +78,7 @@ mongoose
     }
 
     const testTour = new Tour({
-      name: 'The Forest Hiker A',
+      name: 'The Forest Hiker B',
       rating: 4.7,
       price: 497,
     });
