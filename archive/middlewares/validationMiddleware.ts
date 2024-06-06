@@ -32,7 +32,7 @@ export const validateId = [
   handleValidationErrors,
 ];
 
-export const validateTour = [
+export const validateCreateTour = [
   check('name').isString().notEmpty().withMessage('Name is required'),
   check('duration').isNumeric().withMessage('Duration must be a number'),
   check('price').isFloat({ gt: 0 }).withMessage('Price must be greater than 0'),
