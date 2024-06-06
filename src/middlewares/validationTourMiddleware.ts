@@ -4,50 +4,105 @@ import {
   validateNoExtraFields,
 } from './validationMiddleware';
 
-export const validateCreateTour = [
-  validateNoExtraFields(['name', 'duration', 'difficulty', 'price', 'rating']),
-  check('name')
-    .notEmpty()
-    .withMessage('Name is required')
-    .bail()
-    .isString()
-    .withMessage('Name must be a string'),
-  check('duration')
-    .notEmpty()
-    .withMessage('Duration is required')
+const commonValidations = {
+  name: check('name').isString().withMessage('Name must be a string'),
+  duration: check('duration')
     .isFloat({ gt: 0 })
     .withMessage('Duration must be a positive number'),
-  check('difficulty')
-    .notEmpty()
-    .withMessage('Difficulty is required')
-    .bail()
+  maxGroupSize: check('maxGroupSize')
+    .isInt({ gt: 0 })
+    .withMessage('Max group size must be a positive number'),
+  difficulty: check('difficulty')
     .isString()
     .withMessage('Difficulty must be a string'),
-  check('price').isFloat({ gt: 0 }).withMessage('Price must be greater than 0'),
-  check('rating')
+  price: check('price')
+    .isFloat({ gt: 0 })
+    .withMessage('Price must be greater than 0'),
+  priceDiscount: check('priceDiscount')
+    .optional()
+    .isFloat({ gt: 0 })
+    .withMessage('Price discount must be greater than 0'),
+  ratingsAverage: check('ratingsAverage')
     .isFloat({ gt: 0, lt: 5 })
-    .withMessage('Rating must be a float number between 0 and 5'),
+    .withMessage('Ratings average must be a float number between 0 and 5'),
+  ratingsQuantity: check('ratingsQuantity')
+    .optional()
+    .isInt({ gt: 0 })
+    .withMessage('Ratings quantity must be greater than or equal to 0'),
+  summary: check('summary')
+    .optional()
+    .isString()
+    .withMessage('Summary must be a string'),
+  description: check('description')
+    .isString()
+    .withMessage('Description must be a string'),
+  imageCover: check('imageCover')
+    .isString()
+    .withMessage('Image cover must be a string'),
+  images: check('images')
+    .optional()
+    .isArray()
+    .withMessage('Images must be an array')
+    .bail()
+    .custom((values) => {
+      values.forEach((value: any) => {
+        if (typeof value !== 'string') {
+          throw new Error('Each image must be a string');
+        }
+      });
+      return true;
+    }),
+  startDates: check('startDates')
+    .optional()
+    .isArray()
+    .withMessage('Start dates must be an array')
+    .bail()
+    .custom((values) => {
+      values.forEach((value: any) => {
+        if (typeof value !== 'string') {
+          throw new Error('Each start date must be a string');
+        }
+      });
+      return true;
+    }),
+};
+
+const fields = [
+  'name',
+  'duration',
+  'maxGroupSize',
+  'difficulty',
+  'price',
+  'priceDiscount',
+  'ratingsAverage',
+  'ratingsQuantity',
+  'summary',
+  'description',
+  'imageCover',
+  'images',
+  'startDates',
+];
+
+export const validateCreateTour = [
+  validateNoExtraFields(fields),
+  ...Object.values(commonValidations),
   handleValidationErrors,
 ];
 
 export const validateUpdateTour = [
-  validateNoExtraFields(['name', 'duration', 'difficulty', 'price', 'rating']),
-  check('name').optional().isString().withMessage('Name must be a string'),
-  check('duration')
-    .optional()
-    .isFloat({ gt: 0 })
-    .withMessage('Duration must be a positive number'),
-  check('difficulty')
-    .optional()
-    .isString()
-    .withMessage('Difficulty must be a string'),
-  check('price')
-    .optional()
-    .isFloat({ gt: 0 })
-    .withMessage('Price must be greater than 0'),
-  check('rating')
-    .optional()
-    .isFloat({ gt: 0, lt: 5 })
-    .withMessage('Rating must be a float number between 0 and 5'),
+  validateNoExtraFields(fields),
+  commonValidations.name.optional(),
+  commonValidations.duration.optional(),
+  commonValidations.maxGroupSize.optional(),
+  commonValidations.difficulty.optional(),
+  commonValidations.price.optional(),
+  commonValidations.priceDiscount,
+  commonValidations.ratingsAverage.optional(),
+  commonValidations.ratingsQuantity,
+  commonValidations.summary,
+  commonValidations.description.optional(),
+  commonValidations.imageCover.optional(),
+  commonValidations.images,
+  commonValidations.startDates,
   handleValidationErrors,
 ];

@@ -1,7 +1,0 @@
-16:03:43 - [127.0.0.1] DELETE /api/v1/tours/6661388d28fda1e2896115588 400 - Cast to ObjectId failed for value "6661388d28fda1e2896115588" (type string) at path "_id" for model "tour"
-16:04:27 - [127.0.0.1] DELETE /api/v1/tours/6661388d28fda1e2896115588 400 - Cast to ObjectId failed for value "6661388d28fda1e2896115588" (type string) at path "_id" for model "tour"
-16:18:29 - [127.0.0.1] DELETE /api/v1/tours/6661388d28fda1e289611558 400 - Tour with ID 6661388d28fda1e289611558 not found
-16:23:37 - [127.0.0.1] DELETE /api/v1/tours/66617340572802fd8d522e70 404 - Tour with ID 66617340572802fd8d522e70 not found
-16:23:37 - [127.0.0.1] DELETE /api/v1/tours/66617340572802fd8d522e70 400 - Cannot set headers after they are sent to the client
-16:23:39 - [127.0.0.1] DELETE /api/v1/tours/66617340572802fd8d522e70 404 - Tour with ID 66617340572802fd8d522e70 not found
-16:23:39 - [127.0.0.1] DELETE /api/v1/tours/66617340572802fd8d522e70 400 - Cannot set headers after they are sent to the client
