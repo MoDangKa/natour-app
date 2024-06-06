@@ -1,4 +1,5 @@
 import Tour from '@/models/tourModel';
+import apiErrorHandler from '@/utils/apiErrorHandler';
 import { Request, Response } from 'express';
 
 export const getAllTours = async (req: Request, res: Response) => {
@@ -21,7 +22,7 @@ export const getTourById = async (req: Request, res: Response) => {
 
   if (!tour) {
     const errorMessage = `Tour with ID ${id} not found`;
-    throw new Error(errorMessage);
+    apiErrorHandler(req, res, 404, errorMessage);
   }
 
   res.status(200).json({
@@ -39,7 +40,7 @@ export const updateTourById = async (req: Request, res: Response) => {
 
   if (!tour) {
     const errorMessage = `Tour with ID ${id} not found`;
-    throw new Error(errorMessage);
+    apiErrorHandler(req, res, 404, errorMessage);
   }
 
   res.status(200).json({
@@ -49,21 +50,13 @@ export const updateTourById = async (req: Request, res: Response) => {
 };
 
 export const deleteTourById = async (req: Request, res: Response) => {
-  // const id = parseInt(req.params.id, 10);
+  const id = req.params.id;
+  const tour = await Tour.findByIdAndDelete(id);
 
-  // const tours = await readFile<TTour[]>('tours-simple.json');
-  // const tour = tours.find((el) => el.id === id);
-
-  // if (!tour) {
-  //   const errorMessage = `TTour with ID ${id} not found`;
-  //   return handleApiError(req, res, 404, errorMessage);
-  // }
-
-  // const updatedTours = tours.filter((el) => el.id !== id);
-  // await writeFile<TTour[]>(
-  //   'tours-simple.json',
-  //   updatedTours.sort((a, b) => a.id - b.id),
-  // );
+  if (!tour) {
+    const errorMessage = `Tour with ID ${id} not found`;
+    apiErrorHandler(req, res, 404, errorMessage);
+  }
 
   res.status(204).json({
     status: 'success',

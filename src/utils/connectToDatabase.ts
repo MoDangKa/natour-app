@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export const connectToDatabase = async (): Promise<void> => {
+const connectToDatabase = async (): Promise<void> => {
   try {
     const databaseUrl =
       process.env.NODE_ENV === 'development'
@@ -25,3 +25,5 @@ export const connectToDatabase = async (): Promise<void> => {
     process.exit(1);
   }
 };
+
+export default connectToDatabase;

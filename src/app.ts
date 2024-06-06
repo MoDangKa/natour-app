@@ -1,5 +1,5 @@
 import apiV1Router from '@/routes/apiV1Router';
-import { connectToDatabase } from '@/utils/db';
+import connectToDatabase from '@/utils/connectToDatabase';
 import * as dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
