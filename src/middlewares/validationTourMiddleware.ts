@@ -70,7 +70,7 @@ const commonValidations = {
     }),
 };
 
-const fields = [
+export const tourFields = [
   'name',
   'duration',
   'maxGroupSize',
@@ -87,14 +87,14 @@ const fields = [
 ];
 
 export const validateCreateTour = [
-  validateNoExtraFields(fields),
+  validateNoExtraFields(tourFields),
   ...Object.values(requireValidations),
   ...Object.values(commonValidations),
   handleValidationErrors,
 ];
 
 export const validateUpdateTour = [
-  validateNoExtraFields(fields),
+  validateNoExtraFields(tourFields),
   ...Object.values(requireValidations).map((validation) =>
     validation.optional(),
   ),

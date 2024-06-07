@@ -13,7 +13,9 @@
     "build:ts": "tsc",
     "build:assets": "cpx \"src/**/*.{html,json,env}\" dist",
     "prod": "concurrently \"npm run prod:serve\"",
-    "prod:serve": "cross-env NODE_ENV=production nodemon -r tsconfig-paths/register ./dist/app.js"
+    "prod:serve": "cross-env NODE_ENV=production nodemon -r tsconfig-paths/register ./dist/app.js",
+    "import:tours": "nodemon src/utils/import-dev-data.ts --import",
+    "delete:tours": "nodemon src/utils/import-dev-data.ts --delete"
   },
   "author": "Thanaphon Phumthan",
   "license": "MIT",
