@@ -1,10 +1,27 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Model } from 'mongoose';
+
+interface ITour extends Document {
+  name: string;
+  duration: number;
+  maxGroupSize: number;
+  difficulty: string;
+  price: number;
+  priceDiscount?: number;
+  ratingsAverage?: number;
+  ratingsQuantity?: number;
+  summary?: string;
+  description: string;
+  imageCover: string;
+  images?: string[];
+  startDates?: string[];
+  createdAt?: Date;
+}
 
 const tourSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      require: [true, 'A tour must have a name'],
+      required: [true, 'A tour must have a name'],
       unique: true,
       trim: true,
     },
@@ -25,7 +42,9 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'A tour must have a price'],
     },
-    priceDiscount: Number,
+    priceDiscount: {
+      type: Number,
+    },
     ratingsAverage: {
       type: Number,
       default: 4.5,
@@ -59,13 +78,13 @@ const tourSchema = new mongoose.Schema(
     },
     createdAt: {
       type: Date,
-      default: Date.now(),
+      default: Date.now,
       select: false,
     },
   },
   { collection: 'tours' },
 );
 
-const Tour = mongoose.model('tour', tourSchema);
+const Tour: Model<ITour> = mongoose.model<ITour>('Tour', tourSchema);
 
-export default Tour;
+export { Tour, ITour };

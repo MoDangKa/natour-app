@@ -1,68 +1,44 @@
 import { tourFields } from '@/middlewares/validationTourMiddleware';
-import Tour from '@/models/tourModel';
-import apiErrorHandler from '@/utils/apiErrorHandler';
-import { Request, Response } from 'express';
+import { Tour, type ITour } from '@/models/tourModel';
+import APIErrorHandler from '@/utils/APIErrorHandler';
+import APIFeatures from '@/utils/APIFeatures';
+import { NextFunction, Request, Response } from 'express';
+
+export const aliasTopTours = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    Object.assign(req.query, {
+      limit: '5',
+      sort: '-ratingsAverage,price',
+      fields: 'name,price,ratingsAverage,summary,difficulty',
+    });
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const getAllTours = async (req: Request, res: Response) => {
-  let queryFields: { [key: string]: any } = {};
-  let sortBy = '-createdAt';
-  let selectedFields = '-__v';
-  let page = 1;
-  let limit = 100;
+  const features = new APIFeatures<ITour>(Tour.find(), req.query, tourFields)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
 
-  if (Object.keys(req.query).length) {
-    const filteredFields: { [key: string]: any } = {};
-
-    tourFields.forEach((field) => {
-      if (req.query[field]) {
-        filteredFields[field] = req.query[field];
-      }
-    });
-
-    if (Object.keys(filteredFields).length) {
-      let fieldsStr = JSON.stringify(filteredFields);
-      fieldsStr = fieldsStr.replace(
-        /\b(gte|gt|lte|lt)\b/g,
-        (match) => `$${match}`,
-      );
-      queryFields = JSON.parse(fieldsStr);
-    }
-
-    if (req.query.sort) {
-      sortBy = (req.query.sort as string).split(',').join(' ');
-    }
-
-    if (req.query.fields) {
-      selectedFields = (req.query.fields as string).split(',').join(' ');
-    }
-
-    if (req.query.page) {
-      page = parseInt(req.query.page as string, 10) || 1;
-    }
-
-    if (req.query.limit) {
-      limit = parseInt(req.query.limit as string, 10) || 100;
-    }
-  }
-
-  const skip = (page - 1) * limit;
-
-  const numTours = await Tour.countDocuments();
-  if (skip >= numTours) {
-    const errorMessage = 'This page does not exist';
-    return apiErrorHandler(req, res, 404, errorMessage);
-  }
-
-  const tours = await Tour.find(queryFields)
-    .sort(sortBy)
-    .select(selectedFields)
-    .skip(skip)
-    .limit(limit);
+  const response = await features.getResults();
 
   res.status(200).json({
     status: 'success',
-    results: tours.length,
-    data: { tours },
+    results: response.resultsLength,
+    data: {
+      tours: response.data,
+      page: response.page,
+      totalPages: response.totalPages,
+      limit: response.limit,
+    },
   });
 };
 
@@ -77,7 +53,7 @@ export const getTourById = async (req: Request, res: Response) => {
 
   if (!tour) {
     const errorMessage = `Tour with ID ${id} not found`;
-    return apiErrorHandler(req, res, 404, errorMessage);
+    return APIErrorHandler(req, res, 404, errorMessage);
   }
 
   res.status(200).json({
@@ -95,7 +71,7 @@ export const updateTourById = async (req: Request, res: Response) => {
 
   if (!tour) {
     const errorMessage = `Tour with ID ${id} not found`;
-    return apiErrorHandler(req, res, 404, errorMessage);
+    return APIErrorHandler(req, res, 404, errorMessage);
   }
 
   res.status(200).json({
@@ -110,7 +86,7 @@ export const deleteTourById = async (req: Request, res: Response) => {
 
   if (!tour) {
     const errorMessage = `Tour with ID ${id} not found`;
-    return apiErrorHandler(req, res, 404, errorMessage);
+    return APIErrorHandler(req, res, 404, errorMessage);
   }
 
   res.status(204).json({

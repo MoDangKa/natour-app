@@ -1,0 +1,230 @@
+import { tourFields } from '@/middlewares/validationTourMiddleware';
+import Tour from '@/models/tourModel';
+import APIErrorHandler from '@/utils/APIErrorHandler';
+import { NextFunction, Request, Response } from 'express';
+import { Document, Query } from 'mongoose';
+
+export const aliasTopTours = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    Object.assign(req.query, {
+      limit: '5',
+      sort: '-ratingsAverage,price',
+      fields: 'name,price,ratingsAverage,summary,difficulty',
+    });
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+class APIFeatures<T extends Document> {
+  private query: Query<T[], T>;
+  private queryString: Record<string, any>;
+  private fields: string[];
+
+  constructor(
+    query: Query<T[], T>,
+    queryString: Record<string, any>,
+    fields: string[],
+  ) {
+    this.query = query;
+    this.queryString = queryString;
+    this.fields = fields;
+  }
+
+  filter() {
+    let queryFields: Record<string, any> = {};
+
+    if (Object.keys(this.queryString).length) {
+      const filteredFields: Record<string, any> = {};
+
+      this.fields.forEach((field) => {
+        if (this.queryString[field]) {
+          filteredFields[field] = this.queryString[field];
+        }
+      });
+
+      if (Object.keys(filteredFields).length) {
+        let fieldsStr = JSON.stringify(filteredFields);
+        fieldsStr = fieldsStr.replace(
+          /\b(gte|gt|lte|lt)\b/g,
+          (match) => `$${match}`,
+        );
+        queryFields = JSON.parse(fieldsStr);
+      }
+    }
+
+    this.query = this.query.find(queryFields);
+    return this;
+  }
+
+  sort() {
+    if (this.queryString.sort) {
+      const sortBy = (this.queryString.sort as string).split(',').join(' ');
+      this.query = this.query.sort(sortBy);
+    } else {
+      this.query = this.query.sort('-createdAt');
+    }
+    return this;
+  }
+
+  limitFields() {
+    if (this.queryString.fields) {
+      const fields = (this.queryString.fields as string).split(',').join(' ');
+      this.query = this.query.select(fields);
+    } else {
+      this.query = this.query.select('-__v');
+    }
+    return this;
+  }
+
+  paginate() {
+    const page = parseInt(this.queryString.page) || 1;
+    const limit = parseInt(this.queryString.limit) || 100;
+    const skip = (page - 1) * limit;
+
+    this.query = this.query.skip(skip).limit(limit);
+
+    return this;
+  }
+
+  getQuery() {
+    return this.query;
+  }
+}
+
+export const getAllTours = async (req: Request, res: Response) => {
+  const features = new APIFeatures<any>(Tour.find(), req.query, tourFields)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const tours = await features.getQuery();
+
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: { tours },
+  });
+};
+
+// export const getAllTours = async (req: Request, res: Response) => {
+//   let queryFields: { [key: string]: any } = {};
+//   let sortBy = '-createdAt';
+//   let selectedFields = '-__v';
+//   let page = 1;
+//   let limit = 100;
+
+//   if (Object.keys(req.query).length) {
+//     const filteredFields: { [key: string]: any } = {};
+
+//     tourFields.forEach((field) => {
+//       if (req.query[field]) {
+//         filteredFields[field] = req.query[field];
+//       }
+//     });
+
+//     if (Object.keys(filteredFields).length) {
+//       let fieldsStr = JSON.stringify(filteredFields);
+//       fieldsStr = fieldsStr.replace(
+//         /\b(gte|gt|lte|lt)\b/g,
+//         (match) => `$${match}`,
+//       );
+//       queryFields = JSON.parse(fieldsStr);
+//     }
+
+//     if (req.query.sort) {
+//       sortBy = (req.query.sort as string).split(',').join(' ');
+//     }
+
+//     if (req.query.fields) {
+//       selectedFields = (req.query.fields as string).split(',').join(' ');
+//     }
+
+//     if (req.query.page) {
+//       page = parseInt(req.query.page as string, 10) || 1;
+//     }
+
+//     if (req.query.limit) {
+//       limit = parseInt(req.query.limit as string, 10) || 100;
+//     }
+//   }
+
+//   const skip = (page - 1) * limit;
+
+//   const numTours = await Tour.countDocuments();
+//   if (skip >= numTours) {
+//     const errorMessage = 'This page does not exist';
+//     return APIErrorHandler(req, res, 404, errorMessage);
+//   }
+
+//   const tours = await Tour.find(queryFields)
+//     .sort(sortBy)
+//     .select(selectedFields)
+//     .skip(skip)
+//     .limit(limit);
+
+//   res.status(200).json({
+//     status: 'success',
+//     results: tours.length,
+//     data: { tours },
+//   });
+// };
+
+export const createTour = async (req: Request, res: Response) => {
+  const newTour = await Tour.create(req.body);
+  res.status(201).json({ status: 'success', data: { tour: newTour } });
+};
+
+export const getTourById = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const tour = await Tour.findById(id);
+
+  if (!tour) {
+    const errorMessage = `Tour with ID ${id} not found`;
+    return APIErrorHandler(req, res, 404, errorMessage);
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: { tour },
+  });
+};
+
+export const updateTourById = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const tour = await Tour.findByIdAndUpdate(id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!tour) {
+    const errorMessage = `Tour with ID ${id} not found`;
+    return APIErrorHandler(req, res, 404, errorMessage);
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: { tour },
+  });
+};
+
+export const deleteTourById = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const tour = await Tour.findByIdAndDelete(id);
+
+  if (!tour) {
+    const errorMessage = `Tour with ID ${id} not found`;
+    return APIErrorHandler(req, res, 404, errorMessage);
+  }
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+};

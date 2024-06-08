@@ -1,4 +1,5 @@
 import {
+  aliasTopTours,
   createTour,
   deleteTourById,
   getAllTours,
@@ -19,6 +20,8 @@ router
   .route('/')
   .get(asyncHandler(getAllTours))
   .post(validateCreateTour, asyncHandler(createTour));
+
+router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
 
 router.use('/:id', validateId);
 
