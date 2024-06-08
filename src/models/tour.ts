@@ -1,10 +1,12 @@
 import mongoose, { Document, Model } from 'mongoose';
 
+type Difficulty = 'easy' | 'moderate' | 'difficult';
+
 interface ITour extends Document {
   name: string;
   duration: number;
   maxGroupSize: number;
-  difficulty: string;
+  difficulty: Difficulty;
   price: number;
   priceDiscount?: number;
   ratingsAverage?: number;
@@ -17,7 +19,26 @@ interface ITour extends Document {
   createdAt?: Date;
 }
 
-const tourSchema = new mongoose.Schema(
+type ITourKeys = keyof ITour;
+
+const tourKeys: ITourKeys[] = [
+  'name',
+  'duration',
+  'maxGroupSize',
+  'difficulty',
+  'price',
+  'priceDiscount',
+  'ratingsAverage',
+  'ratingsQuantity',
+  'summary',
+  'description',
+  'imageCover',
+  'images',
+  'startDates',
+  'createdAt',
+];
+
+const tourSchema = new mongoose.Schema<ITour>(
   {
     name: {
       type: String,
@@ -36,6 +57,7 @@ const tourSchema = new mongoose.Schema(
     },
     difficulty: {
       type: String,
+      enum: ['easy', 'moderate', 'difficult'] as Difficulty[],
       required: [true, 'A tour must have a difficulty'],
     },
     price: {
@@ -70,11 +92,11 @@ const tourSchema = new mongoose.Schema(
     },
     images: {
       type: [String],
-      default: '',
+      default: [],
     },
     startDates: {
       type: [String],
-      default: '',
+      default: [],
     },
     createdAt: {
       type: Date,
@@ -87,4 +109,4 @@ const tourSchema = new mongoose.Schema(
 
 const Tour: Model<ITour> = mongoose.model<ITour>('Tour', tourSchema);
 
-export { Tour, ITour };
+export { Tour, ITour, tourKeys };

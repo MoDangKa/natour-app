@@ -1,3 +1,4 @@
+import { tourKeys } from '@/models/tour';
 import { check } from 'express-validator';
 import {
   handleValidationErrors,
@@ -70,31 +71,15 @@ const commonValidations = {
     }),
 };
 
-export const tourFields = [
-  'name',
-  'duration',
-  'maxGroupSize',
-  'difficulty',
-  'price',
-  'priceDiscount',
-  'ratingsAverage',
-  'ratingsQuantity',
-  'summary',
-  'description',
-  'imageCover',
-  'images',
-  'startDates',
-];
-
 export const validateCreateTour = [
-  validateNoExtraFields(tourFields),
+  validateNoExtraFields(tourKeys),
   ...Object.values(requireValidations),
   ...Object.values(commonValidations),
   handleValidationErrors,
 ];
 
 export const validateUpdateTour = [
-  validateNoExtraFields(tourFields),
+  validateNoExtraFields(tourKeys),
   ...Object.values(requireValidations).map((validation) =>
     validation.optional(),
   ),

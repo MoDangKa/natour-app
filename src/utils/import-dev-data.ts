@@ -1,5 +1,5 @@
 import Tour from '@/models/tourModel';
-import connectToDatabase from '@/utils/connectToDatabase';
+import dbConfig from '@/utils/dbConfig';
 import { readFile } from '@/utils/fileHelper';
 import * as dotenv from 'dotenv';
 import path from 'path';
@@ -49,7 +49,7 @@ const stopNodemon = () => {
 
 const run = async () => {
   try {
-    await connectToDatabase();
+    await dbConfig();
 
     const argv2 = process.argv?.[2];
     if (argv2 === '--import') {

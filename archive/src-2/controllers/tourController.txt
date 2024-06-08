@@ -1,6 +1,6 @@
 import { tourFields } from '@/middlewares/validationTourMiddleware';
 import Tour from '@/models/tourModel';
-import APIErrorHandler from '@/utils/APIErrorHandler';
+import apiErrorHandler from '@/utils/apiErrorHandler';
 import { NextFunction, Request, Response } from 'express';
 import { Document, Query } from 'mongoose';
 
@@ -160,7 +160,7 @@ export const getAllTours = async (req: Request, res: Response) => {
 //   const numTours = await Tour.countDocuments();
 //   if (skip >= numTours) {
 //     const errorMessage = 'This page does not exist';
-//     return APIErrorHandler(req, res, 404, errorMessage);
+//     return apiErrorHandler(req, res, 404, errorMessage);
 //   }
 
 //   const tours = await Tour.find(queryFields)
@@ -187,7 +187,7 @@ export const getTourById = async (req: Request, res: Response) => {
 
   if (!tour) {
     const errorMessage = `Tour with ID ${id} not found`;
-    return APIErrorHandler(req, res, 404, errorMessage);
+    return apiErrorHandler(req, res, 404, errorMessage);
   }
 
   res.status(200).json({
@@ -205,7 +205,7 @@ export const updateTourById = async (req: Request, res: Response) => {
 
   if (!tour) {
     const errorMessage = `Tour with ID ${id} not found`;
-    return APIErrorHandler(req, res, 404, errorMessage);
+    return apiErrorHandler(req, res, 404, errorMessage);
   }
 
   res.status(200).json({
@@ -220,7 +220,7 @@ export const deleteTourById = async (req: Request, res: Response) => {
 
   if (!tour) {
     const errorMessage = `Tour with ID ${id} not found`;
-    return APIErrorHandler(req, res, 404, errorMessage);
+    return apiErrorHandler(req, res, 404, errorMessage);
   }
 
   res.status(204).json({

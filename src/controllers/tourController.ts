@@ -1,6 +1,5 @@
-import { tourFields } from '@/middlewares/validationTourMiddleware';
-import { Tour, type ITour } from '@/models/tourModel';
-import APIErrorHandler from '@/utils/apiErrorHandler';
+import { Tour, tourKeys, type ITour } from '@/models/tour';
+import apiErrorHandler from '@/utils/apiErrorHandler';
 import APIFeatures from '@/utils/apiFeatures';
 import { NextFunction, Request, Response } from 'express';
 
@@ -22,7 +21,7 @@ export const aliasTopTours = (
 };
 
 export const getAllTours = async (req: Request, res: Response) => {
-  const features = new APIFeatures<ITour>(Tour.find(), req.query, tourFields)
+  const features = new APIFeatures<ITour>(Tour.find(), req.query, tourKeys)
     .filter()
     .sort()
     .limitFields()
@@ -31,7 +30,7 @@ export const getAllTours = async (req: Request, res: Response) => {
   const response = await features.getResults();
 
   if (response.errorMessage) {
-    return APIErrorHandler(req, res, 404, response.errorMessage);
+    return apiErrorHandler(req, res, 404, response.errorMessage);
   }
 
   res.status(200).json({
@@ -57,7 +56,7 @@ export const getTourById = async (req: Request, res: Response) => {
 
   if (!tour) {
     const errorMessage = `Tour with ID ${id} not found`;
-    return APIErrorHandler(req, res, 404, errorMessage);
+    return apiErrorHandler(req, res, 404, errorMessage);
   }
 
   res.status(200).json({
@@ -75,7 +74,7 @@ export const updateTourById = async (req: Request, res: Response) => {
 
   if (!tour) {
     const errorMessage = `Tour with ID ${id} not found`;
-    return APIErrorHandler(req, res, 404, errorMessage);
+    return apiErrorHandler(req, res, 404, errorMessage);
   }
 
   res.status(200).json({
@@ -90,7 +89,7 @@ export const deleteTourById = async (req: Request, res: Response) => {
 
   if (!tour) {
     const errorMessage = `Tour with ID ${id} not found`;
-    return APIErrorHandler(req, res, 404, errorMessage);
+    return apiErrorHandler(req, res, 404, errorMessage);
   }
 
   res.status(204).json({

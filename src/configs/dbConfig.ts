@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
-const connectToDatabase = async (): Promise<void> => {
+const dbConfig = async (): Promise<void> => {
   try {
     const databaseUrl =
       process.env.NODE_ENV === 'development'
-        ? process.env.DATABASE_LOCAL
-        : process.env.DATABASE?.replace(
+        ? process.env.MONGO_LOCAL
+        : process.env.MONGO_URI?.replace(
             '<PASSWORD>',
-            process.env.DATABASE_PASSWORD || '',
+            process.env.MONGO_PASSWORD || '',
           );
 
     if (!databaseUrl) {
@@ -26,4 +26,4 @@ const connectToDatabase = async (): Promise<void> => {
   }
 };
 
-export default connectToDatabase;
+export default dbConfig;

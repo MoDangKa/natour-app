@@ -13,6 +13,11 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/data/import-dev-data.ts", "src/data/import-dev-data.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/@types/**/*",
+    "src/data/import-dev-data.ts",
+    "src/data/import-dev-data.ts"
+  ],
   "exclude": ["node_modules"]
 }

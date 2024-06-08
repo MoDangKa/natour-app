@@ -1,7 +1,7 @@
 import { apiLogError } from '@/utils/logger';
 import { NextFunction, Request, Response } from 'express';
 
-const globalErrorHandler = (
+const errorMiddleware = (
   err: Error,
   req: Request,
   res: Response,
@@ -18,4 +18,4 @@ const globalErrorHandler = (
   });
 };
 
-export default globalErrorHandler;
+export default errorMiddleware;

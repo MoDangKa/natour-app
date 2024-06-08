@@ -1,4 +1,3 @@
-import { aliasTopTours, getAllTours } from '@/controllers/tourController';
 import { Router } from 'express';
 import tourRoutes from './tourRoutes';
 

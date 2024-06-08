@@ -1,5 +1,4 @@
 import { Document, Query } from 'mongoose';
-import APIErrorHandler from './apiErrorHandler';
 
 export default class APIFeatures<T extends Document> {
   private query: Query<T[], T>;

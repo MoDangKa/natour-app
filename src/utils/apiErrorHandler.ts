@@ -1,7 +1,7 @@
 import { apiLogError } from '@/utils/logger';
 import { Request, Response } from 'express';
 
-const APIErrorHandler = (
+const apiErrorHandler = (
   req: Request,
   res: Response,
   statusCode: number,
@@ -14,4 +14,4 @@ const APIErrorHandler = (
   });
 };
 
-export default APIErrorHandler;
+export default apiErrorHandler;
