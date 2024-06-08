@@ -5,3 +5,4 @@
 15:42:40 - [127.0.0.1] GET /api/v1/tours?limit=3&page=5 400 - This page does not exist
 15:42:42 - [127.0.0.1] GET /api/v1/tours?limit=3&page=5 400 - This page does not exist
 15:53:04 - [127.0.0.1] GET /api/v1/tours?page=12 404 - This page does not exist
+16:08:55 - [127.0.0.1] GET /api/v1/tours/tour-stats 400 - Cast to ObjectId failed for value "tour-stats" (type string) at path "_id" for model "Tour"

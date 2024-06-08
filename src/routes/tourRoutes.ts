@@ -4,6 +4,7 @@ import {
   deleteTourById,
   getAllTours,
   getTourById,
+  getTourStats,
   updateTourById,
 } from '@/controllers/tourController';
 import { validateId } from '@/middlewares/validationMiddleware';
@@ -22,6 +23,7 @@ router
   .post(validateCreateTour, asyncHandler(createTour));
 
 router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
+router.route('/tour-stats').get(getTourStats);
 
 router.use('/:id', validateId);
 
