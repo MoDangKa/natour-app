@@ -1,4 +1,5 @@
 import { Document, Query } from 'mongoose';
+import APIErrorHandler from './apiErrorHandler';
 
 export default class APIFeatures<T extends Document> {
   private query: Query<T[], T>;
@@ -79,11 +80,21 @@ export default class APIFeatures<T extends Document> {
 
   async getResults() {
     const totalDocs = await this.query.model.countDocuments();
+
     if (this.skip >= totalDocs) {
-      throw new Error('This page does not exist');
+      const errorMessage = 'This page does not exist';
+      return {
+        data: [],
+        page: this.page,
+        limit: this.limit,
+        totalPages: 0,
+        resultsLength: 0,
+        errorMessage,
+      };
     }
 
     const results = await this.query;
+
     return {
       data: results,
       page: this.page,

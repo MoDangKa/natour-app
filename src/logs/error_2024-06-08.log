@@ -1,3 +1,7 @@
 13:16:45 - [127.0.0.1] GET /api/v1/tours/top-5-cheap 400 - Cast to ObjectId failed for value "top-5-cheap" (type string) at path "_id" for model "tour"
 14:54:57 - [127.0.0.1] GET /api/v1/tours/a 400 - Cast to ObjectId failed for value "a" (type string) at path "_id" for model "Tour"
 15:26:08 - [127.0.0.1] GET /api/v1/tours?page=2 404 - This page does not exist
+15:42:25 - [127.0.0.1] GET /api/v1/tours?limit=3&page=5 400 - This page does not exist
+15:42:40 - [127.0.0.1] GET /api/v1/tours?limit=3&page=5 400 - This page does not exist
+15:42:42 - [127.0.0.1] GET /api/v1/tours?limit=3&page=5 400 - This page does not exist
+15:53:04 - [127.0.0.1] GET /api/v1/tours?page=12 404 - This page does not exist

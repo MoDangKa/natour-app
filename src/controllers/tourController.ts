@@ -1,7 +1,7 @@
 import { tourFields } from '@/middlewares/validationTourMiddleware';
 import { Tour, type ITour } from '@/models/tourModel';
-import APIErrorHandler from '@/utils/APIErrorHandler';
-import APIFeatures from '@/utils/APIFeatures';
+import APIErrorHandler from '@/utils/apiErrorHandler';
+import APIFeatures from '@/utils/apiFeatures';
 import { NextFunction, Request, Response } from 'express';
 
 export const aliasTopTours = (
@@ -29,6 +29,10 @@ export const getAllTours = async (req: Request, res: Response) => {
     .paginate();
 
   const response = await features.getResults();
+
+  if (response.errorMessage) {
+    return APIErrorHandler(req, res, 404, response.errorMessage);
+  }
 
   res.status(200).json({
     status: 'success',
