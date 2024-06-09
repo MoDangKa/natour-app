@@ -1,6 +1,6 @@
 import mongoose, { Document, Model } from 'mongoose';
 
-type Difficulty = 'easy' | 'moderate' | 'difficult';
+type Difficulty = 'easy' | 'medium' | 'difficult';
 
 interface ITour extends Document {
   name: string;
@@ -15,7 +15,7 @@ interface ITour extends Document {
   description: string;
   imageCover: string;
   images?: string[];
-  startDates?: string[];
+  startDates?: Date[];
   createdAt?: Date;
 }
 
@@ -57,7 +57,7 @@ const tourSchema = new mongoose.Schema<ITour>(
     },
     difficulty: {
       type: String,
-      enum: ['easy', 'moderate', 'difficult'] as Difficulty[],
+      enum: ['easy', 'medium', 'difficult'] as Difficulty[],
       required: [true, 'A tour must have a difficulty'],
     },
     price: {
@@ -95,7 +95,7 @@ const tourSchema = new mongoose.Schema<ITour>(
       default: [],
     },
     startDates: {
-      type: [String],
+      type: [Date],
       default: [],
     },
     createdAt: {

@@ -1,11 +1,11 @@
-import Tour from '@/models/tourModel';
-import dbConfig from '@/utils/dbConfig';
+import { Tour } from '@/models/tour';
+import dbConfig from '@/configs/dbConfig';
 import { readFile } from '@/utils/fileHelper';
 import * as dotenv from 'dotenv';
 import path from 'path';
 import { exec } from 'child_process';
 
-const ENV_FILE_PATH = path.resolve(__dirname, '../config.env');
+const ENV_FILE_PATH = path.resolve(__dirname, '../configs/config.env');
 const dotenvResult = dotenv.config({ path: ENV_FILE_PATH });
 
 if (dotenvResult.error) {

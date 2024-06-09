@@ -8,16 +8,12 @@ export const aliasTopTours = (
   res: Response,
   next: NextFunction,
 ) => {
-  try {
-    Object.assign(req.query, {
-      limit: '5',
-      sort: '-ratingsAverage,price',
-      fields: 'name,price,ratingsAverage,summary,difficulty',
-    });
-    next();
-  } catch (error) {
-    next(error);
-  }
+  Object.assign(req.query, {
+    limit: '5',
+    sort: '-ratingsAverage,price',
+    fields: 'name,price,ratingsAverage,summary,difficulty',
+  });
+  next();
 };
 
 export const getAllTours = async (req: Request, res: Response) => {
@@ -117,11 +113,66 @@ export const getTourStats = async (req: Request, res: Response) => {
     {
       $sort: { avgPrice: 1 },
     },
-    { $match: { _id: { $ne: 'EASY' } } },
+    // { $match: { _id: { $ne: 'EASY' } } },
   ]);
 
   res.status(200).json({
     status: 'success',
     data: { stats },
+  });
+};
+
+export const getMonthlyPlan = async (req: Request, res: Response) => {
+  const year = parseInt(req.params.year) || new Date().getFullYear();
+  const plan = await Tour.aggregate([
+    {
+      $unwind: '$startDates',
+    },
+    {
+      $match: {
+        startDates: {
+          $gte: new Date(`${year}-01-01`),
+          $lte: new Date(`${year}-12-31`),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { $month: '$startDates' },
+        numTourStarts: { $sum: 1 },
+        tours: { $push: '$name' },
+      },
+    },
+    {
+      $addFields: { month: '$_id' },
+    },
+    {
+      $project: { _id: 0 },
+    },
+    {
+      $sort: { month: 1 },
+    },
+    { $limit: 12 },
+  ]);
+
+  if (!plan || plan.length === 0) {
+    const errorMessage = `Plan with year ${year} not found`;
+    return apiErrorHandler(req, res, 404, errorMessage);
+  }
+
+  const defaultPlan = Array.from({ length: 12 }, (_, i) => ({
+    month: i + 1,
+    numTourStarts: 0,
+    tours: [],
+  }));
+
+  plan.forEach(({ month, numTourStarts, tours }) => {
+    const monthIndex = month - 1;
+    defaultPlan[monthIndex] = { month, numTourStarts, tours };
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: { plan: defaultPlan },
   });
 };

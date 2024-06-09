@@ -1,5 +1,5 @@
 import { tourKeys } from '@/models/tour';
-import { check } from 'express-validator';
+import { ValidationChain, check } from 'express-validator';
 import {
   handleValidationErrors,
   validateNoExtraFields,

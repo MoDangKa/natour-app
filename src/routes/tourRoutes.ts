@@ -3,11 +3,11 @@ import {
   createTour,
   deleteTourById,
   getAllTours,
+  getMonthlyPlan,
   getTourById,
   getTourStats,
   updateTourById,
 } from '@/controllers/tourController';
-import { validateId } from '@/middlewares/validationMiddleware';
 import {
   validateCreateTour,
   validateUpdateTour,
@@ -24,8 +24,8 @@ router
 
 router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
 router.route('/tour-stats').get(getTourStats);
-
-router.use('/:id', validateId);
+router.route('/monthly-plan').get(getMonthlyPlan);
+router.route('/monthly-plan/:year').get(getMonthlyPlan);
 
 router
   .route('/:id')

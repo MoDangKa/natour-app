@@ -1,6 +1,6 @@
 import { apiLogError } from '@/utils/logger';
 import { NextFunction, Request, Response } from 'express';
-import { check, validationResult } from 'express-validator';
+import { validationResult } from 'express-validator';
 
 export const validateNoExtraFields = (expectedFields: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -42,8 +42,3 @@ export const handleValidationErrors = (
   }
   next();
 };
-
-export const validateId = [
-  check('id').notEmpty().withMessage('Param id must be required'),
-  handleValidationErrors,
-];
