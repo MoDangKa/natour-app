@@ -1,1 +1,2 @@
 14:17:11 - [127.0.0.1] GET /api/v1/tours/monthly-plan 404 - Plan with year 2024 not found
+15:40:50 - [127.0.0.1] GET /api/v1/tours?limit=4&page=4 404 - This page does not exist

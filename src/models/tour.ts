@@ -1,9 +1,11 @@
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose, { Document, Model, Query } from 'mongoose';
+import slugify from 'slugify';
 
 type Difficulty = 'easy' | 'medium' | 'difficult';
 
 interface ITour extends Document {
   name: string;
+  slug: string; // 139
   duration: number;
   maxGroupSize: number;
   difficulty: Difficulty;
@@ -16,13 +18,16 @@ interface ITour extends Document {
   imageCover: string;
   images?: string[];
   startDates?: Date[];
+  secretTour?: boolean;
   createdAt?: Date;
+  durationWeeks?: number;
 }
 
 type ITourKeys = keyof ITour;
 
 const tourKeys: ITourKeys[] = [
   'name',
+  'slug', // DOCUMENT MIDDLEWARE
   'duration',
   'maxGroupSize',
   'difficulty',
@@ -35,7 +40,9 @@ const tourKeys: ITourKeys[] = [
   'imageCover',
   'images',
   'startDates',
+  'secretTour',
   'createdAt',
+  'durationWeeks',
 ];
 
 const tourSchema = new mongoose.Schema<ITour>(
@@ -46,6 +53,7 @@ const tourSchema = new mongoose.Schema<ITour>(
       unique: true,
       trim: true,
     },
+    slug: String, // DOCUMENT MIDDLEWARE
     duration: {
       type: Number,
       required: [true, 'A tour must have a duration'],
@@ -98,14 +106,69 @@ const tourSchema = new mongoose.Schema<ITour>(
       type: [Date],
       default: [],
     },
+    secretTour: {
+      type: Boolean,
+      default: false,
+    },
     createdAt: {
       type: Date,
       default: Date.now,
       select: false,
     },
   },
-  { collection: 'tours' },
+  {
+    toJSON: {
+      virtuals: true,
+      transform: (doc, ret) => {
+        delete ret.id;
+        delete ret.__v;
+        return ret;
+      },
+    },
+    toObject: {
+      virtuals: true,
+      transform: (doc, ret) => {
+        delete ret.id;
+        delete ret.__v;
+        return ret;
+      },
+    },
+    collection: 'tours',
+  },
 );
+
+tourSchema.virtual<ITour>('durationWeeks').get(function () {
+  return this.duration / 7;
+});
+
+// DOCUMENT MIDDLEWARE: runs before .save() and .create()
+tourSchema.pre<ITour>('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
+/*
+tourSchema.pre('save', function (next) {
+  // For refer
+  console.log('Will save document...');
+  next();
+});
+
+tourSchema.post('save', function (doc, next) {
+  // For refer
+  console.log('doc: ', doc);
+  next();
+});
+*/
+tourSchema.pre<Query<any, ITour>>(/^find/, function (next) {
+  this.find({ secretTour: { $ne: true } });
+  (this as any).start = Date.now();
+  next();
+});
+
+tourSchema.post<Query<any, ITour>>(/^find/, function (doc, next) {
+  console.log(`Query took ${Date.now() - (this as any).start} milliseconds!`);
+  next();
+});
 
 const Tour: Model<ITour> = mongoose.model<ITour>('Tour', tourSchema);
 

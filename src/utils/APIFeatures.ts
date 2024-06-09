@@ -66,8 +66,6 @@ export default class APIFeatures<T extends Document> {
     if (this.queryString.fields) {
       const fields = (this.queryString.fields as string).split(',').join(' ');
       this.query = this.query.select(fields);
-    } else {
-      this.query = this.query.select('-__v');
     }
     return this;
   }
@@ -81,15 +79,7 @@ export default class APIFeatures<T extends Document> {
     const totalDocs = await this.query.model.countDocuments();
 
     if (this.skip >= totalDocs) {
-      const errorMessage = 'This page does not exist';
-      return {
-        data: [],
-        page: this.page,
-        limit: this.limit,
-        totalPages: 0,
-        resultsLength: 0,
-        errorMessage,
-      };
+      return { errorMessage: 'This page does not exist' };
     }
 
     const results = await this.query;
