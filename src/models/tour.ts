@@ -5,7 +5,7 @@ type Difficulty = 'easy' | 'medium' | 'difficult';
 
 interface ITour extends Document {
   name: string;
-  slug: string; // 139
+  slug: string; // DOCUMENT MIDDLEWARE
   duration: number;
   maxGroupSize: number;
   difficulty: Difficulty;
@@ -52,6 +52,8 @@ const tourSchema = new mongoose.Schema<ITour>(
       required: [true, 'A tour must have a name'],
       unique: true,
       trim: true,
+      maxlength: [40, 'A tour name must have less or equal than 40 characters'],
+      minlength: [10, 'A tour name must have more or equal than 10 characters'],
     },
     slug: String, // DOCUMENT MIDDLEWARE
     duration: {
@@ -65,8 +67,11 @@ const tourSchema = new mongoose.Schema<ITour>(
     },
     difficulty: {
       type: String,
-      enum: ['easy', 'medium', 'difficult'] as Difficulty[],
       required: [true, 'A tour must have a difficulty'],
+      enum: {
+        values: ['easy', 'medium', 'difficult'] as Difficulty[],
+        message: 'Difficulty is either: easy, medium, difficult',
+      },
     },
     price: {
       type: Number,
@@ -74,10 +79,18 @@ const tourSchema = new mongoose.Schema<ITour>(
     },
     priceDiscount: {
       type: Number,
+      validate: {
+        validator: function (this: ITour, val: number): boolean {
+          return val < this.price;
+        },
+        message: 'Discount price ({VALUE}) should be below regular price',
+      },
     },
     ratingsAverage: {
       type: Number,
       default: 4.5,
+      min: [1, 'Rating must be above 1.0'],
+      max: [5, 'Rating must be below 5.0'],
     },
     ratingsQuantity: {
       type: Number,
@@ -170,6 +183,15 @@ tourSchema.post<Query<any, ITour>>(/^find/, function (doc, next) {
   next();
 });
 
+// AGGREGATION MIDDLEWARE
+tourSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({
+    $match: { secretTour: { $ne: true } },
+  });
+  console.log(this.pipeline());
+  next();
+});
+
 const Tour: Model<ITour> = mongoose.model<ITour>('Tour', tourSchema);
 
-export { Tour, ITour, tourKeys };
+export { Difficulty, ITour, Tour, tourKeys };

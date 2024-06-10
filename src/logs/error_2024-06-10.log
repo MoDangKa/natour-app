@@ -1,0 +1,5 @@
+17:31:24 - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"type":"field","value":6,"msg":"Ratings average must be a float number between 0 and 5","path":"ratingsAverage","location":"body"}]
+17:38:03 - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"type":"field","value":"difficult a","msg":"Difficulty must be one of: easy, medium, difficult","path":"difficulty","location":"body"},{"type":"field","value":6,"msg":"Ratings average must be a float number between 1.0 and 5.0","path":"ratingsAverage","location":"body"}]
+17:38:16 - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"type":"field","value":"difficult a","msg":"Difficulty must be one of: easy, medium, difficult","path":"difficulty","location":"body"}]
+17:46:32 - [127.0.0.1] POST /api/v1/tours 400 - E11000 duplicate key error collection: natours-db.tours index: name_1 dup key: { name: "Test Tour A" }
+17:51:03 - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: priceDiscount: Discount price (230) should be below regular price

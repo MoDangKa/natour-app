@@ -1,5 +1,5 @@
-import { tourKeys } from '@/models/tour';
-import { ValidationChain, check } from 'express-validator';
+import { Difficulty, tourKeys } from '@/models/tour';
+import { check } from 'express-validator';
 import {
   handleValidationErrors,
   validateNoExtraFields,
@@ -14,14 +14,14 @@ const requireValidations = {
     .isInt({ gt: 0 })
     .withMessage('Max group size must be a positive number'),
   difficulty: check('difficulty')
-    .isString()
-    .withMessage('Difficulty must be a string'),
+    .isIn(['easy', 'medium', 'difficult'] as Difficulty[])
+    .withMessage('Difficulty must be one of: easy, medium, difficult'),
   price: check('price')
     .isFloat({ gt: 0 })
     .withMessage('Price must be greater than 0'),
   ratingsAverage: check('ratingsAverage')
-    .isFloat({ gt: 0, lt: 5 })
-    .withMessage('Ratings average must be a float number between 0 and 5'),
+    .isFloat({ gt: 1, lt: 5 })
+    .withMessage('Ratings average must be a float number between 1.0 and 5.0'),
   description: check('description')
     .isString()
     .withMessage('Description must be a string'),
