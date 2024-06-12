@@ -1,4 +1,4 @@
-import { apiLogError } from '@/utils/logger';
+import CustomError from '@/utils/CustomError';
 import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 
@@ -8,19 +8,8 @@ export const validateNoExtraFields = (expectedFields: string[]) => {
       (field) => !expectedFields.includes(field),
     );
     if (extraFields.length) {
-      const statusCode = 400;
       const errorMessage = `Unexpected fields: ${extraFields.join(', ')}`;
-      apiLogError(
-        req.ip,
-        req.method,
-        req.originalUrl,
-        statusCode,
-        errorMessage,
-      );
-      return res.status(statusCode).json({
-        status: 'failed',
-        message: errorMessage,
-      });
+      throw new CustomError(errorMessage, 400);
     }
     next();
   };
@@ -33,12 +22,11 @@ export const handleValidationErrors = (
 ) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const statusCode = 400;
-    const errorMessage = `Validation Error: ${JSON.stringify(errors.array())}`;
-    apiLogError(req.ip, req.method, req.originalUrl, statusCode, errorMessage);
-    return res
-      .status(statusCode)
-      .json({ status: 'failed', errors: errors.array() });
+    const errorFields = errors.array().map((err: any) => ({
+      [err.path]: err.msg,
+    }));
+    const errorMessage = `Validation Error: ${JSON.stringify(errorFields)}`;
+    return next(new CustomError(errorMessage, 400, errors.array()));
   }
   next();
 };

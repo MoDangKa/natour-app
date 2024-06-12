@@ -5,7 +5,7 @@ import express from 'express';
 import morgan from 'morgan';
 import path from 'path';
 import errorMiddleware from './middlewares/errorMiddleware';
-import handleUnknownRoutes from './utils/notFoundErrorHandler';
+import notFoundMiddleware from './middlewares/notFoundMiddleware';
 
 const ENV_FILE_PATH = path.resolve(__dirname, 'configs', 'config.env');
 const dotenvResult = dotenv.config({ path: ENV_FILE_PATH });
@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/v1', apiV1Router);
 
-app.all('*', handleUnknownRoutes);
+app.all('*', notFoundMiddleware);
 
 app.use(errorMiddleware);
 

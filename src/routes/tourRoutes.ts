@@ -13,14 +13,10 @@ import {
   validateUpdateTour,
 } from '@/middlewares/validationTourMiddleware';
 import { Router } from 'express';
-import asyncHandler from 'express-async-handler';
 
 const router = Router();
 
-router
-  .route('/')
-  .get(asyncHandler(getAllTours))
-  .post(validateCreateTour, asyncHandler(createTour));
+router.route('/').get(getAllTours).post(validateCreateTour, createTour);
 
 router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
 router.route('/tour-stats').get(getTourStats);
@@ -29,8 +25,8 @@ router.route('/monthly-plan/:year').get(getMonthlyPlan);
 
 router
   .route('/:id')
-  .get(asyncHandler(getTourById))
-  .patch(validateUpdateTour, asyncHandler(updateTourById))
-  .delete(asyncHandler(deleteTourById));
+  .get(getTourById)
+  .patch(validateUpdateTour, updateTourById)
+  .delete(deleteTourById);
 
 export default router;

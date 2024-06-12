@@ -1,7 +1,8 @@
-import { Tour, tourKeys, type ITour } from '@/models/tour';
-import apiErrorHandler from '@/utils/apiErrorHandler';
-import APIFeatures from '@/utils/apiFeatures';
+import { ITour, Tour, tourKeys } from '@/models/tour';
+import APIFeatures from '@/utils/APIFeatures';
+import CustomError from '@/utils/CustomError';
 import { NextFunction, Request, Response } from 'express';
+import asyncHandler from 'express-async-handler';
 
 export const aliasTopTours = (
   req: Request,
@@ -16,7 +17,7 @@ export const aliasTopTours = (
   next();
 };
 
-export const getAllTours = async (req: Request, res: Response) => {
+export const getAllTours = asyncHandler(async (req: Request, res: Response) => {
   const features = new APIFeatures<ITour>(Tour.find(), req.query, tourKeys)
     .filter()
     .sort()
@@ -24,9 +25,8 @@ export const getAllTours = async (req: Request, res: Response) => {
     .paginate();
 
   const response = await features.getResults();
-
   if (response.errorMessage) {
-    return apiErrorHandler(req, res, 404, response.errorMessage);
+    throw new CustomError(response.errorMessage, 404);
   }
 
   res.status(200).json({
@@ -39,140 +39,146 @@ export const getAllTours = async (req: Request, res: Response) => {
       limit: response.limit,
     },
   });
-};
+});
 
-export const createTour = async (req: Request, res: Response) => {
+export const createTour = asyncHandler(async (req: Request, res: Response) => {
   const newTour = await Tour.create(req.body);
   res.status(201).json({ status: 'success', data: { tour: newTour } });
-};
+});
 
-export const getTourById = async (req: Request, res: Response) => {
+export const getTourById = asyncHandler(async (req: Request, res: Response) => {
   const id = req.params.id;
+
+  if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
+    throw new CustomError('Invalid tour ID format', 400);
+  }
+
   const tour = await Tour.findById(id);
 
   if (!tour) {
-    const errorMessage = `Tour with ID ${id} not found`;
-    return apiErrorHandler(req, res, 404, errorMessage);
+    throw new CustomError(`Tour with ID ${id} not found`, 404);
   }
 
   res.status(200).json({
     status: 'success',
     data: { tour },
   });
-};
+});
 
-export const updateTourById = async (req: Request, res: Response) => {
-  const id = req.params.id;
-  const tour = await Tour.findByIdAndUpdate(id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+export const updateTourById = asyncHandler(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
 
-  if (!tour) {
-    const errorMessage = `Tour with ID ${id} not found`;
-    return apiErrorHandler(req, res, 404, errorMessage);
-  }
+    if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
+      throw new CustomError('Invalid tour ID format', 400);
+    }
 
-  res.status(200).json({
-    status: 'success',
-    data: { tour },
-  });
-};
+    const tour = await Tour.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
-export const deleteTourById = async (req: Request, res: Response) => {
-  const id = req.params.id;
-  const tour = await Tour.findByIdAndDelete(id);
+    if (!tour) {
+      throw new CustomError(`Tour with ID ${id} not found`, 404);
+    }
 
-  if (!tour) {
-    const errorMessage = `Tour with ID ${id} not found`;
-    return apiErrorHandler(req, res, 404, errorMessage);
-  }
+    res.status(200).json({
+      status: 'success',
+      data: { tour },
+    });
+  },
+);
 
-  res.status(204).json({
-    status: 'success',
-    data: null,
-  });
-};
+export const deleteTourById = asyncHandler(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
 
-export const getTourStats = async (req: Request, res: Response) => {
-  const stats = await Tour.aggregate([
-    {
-      $match: { ratingsAverage: { $gte: 4.5 } },
-    },
-    {
-      $group: {
-        _id: { $toUpper: '$difficulty' },
-        numTours: { $sum: 1 },
-        numRatings: { $sum: '$ratingsQuantity' },
-        avgRating: { $avg: '$ratingsAverage' },
-        avgPrice: { $avg: '$price' },
-        minPrice: { $min: '$price' },
-        maxPrice: { $max: '$price' },
-      },
-    },
-    {
-      $sort: { avgPrice: 1 },
-    },
-    // { $match: { _id: { $ne: 'EASY' } } },
-  ]);
+    if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
+      throw new CustomError('Invalid tour ID format', 400);
+    }
 
-  res.status(200).json({
-    status: 'success',
-    data: { stats },
-  });
-};
+    const tour = await Tour.findByIdAndDelete(id);
 
-export const getMonthlyPlan = async (req: Request, res: Response) => {
-  const year = parseInt(req.params.year) || new Date().getFullYear();
-  const plan = await Tour.aggregate([
-    {
-      $unwind: '$startDates',
-    },
-    {
-      $match: {
-        startDates: {
-          $gte: new Date(`${year}-01-01`),
-          $lte: new Date(`${year}-12-31`),
+    if (!tour) {
+      throw new CustomError(`Tour with ID ${id} not found`, 404);
+    }
+
+    res.status(204).json({
+      status: 'success',
+      data: null,
+    });
+  },
+);
+
+export const getTourStats = asyncHandler(
+  async (req: Request, res: Response) => {
+    const stats = await Tour.aggregate([
+      { $match: { ratingsAverage: { $gte: 4.5 } } },
+      {
+        $group: {
+          _id: { $toUpper: '$difficulty' },
+          numTours: { $sum: 1 },
+          numRatings: { $sum: '$ratingsQuantity' },
+          avgRating: { $avg: '$ratingsAverage' },
+          avgPrice: { $avg: '$price' },
+          minPrice: { $min: '$price' },
+          maxPrice: { $max: '$price' },
         },
       },
-    },
-    {
-      $group: {
-        _id: { $month: '$startDates' },
-        numTourStarts: { $sum: 1 },
-        tours: { $push: '$name' },
+      { $sort: { avgPrice: 1 } },
+    ]);
+
+    res.status(200).json({
+      status: 'success',
+      data: { stats },
+    });
+  },
+);
+
+export const getMonthlyPlan = asyncHandler(
+  async (req: Request, res: Response) => {
+    const year = parseInt(req.params.year) || new Date().getFullYear();
+    const plan = await Tour.aggregate([
+      { $unwind: '$startDates' },
+      {
+        $match: {
+          startDates: {
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-31`),
+          },
+        },
       },
-    },
-    {
-      $addFields: { month: '$_id' },
-    },
-    {
-      $project: { _id: 0 },
-    },
-    {
-      $sort: { month: 1 },
-    },
-    { $limit: 12 },
-  ]);
+      {
+        $group: {
+          _id: { $month: '$startDates' },
+          numTourStarts: { $sum: 1 },
+          tours: { $push: '$name' },
+        },
+      },
+      { $addFields: { month: '$_id' } },
+      { $project: { _id: 0 } },
+      { $sort: { month: 1 } },
+      { $limit: 12 },
+    ]);
 
-  if (!plan || plan.length === 0) {
-    const errorMessage = `Plan with year ${year} not found`;
-    return apiErrorHandler(req, res, 404, errorMessage);
-  }
+    if (!plan || plan.length === 0) {
+      throw new CustomError(`Plan with year ${year} not found`, 404);
+    }
 
-  const defaultPlan = Array.from({ length: 12 }, (_, i) => ({
-    month: i + 1,
-    numTourStarts: 0,
-    tours: [],
-  }));
+    const defaultPlan = Array.from({ length: 12 }, (_, i) => ({
+      month: i + 1,
+      numTourStarts: 0,
+      tours: [],
+    }));
 
-  plan.forEach(({ month, numTourStarts, tours }) => {
-    const monthIndex = month - 1;
-    defaultPlan[monthIndex] = { month, numTourStarts, tours };
-  });
+    plan.forEach(({ month, numTourStarts, tours }) => {
+      const monthIndex = month - 1;
+      defaultPlan[monthIndex] = { month, numTourStarts, tours };
+    });
 
-  res.status(200).json({
-    status: 'success',
-    data: { plan: defaultPlan },
-  });
-};
+    res.status(200).json({
+      status: 'success',
+      data: { plan: defaultPlan },
+    });
+  },
+);

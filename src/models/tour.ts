@@ -180,7 +180,9 @@ tourSchema.pre<Query<any, ITour>>(/^find/, function (next) {
 });
 
 tourSchema.post<Query<any, ITour>>(/^find/, function (doc, next) {
-  console.log(`ToursQuery took ${Date.now() - (this as any).start} milliseconds!`);
+  console.log(
+    `Tour query took ${Date.now() - (this as any).start} milliseconds!`,
+  );
   next();
 });
 
