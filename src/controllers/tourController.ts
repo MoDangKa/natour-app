@@ -63,7 +63,7 @@ export const getTourById = asyncHandler(
     const tour = await Tour.findById(id);
 
     if (!tour) {
-      const errorMessage = `Tour with ID ${id} not found`;
+      const errorMessage = 'No tour found with that ID';
       return next(new CustomError(errorMessage, 404));
     }
 
@@ -89,7 +89,7 @@ export const updateTourById = asyncHandler(
     });
 
     if (!tour) {
-      const errorMessage = `Tour with ID ${id} not found`;
+      const errorMessage = 'No tour found with that ID';
       return next(new CustomError(errorMessage, 404));
     }
 
@@ -112,7 +112,7 @@ export const deleteTourById = asyncHandler(
     const tour = await Tour.findByIdAndDelete(id);
 
     if (!tour) {
-      const errorMessage = `Tour with ID ${id} not found`;
+      const errorMessage = 'No tour found with that ID';
       return next(new CustomError(errorMessage, 404));
     }
 
