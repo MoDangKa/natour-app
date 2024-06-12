@@ -1,36 +1,47 @@
 import fs from 'fs';
 import path from 'path';
 
-const logsDirectory = path.join(__dirname, '../logs');
+const getLogFilePath = (folder: string = ''): string | null => {
+  const currentDate: string = new Date().toISOString().split('T')[0];
+  const logFileName: string = `error_${currentDate}.log`;
+  const logsDirectory: string = path.join(__dirname, '../logs', folder);
 
-if (!fs.existsSync(logsDirectory)) {
-  fs.mkdirSync(logsDirectory);
-}
+  try {
+    if (!fs.existsSync(logsDirectory)) {
+      fs.mkdirSync(logsDirectory, { recursive: true });
+    }
+  } catch (error: any) {
+    console.error(`Error creating logs directory: ${error.message}`);
+    return null;
+  }
 
-const getLogFilePath = () => {
-  const currentDate = new Date().toISOString().split('T')[0];
-  const logFileName = `error_${currentDate}.log`;
   return path.join(logsDirectory, logFileName);
 };
 
-export const writeLogError = (message: string) => {
-  const logFilePath = getLogFilePath();
-  const timestamp = new Date().toLocaleTimeString([], {
-    hour12: false,
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  });
-  const logMessage = `${timestamp} - ${message}\n`;
-  fs.appendFileSync(logFilePath, logMessage, 'utf8');
+export const writeLogFile = async (message: string): Promise<void> => {
+  const logFilePath: string | null = getLogFilePath('errors');
+
+  if (!logFilePath) {
+    return;
+  }
+
+  const timestamp: string = new Date().toISOString();
+  const logMessage: string = `${timestamp} - ${message}\n`;
+
+  try {
+    await fs.promises.appendFile(logFilePath, logMessage, 'utf8');
+  } catch (error: any) {
+    console.error(`Error writing to log file: ${error.message}`);
+  }
 };
 
-export const LogError = (
+export const writeErrorLog = async (
   ip: string = '',
   method: string,
   pathname: string,
   stateCode: number,
   errorMessage: string,
-) => {
-  writeLogError(`[${ip}] ${method} ${pathname} ${stateCode} - ${errorMessage}`);
+): Promise<void> => {
+  const logMessage: string = `[${ip}] ${method} ${pathname} ${stateCode} - ${errorMessage}`;
+  await writeLogFile(logMessage);
 };

@@ -1,5 +1,5 @@
 import CustomError from '@/utils/customError';
-import { LogError } from '@/utils/logger';
+import { writeErrorLog } from '@/utils/logger';
 import { NextFunction, Request, Response } from 'express';
 
 const errorMiddleware = (
@@ -30,7 +30,7 @@ const errorMiddleware = (
     jsonResponse.error = errorDetails;
   }
 
-  LogError(req.ip, req.method, req.originalUrl, statusCode, errorMessage);
+  writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, errorMessage);
 
   res.status(statusCode).json(jsonResponse);
 };
