@@ -12,3 +12,5 @@
 16:07:07 - [127.0.0.1] POST /api/v1/tours 400 - Something is wrong
 16:07:18 - [127.0.0.1] GET /api/v1s/tours 404 - Can't find /api/v1s/tours on this server!
 16:07:58 - [127.0.0.1] POST /api/v1/tours 400 - Something is wrong
+16:14:32 - [127.0.0.1] POST /api/v1/tours 400 - Unexpected fields: good
+16:14:43 - [127.0.0.1] POST /api/v1/tours 400 - Something is wrong
