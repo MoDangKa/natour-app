@@ -1,5 +1,6 @@
 import mongoose, { Document, Model, Query } from 'mongoose';
 import slugify from 'slugify';
+import validator from 'validator';
 
 type Difficulty = 'easy' | 'medium' | 'difficult';
 
@@ -80,7 +81,7 @@ const tourSchema = new mongoose.Schema<ITour>(
     priceDiscount: {
       type: Number,
       validate: {
-        validator: function (this: ITour, val: number): boolean {
+        validator: function (this: ITour, val: number) {
           return val < this.price;
         },
         message: 'Discount price ({VALUE}) should be below regular price',
@@ -179,7 +180,7 @@ tourSchema.pre<Query<any, ITour>>(/^find/, function (next) {
 });
 
 tourSchema.post<Query<any, ITour>>(/^find/, function (doc, next) {
-  console.log(`Query took ${Date.now() - (this as any).start} milliseconds!`);
+  console.log(`ToursQuery took ${Date.now() - (this as any).start} milliseconds!`);
   next();
 });
 

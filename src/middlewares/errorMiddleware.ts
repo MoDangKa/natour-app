@@ -12,9 +12,10 @@ const errorMiddleware = (
   const errorMessage = err.message || 'Internal Server Error';
 
   apiLogError(req.ip, req.method, req.originalUrl, statusCode, errorMessage);
+
   res.status(statusCode).json({
     status,
-    message: errorMessage,
+    error: (err as any).errors || err,
   });
 };
 

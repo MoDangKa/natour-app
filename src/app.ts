@@ -1,10 +1,11 @@
+import dbConfig from '@/configs/dbConfig';
 import apiV1Router from '@/routes/apiV1Router';
 import * as dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
 import path from 'path';
 import errorMiddleware from './middlewares/errorMiddleware';
-import dbConfig from '@/configs/dbConfig';
+import handleUnknownRoutes from './utils/notFoundErrorHandler';
 
 const ENV_FILE_PATH = path.resolve(__dirname, 'configs', 'config.env');
 const dotenvResult = dotenv.config({ path: ENV_FILE_PATH });
@@ -24,6 +25,8 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/v1', apiV1Router);
+
+app.all('*', handleUnknownRoutes);
 
 app.use(errorMiddleware);
 

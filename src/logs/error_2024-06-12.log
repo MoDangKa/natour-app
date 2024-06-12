@@ -1,0 +1,14 @@
+10:59:49 - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: name: Tour name must only contain characters
+11:02:37 - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: name: Tour name must only contain characters
+11:02:51 - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: name: Tour name must only contain characters
+11:03:33 - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: name: Tour name must only contain characters
+11:03:53 - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: name: Tour name must only contain characters
+11:04:22 - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: name: Tour name must only contain characters
+11:05:01 - [127.0.0.1] GET /api/v1/tours/66654f11f396090416df0 400 - Cast to ObjectId failed for value "66654f11f396090416df0" (type string) at path "_id" for model "Tour"
+11:05:21 - [127.0.0.1] GET /api/v1/tours/66654f11f396090416df0 400 - Cast to ObjectId failed for value "66654f11f396090416df0" (type string) at path "_id" for model "Tour"
+11:06:01 - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: name: Tour name must only contain characters
+11:08:17 - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: name: Tour name must only contain characters
+11:08:39 - [127.0.0.1] PATCH /api/v1/tours/1 400 - Validation Error: [{"type":"field","value":"4t3t34t","msg":"Duration must be a positive number","path":"duration","location":"body"}]
+11:09:53 - [127.0.0.1] PATCH /api/v1/tours/1 400 - Cast to ObjectId failed for value "1" (type string) at path "_id" for model "Tour"
+11:58:51 - [127.0.0.1] GET /api/v/tours 400 - Can't find /api/v/tours on this server!
+12:02:58 - [127.0.0.1] GET /api/v/tours 404 - Can't find /api/v/tours on this server!
