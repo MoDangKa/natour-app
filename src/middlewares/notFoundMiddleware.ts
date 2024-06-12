@@ -6,8 +6,7 @@ const notFoundMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
-  const errorMessage = `Can't find ${req.originalUrl} on this server!`;
-  throw new CustomError(errorMessage, 404);
+  next(new CustomError(`Can't find ${req.originalUrl} on this server!`, 404));
 };
 
 export default notFoundMiddleware;

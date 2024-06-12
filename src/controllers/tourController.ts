@@ -17,60 +17,67 @@ export const aliasTopTours = (
   next();
 };
 
-export const getAllTours = asyncHandler(async (req: Request, res: Response) => {
-  const features = new APIFeatures<ITour>(Tour.find(), req.query, tourKeys)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
+export const getAllTours = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const features = new APIFeatures<ITour>(Tour.find(), req.query, tourKeys)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
 
-  const response = await features.getResults();
-  if (response.errorMessage) {
-    throw new CustomError(response.errorMessage, 404);
-  }
+    const response = await features.getResults();
 
-  res.status(200).json({
-    status: 'success',
-    results: response.resultsLength,
-    data: {
-      tours: response.data,
-      page: response.page,
-      totalPages: response.totalPages,
-      limit: response.limit,
-    },
-  });
-});
+    if (response.errorMessage) {
+      return next(new CustomError(response.errorMessage, 404));
+    }
 
-export const createTour = asyncHandler(async (req: Request, res: Response) => {
-  const newTour = await Tour.create(req.body);
-  res.status(201).json({ status: 'success', data: { tour: newTour } });
-});
+    res.status(200).json({
+      status: 'success',
+      results: response.resultsLength,
+      data: {
+        tours: response.data,
+        page: response.page,
+        totalPages: response.totalPages,
+        limit: response.limit,
+      },
+    });
+  },
+);
 
-export const getTourById = asyncHandler(async (req: Request, res: Response) => {
-  const id = req.params.id;
+export const createTour = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const newTour = await Tour.create(req.body);
+    res.status(201).json({ status: 'success', data: { tour: newTour } });
+  },
+);
 
-  if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
-    throw new CustomError('Invalid tour ID format', 400);
-  }
-
-  const tour = await Tour.findById(id);
-
-  if (!tour) {
-    throw new CustomError(`Tour with ID ${id} not found`, 404);
-  }
-
-  res.status(200).json({
-    status: 'success',
-    data: { tour },
-  });
-});
-
-export const updateTourById = asyncHandler(
-  async (req: Request, res: Response) => {
+export const getTourById = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
 
     if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
-      throw new CustomError('Invalid tour ID format', 400);
+      return next(new CustomError('Invalid tour ID format', 400));
+    }
+
+    const tour = await Tour.findById(id);
+
+    if (!tour) {
+      return next(new CustomError(`Tour with ID ${id} not found`, 404));
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: { tour },
+    });
+  },
+);
+
+export const updateTourById = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+
+    if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
+      return next(new CustomError('Invalid tour ID format', 400));
     }
 
     const tour = await Tour.findByIdAndUpdate(id, req.body, {
@@ -79,7 +86,7 @@ export const updateTourById = asyncHandler(
     });
 
     if (!tour) {
-      throw new CustomError(`Tour with ID ${id} not found`, 404);
+      return next(new CustomError(`Tour with ID ${id} not found`, 404));
     }
 
     res.status(200).json({
@@ -90,17 +97,17 @@ export const updateTourById = asyncHandler(
 );
 
 export const deleteTourById = asyncHandler(
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
 
     if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
-      throw new CustomError('Invalid tour ID format', 400);
+      return next(new CustomError('Invalid tour ID format', 400));
     }
 
     const tour = await Tour.findByIdAndDelete(id);
 
     if (!tour) {
-      throw new CustomError(`Tour with ID ${id} not found`, 404);
+      return next(new CustomError(`Tour with ID ${id} not found`, 404));
     }
 
     res.status(204).json({
@@ -111,7 +118,7 @@ export const deleteTourById = asyncHandler(
 );
 
 export const getTourStats = asyncHandler(
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const stats = await Tour.aggregate([
       { $match: { ratingsAverage: { $gte: 4.5 } } },
       {
@@ -136,7 +143,7 @@ export const getTourStats = asyncHandler(
 );
 
 export const getMonthlyPlan = asyncHandler(
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const year = parseInt(req.params.year) || new Date().getFullYear();
     const plan = await Tour.aggregate([
       { $unwind: '$startDates' },
@@ -162,7 +169,7 @@ export const getMonthlyPlan = asyncHandler(
     ]);
 
     if (!plan || plan.length === 0) {
-      throw new CustomError(`Plan with year ${year} not found`, 404);
+      return next(new CustomError(`Plan with year ${year} not found`, 404));
     }
 
     const defaultPlan = Array.from({ length: 12 }, (_, i) => ({
