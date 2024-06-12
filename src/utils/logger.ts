@@ -1,10 +1,20 @@
 import fs from 'fs';
 import path from 'path';
 
-const getLogFilePath = (folder: string = ''): string | null => {
+type LogType = 'error';
+
+const getLogFilePath = (logType?: LogType): string | null => {
   const currentDate: string = new Date().toISOString().split('T')[0];
-  const logFileName: string = `error_${currentDate}.log`;
-  const logsDirectory: string = path.join(__dirname, '../logs', folder);
+  let logFileName: string;
+  let logsDirectory: string;
+
+  if (logType) {
+    logFileName = `${logType}_${currentDate}.log`;
+    logsDirectory = path.join(__dirname, '../logs', `${logType}s`);
+  } else {
+    logFileName = `log_${currentDate}.log`;
+    logsDirectory = path.join(__dirname, '../logs');
+  }
 
   try {
     if (!fs.existsSync(logsDirectory)) {
@@ -18,8 +28,11 @@ const getLogFilePath = (folder: string = ''): string | null => {
   return path.join(logsDirectory, logFileName);
 };
 
-export const writeLogFile = async (message: string): Promise<void> => {
-  const logFilePath: string | null = getLogFilePath('errors');
+export const writeLogFile = async (
+  message: string,
+  logType?: LogType,
+): Promise<void> => {
+  const logFilePath: string | null = getLogFilePath(logType);
 
   if (!logFilePath) {
     return;
@@ -43,5 +56,5 @@ export const writeErrorLog = async (
   errorMessage: string,
 ): Promise<void> => {
   const logMessage: string = `[${ip}] ${method} ${pathname} ${stateCode} - ${errorMessage}`;
-  await writeLogFile(logMessage);
+  await writeLogFile(logMessage, 'error');
 };
