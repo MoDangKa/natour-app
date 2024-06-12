@@ -1,6 +1,6 @@
 import { ITour, Tour, tourKeys } from '@/models/tour';
-import APIFeatures from '@/utils/APIFeatures';
-import CustomError from '@/utils/CustomError';
+import APIFeatures from '@/utils/apiFeatures';
+import CustomError from '@/utils/customError';
 import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 

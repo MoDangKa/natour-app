@@ -4,8 +4,8 @@ import * as dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
 import path from 'path';
-import errorMiddleware from './middlewares/errorMiddleware';
-import notFoundMiddleware from './middlewares/notFoundMiddleware';
+import errorMiddleware from '@/middlewares/errorMiddleware';
+import notFoundMiddleware from '@/middlewares/notFoundMiddleware';
 
 const ENV_FILE_PATH = path.resolve(__dirname, 'configs', 'config.env');
 const dotenvResult = dotenv.config({ path: ENV_FILE_PATH });
