@@ -13,7 +13,7 @@ const getLogFilePath = () => {
   return path.join(logsDirectory, logFileName);
 };
 
-export const logError = (message: string) => {
+export const writeLogError = (message: string) => {
   const logFilePath = getLogFilePath();
   const timestamp = new Date().toLocaleTimeString([], {
     hour12: false,
@@ -25,12 +25,12 @@ export const logError = (message: string) => {
   fs.appendFileSync(logFilePath, logMessage, 'utf8');
 };
 
-export const apiLogError = (
+export const LogError = (
   ip: string = '',
   method: string,
   pathname: string,
   stateCode: number,
   errorMessage: string,
 ) => {
-  logError(`[${ip}] ${method} ${pathname} ${stateCode} - ${errorMessage}`);
+  writeLogError(`[${ip}] ${method} ${pathname} ${stateCode} - ${errorMessage}`);
 };

@@ -1,5 +1,14 @@
-13:44:05 - [127.0.0.1] GET /api/v1/tours/666934ea78b0d790d8bbbdf44444 400 - Invalid tour ID format
-13:51:02 - [127.0.0.1] GET /api/v/tours?fieldss=name,price,duration 404 - Can't find /api/v/tours?fieldss=name,price,duration on this server!
-14:01:11 - [127.0.0.1] POST /api/v1/tours 400 - Unexpected fields: durations
-14:01:18 - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"duration":"Duration must be a positive number"},{"maxGroupSize":"Max group size must be a positive number"}]
-14:01:43 - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"maxGroupSize":"Max group size must be a positive number"}]
+15:59:46 - [127.0.0.1] POST /api/v1/tours 400 - Internal Server Error
+16:00:07 - [127.0.0.1] POST /api/v1/tours 400 - Internal Server Error
+16:01:30 - [127.0.0.1] POST /api/v1/tours 400 - Unexpected fields: imageCovers
+16:02:27 - [127.0.0.1] POST /api/v1/tours 400 - Unexpected fields: imageCovers
+16:02:56 - [127.0.0.1] POST /api/v1/tours 400 - Internal Server Error
+16:02:59 - [127.0.0.1] POST /api/v1/tours 400 - Internal Server Error
+16:03:13 - [127.0.0.1] POST /api/v1/tours 400 - Internal Server Error
+16:03:15 - [127.0.0.1] POST /api/v1/tours 400 - Internal Server Error
+16:03:35 - [127.0.0.1] POST /api/v1/tours 400 - Internal Server Error
+16:05:14 - [127.0.0.1] POST /api/v1/tours 400 - Something is wrong
+16:07:06 - [127.0.0.1] POST /api/v1/tours 400 - Something is wrong
+16:07:07 - [127.0.0.1] POST /api/v1/tours 400 - Something is wrong
+16:07:18 - [127.0.0.1] GET /api/v1s/tours 404 - Can't find /api/v1s/tours on this server!
+16:07:58 - [127.0.0.1] POST /api/v1/tours 400 - Something is wrong

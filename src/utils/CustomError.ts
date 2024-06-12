@@ -1,15 +1,15 @@
 class CustomError extends Error {
   statusCode: number;
-  status: string;
   errors?: any;
+  isOperational: boolean;
 
   constructor(message: string, statusCode: number, errors?: any) {
     super(message);
     this.statusCode = statusCode;
-    this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
     this.errors = errors;
+    this.isOperational = true;
 
-    Object.setPrototypeOf(this, CustomError.prototype);
+    Error.captureStackTrace(this.constructor);
   }
 }
 

@@ -25,7 +25,7 @@ export const logError = (message: string) => {
   fs.appendFileSync(logFilePath, logMessage, 'utf8');
 };
 
-export const apiLogError = (
+export const LogError = (
   ip: string = '',
   method: string,
   pathname: string,

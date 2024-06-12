@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { apiLogError } from './logger';
+import { LogError } from './logger';
 
 export const handleApiError = (
   req: Request,
@@ -7,6 +7,6 @@ export const handleApiError = (
   statusCode: number,
   errorMessage: string,
 ) => {
-  apiLogError(req.ip, req.method, req.originalUrl, statusCode, errorMessage);
+  LogError(req.ip, req.method, req.originalUrl, statusCode, errorMessage);
   res.status(statusCode).json({ status: 'failed', message: errorMessage });
 };

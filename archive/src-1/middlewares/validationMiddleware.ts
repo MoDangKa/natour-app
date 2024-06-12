@@ -1,4 +1,4 @@
-import { apiLogError } from '@/utils/logger';
+import { LogError } from '@/utils/logger';
 import { NextFunction, Request, Response } from 'express';
 import { check, validationResult } from 'express-validator';
 
@@ -21,7 +21,7 @@ const handleValidationErrors = (
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const errorMessage = `Validation Error: ${JSON.stringify(errors.array())}`;
-    apiLogError(req.ip, req.method, req.originalUrl, errorMessage);
+    LogError(req.ip, req.method, req.originalUrl, errorMessage);
     return res.status(400).json({ status: 'fail', errors: errors.array() });
   }
   next();
