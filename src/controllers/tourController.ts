@@ -56,13 +56,15 @@ export const getTourById = asyncHandler(
     const id = req.params.id;
 
     if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
-      return next(new CustomError('Invalid tour ID format', 400));
+      const errorMessage = 'Invalid tour ID format';
+      return next(new CustomError(errorMessage, 400));
     }
 
     const tour = await Tour.findById(id);
 
     if (!tour) {
-      return next(new CustomError(`Tour with ID ${id} not found`, 404));
+      const errorMessage = `Tour with ID ${id} not found`;
+      return next(new CustomError(errorMessage, 404));
     }
 
     res.status(200).json({
@@ -77,7 +79,8 @@ export const updateTourById = asyncHandler(
     const id = req.params.id;
 
     if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
-      return next(new CustomError('Invalid tour ID format', 400));
+      const errorMessage = 'Invalid tour ID format';
+      return next(new CustomError(errorMessage, 400));
     }
 
     const tour = await Tour.findByIdAndUpdate(id, req.body, {
@@ -86,7 +89,8 @@ export const updateTourById = asyncHandler(
     });
 
     if (!tour) {
-      return next(new CustomError(`Tour with ID ${id} not found`, 404));
+      const errorMessage = `Tour with ID ${id} not found`;
+      return next(new CustomError(errorMessage, 404));
     }
 
     res.status(200).json({
@@ -101,13 +105,15 @@ export const deleteTourById = asyncHandler(
     const id = req.params.id;
 
     if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
-      return next(new CustomError('Invalid tour ID format', 400));
+      const errorMessage = 'Invalid tour ID format';
+      return next(new CustomError(errorMessage, 400));
     }
 
     const tour = await Tour.findByIdAndDelete(id);
 
     if (!tour) {
-      return next(new CustomError(`Tour with ID ${id} not found`, 404));
+      const errorMessage = `Tour with ID ${id} not found`;
+      return next(new CustomError(errorMessage, 404));
     }
 
     res.status(204).json({
@@ -169,7 +175,8 @@ export const getMonthlyPlan = asyncHandler(
     ]);
 
     if (!plan || plan.length === 0) {
-      return next(new CustomError(`Plan with year ${year} not found`, 404));
+      const errorMessage = `Plan with year ${year} not found`;
+      return next(new CustomError(errorMessage, 404));
     }
 
     const defaultPlan = Array.from({ length: 12 }, (_, i) => ({

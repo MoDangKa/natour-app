@@ -8,9 +8,8 @@ export const validateNoExtraFields = (expectedFields: string[]) => {
       (field) => !expectedFields.includes(field),
     );
     if (extraFields.length) {
-      return next(
-        new CustomError(`Unexpected fields: ${extraFields.join(', ')}`, 400),
-      );
+      const errorMessage = `Unexpected fields: ${extraFields.join(', ')}`;
+      return next(new CustomError(errorMessage, 400));
     }
     next();
   };
