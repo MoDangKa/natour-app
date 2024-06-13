@@ -8,29 +8,46 @@ const errorMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
-  const customError = err instanceof CustomError ? err : null;
-  const statusCode =
-    customError?.statusCode || (err instanceof Error ? 400 : 500);
-  const clientError = `${statusCode}`.startsWith('4');
-  const status = clientError ? 'fail' : 'error';
-  const errorMessage =
-    customError?.message ||
-    (clientError ? 'Something is wrong' : 'Internal Server Error');
-  const errorDetails =
-    customError?.errors ||
-    (err instanceof Error && (err as any)?.errorResponse) ||
-    {};
+  const isCustomError = err instanceof CustomError;
+  const isError = err instanceof Error;
 
-  const jsonResponse: { status: string; message: string; error?: any } = {
-    status,
-    message: errorMessage,
-  };
+  let statusCode: number = 500;
+  let status: string = 'error';
+  const message: string = err.message;
+  let error: Record<string, any> = {};
 
-  if (Object.keys(errorDetails).length > 0) {
-    jsonResponse.error = errorDetails;
+  if (isCustomError) {
+    statusCode = err.statusCode;
+    status = err.status;
+    error = err.error;
+    console.log('CustomError: ', err);
   }
 
-  writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, errorMessage);
+  if (isError) {
+    statusCode = (err as any)?.statusCode || 400;
+    status = 'fail';
+    error = (err as any)?.error || ((err as any)?.errorResponse && err) || {};
+    console.log('Error: ', err);
+  }
+
+  const jsonResponse: {
+    status: string;
+    message: string;
+    error?: any;
+    stack?: any;
+  } = {
+    status,
+    message,
+  };
+
+  if (process.env.NODE_ENV === 'development') {
+    if (Object.keys(error).length > 0) {
+      jsonResponse.error = error;
+    }
+    jsonResponse.stack = err.stack;
+  }
+
+  writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
 
   res.status(statusCode).json(jsonResponse);
 };

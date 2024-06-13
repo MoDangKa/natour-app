@@ -13,6 +13,7 @@ export const aliasTopTours = (
     limit: '5',
     sort: '-ratingsAverage,price',
     fields: 'name,price,ratingsAverage,summary,difficulty',
+    pagination: '0',
   });
   next();
 };
@@ -31,15 +32,20 @@ export const getAllTours = asyncHandler(
       return next(new CustomError(response.errorMessage, 404));
     }
 
+    const { data = [], page, totalPages, limit, resultsLength } = response;
+
+    const pagination = req.query.pagination;
+    const hidePagination = pagination === '0';
+
+    const responseData = {
+      tours: data,
+      ...(!hidePagination && { page, totalPages, limit }),
+    };
+
     res.status(200).json({
       status: 'success',
-      results: response.resultsLength,
-      data: {
-        tours: response.data,
-        page: response.page,
-        totalPages: response.totalPages,
-        limit: response.limit,
-      },
+      results: resultsLength,
+      data: responseData,
     });
   },
 );

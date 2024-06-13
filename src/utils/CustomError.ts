@@ -1,15 +1,17 @@
 class CustomError extends Error {
   statusCode: number;
-  errors?: any;
+  status: string;
+  error?: any;
   isOperational: boolean;
 
-  constructor(message: string, statusCode: number, errors?: any) {
+  constructor(message: string, statusCode: number, error?: any) {
     super(message);
     this.statusCode = statusCode;
-    this.errors = errors;
+    this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
+    this.error = error;
     this.isOperational = true;
 
-    Error.captureStackTrace(this.constructor);
+    Error.captureStackTrace(this, this.constructor);
   }
 }
 
