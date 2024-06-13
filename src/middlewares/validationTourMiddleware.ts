@@ -6,7 +6,15 @@ import {
 } from './validationMiddleware';
 
 const requireValidations = {
-  name: check('name').isString().withMessage('Name must be a string'),
+  name: check('name')
+    .isString()
+    .withMessage('Name must be a string')
+    .bail()
+    .isLength({ min: 10 })
+    .withMessage('A tour name must have more or equal than 10 characters')
+    .bail()
+    .isLength({ max: 40 })
+    .withMessage('A tour name must have less or equal than 40 characters'),
   duration: check('duration')
     .isFloat({ gt: 0 })
     .withMessage('Duration must be a positive number'),

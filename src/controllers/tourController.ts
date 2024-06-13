@@ -61,11 +61,6 @@ export const getTourById = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
 
-    if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
-      const errorMessage = 'Invalid tour ID format';
-      return next(new CustomError(errorMessage, 400));
-    }
-
     const tour = await Tour.findById(id);
 
     if (!tour) {
@@ -83,11 +78,6 @@ export const getTourById = asyncHandler(
 export const updateTourById = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-
-    if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
-      const errorMessage = 'Invalid tour ID format';
-      return next(new CustomError(errorMessage, 400));
-    }
 
     const tour = await Tour.findByIdAndUpdate(id, req.body, {
       new: true,
@@ -109,11 +99,6 @@ export const updateTourById = asyncHandler(
 export const deleteTourById = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-
-    if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
-      const errorMessage = 'Invalid tour ID format';
-      return next(new CustomError(errorMessage, 400));
-    }
 
     const tour = await Tour.findByIdAndDelete(id);
 
