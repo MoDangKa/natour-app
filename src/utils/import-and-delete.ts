@@ -1,11 +1,11 @@
 import { Tour } from '@/models/tour';
-import dbConfig from '@/configs/dbConfig';
 import { readFile } from '@/utils/fileHelper';
+import { exec } from 'child_process';
 import * as dotenv from 'dotenv';
 import path from 'path';
-import { exec } from 'child_process';
+import connectDatabase from './connectDatabase';
 
-const ENV_FILE_PATH = path.resolve(__dirname, '../configs/config.env');
+const ENV_FILE_PATH = path.resolve(__dirname, '../config.env');
 const dotenvResult = dotenv.config({ path: ENV_FILE_PATH });
 
 if (dotenvResult.error) {
@@ -49,7 +49,7 @@ const stopNodemon = () => {
 
 const run = async () => {
   try {
-    await dbConfig();
+    await connectDatabase();
 
     const argv2 = process.argv?.[2];
     if (argv2 === '--import') {
@@ -68,5 +68,4 @@ const run = async () => {
   }
 };
 
-// Execute the main function
 run();
