@@ -1,3 +1,4 @@
+import { authorizeAdmin } from '@/controllers/authController';
 import {
   aliasTopTours,
   createTour,
@@ -8,7 +9,6 @@ import {
   getTourStats,
   updateTourById,
 } from '@/controllers/tourController';
-import authorizeAdmin from '@/middlewares/authMiddleware';
 import {
   validateCreateTour,
   validateUpdateTour,

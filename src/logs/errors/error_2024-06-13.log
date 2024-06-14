@@ -1,3 +1,0 @@
-2024-06-13T09:09:32.323Z - [127.0.0.1] POST /api/v1/tours 400 - Duplicate field value: "Test Tour Price 8". Please use another value!
-2024-06-13T09:27:07.906Z - [127.0.0.1] GET / 404 - Can't find / on this server!
-2024-06-13T09:27:07.965Z - [127.0.0.1] GET /robots.txt?1718270827955 404 - Can't find /robots.txt?1718270827955 on this server!

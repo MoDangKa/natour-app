@@ -25,7 +25,6 @@ const errorMiddleware = (
   let status: string = err.status || 'error';
   let message: string = err.message;
   let customError: any = { ...err };
-  console.log('customError: ', customError);
 
   if (customError?.path && customError?.value) {
     customError = handleCastErrorDB(customError);
