@@ -1,1 +1,10 @@
 2024-06-14T15:48:15.644Z - [127.0.0.1] GET /api/v1/tours 403 - User not found or unauthorized access
+2024-06-14T15:49:22.789Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized
+2024-06-14T15:49:23.970Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized
+2024-06-14T15:49:26.898Z - [127.0.0.1] POST /api/v1/auth/signin 401 - Invalid credentials
+2024-06-14T15:50:55.946Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized
+2024-06-14T15:50:56.791Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized
+2024-06-14T15:50:57.860Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized
+2024-06-14T15:51:00.695Z - [127.0.0.1] POST /api/v1/auth/signin 401 - Invalid credentials
+2024-06-14T15:53:06.518Z - [127.0.0.1] POST /api/v1/auth/signin 401 - Invalid credentials
+2024-06-14T15:53:10.169Z - [127.0.0.1] POST /api/v1/auth/signin 401 - Invalid credentials

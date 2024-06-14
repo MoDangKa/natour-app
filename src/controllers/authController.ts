@@ -25,7 +25,7 @@ export const signin = asyncHandler(
     const user = await User.findOne({ email });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      throw new CustomError('Invalid credentials', 401);
+      return next(new CustomError('Invalid credentials', 401));
     }
 
     const jwtToken: string = process.env.JWT_TOKEN!;
