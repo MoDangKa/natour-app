@@ -1,0 +1,37 @@
+2024-06-14T10:29:00.196Z - [127.0.0.1] POST /api/v1/users/signup 404 - Can't find /api/v1/users/signup on this server!
+2024-06-14T10:31:06.181Z - [127.0.0.1] GET /api/v1/tours 500 - Cannot read properties of undefined (reading 'jwtToken')
+2024-06-14T10:36:27.205Z - [127.0.0.1] GET /api/v1/tours 500 - Cannot read properties of undefined (reading 'jwt-token')
+2024-06-14T10:36:54.420Z - [127.0.0.1] GET /api/v1/tours 500 - Cannot read properties of undefined (reading 'jwt-token')
+2024-06-14T11:02:42.747Z - [127.0.0.1] GET /api/v1/tours 401 - Invalid token or unauthorized
+2024-06-14T11:03:04.106Z - [127.0.0.1] GET /api/v1/tours 401 - Invalid token or unauthorized
+2024-06-14T11:03:38.372Z - [127.0.0.1] GET /api/v1/tours 401 - Invalid token or unauthorized
+2024-06-14T11:04:31.389Z - [127.0.0.1] GET /api/v1/tours 401 - Invalid token or unauthorized
+2024-06-14T11:05:19.410Z - [127.0.0.1] GET /api/v1/tours 401 - Invalid token or unauthorized
+2024-06-14T11:05:36.151Z - [127.0.0.1] GET /api/v1/tours 401 - Invalid token or unauthorized
+2024-06-14T11:09:10.561Z - [127.0.0.1] GET /api/v1/tours 401 - Invalid token or unauthorized
+2024-06-14T11:09:24.136Z - [127.0.0.1] GET /api/v1/tours 401 - Invalid token or unauthorized
+2024-06-14T11:09:25.416Z - [127.0.0.1] GET /api/v1/tours 401 - Invalid token or unauthorized
+2024-06-14T11:09:26.342Z - [127.0.0.1] GET /api/v1/tours 401 - Invalid token or unauthorized
+2024-06-14T11:10:49.053Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:11:08.099Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:11:09.353Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:11:10.478Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:11:15.319Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:11:16.223Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:11:43.785Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:11:50.790Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:13:48.571Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:13:49.523Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:14:54.501Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:14:55.801Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:19:08.447Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:19:38.709Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:19:40.007Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:19:42.800Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:24:57.517Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:25:48.301Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:27:11.466Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized - Admin access required
+2024-06-14T11:30:19.871Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized
+2024-06-14T11:31:35.735Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized
+2024-06-14T11:31:37.575Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized
+2024-06-14T11:38:20.469Z - [127.0.0.1] POST /api/v1/auth/signin 404 - Invalid credentials

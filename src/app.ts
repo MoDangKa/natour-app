@@ -1,11 +1,12 @@
 import errorMiddleware from '@/middlewares/errorMiddleware';
 import notFoundMiddleware from '@/middlewares/notFoundMiddleware';
 import apiV1Router from '@/routes/apiV1Router';
+import connectDatabase from '@/utils/connectDatabase';
 import * as dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
 import path from 'path';
-import connectDatabase from './utils/connectDatabase';
+import cookieParser from 'cookie-parser';
 
 process.on('uncaughtException', (err: Error) => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
@@ -32,7 +33,7 @@ if (!PORT || !HOSTNAME) {
 }
 
 const app = express();
-
+app.use(cookieParser());
 app.use(express.json());
 
 if (NODE_ENV === 'development' || NODE_ENV === 'alpha') {
@@ -42,7 +43,6 @@ if (NODE_ENV === 'development' || NODE_ENV === 'alpha') {
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/v1', apiV1Router);
-
 app.all('*', notFoundMiddleware);
 
 app.use(errorMiddleware);
@@ -85,4 +85,3 @@ process.on('unhandledRejection', (err: Error) => {
 
 // process.on('SIGINT', () => handleTerminated('SIGINT'));
 // process.on('SIGTERM', () => handleTerminated('SIGTERM'));
-
