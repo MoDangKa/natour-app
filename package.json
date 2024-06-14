@@ -14,8 +14,8 @@
     "prod": "cross-env NODE_ENV=production node dist/app.js",
     "lint": "eslint 'src/**/*.{ts,tsx}' --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx,js,json,html}'",
-    "import:tours": "ts-node src/utils/import-and-delete.ts --import",
-    "delete:tours": "ts-node src/utils/import-and-delete.ts --delete"
+    "import:tours": "ts-node src/dev-data/import-and-delete.ts --import",
+    "delete:tours": "ts-node src/dev-data/import-and-delete.ts --delete"
   },
   "author": "Thanaphon Phumthan",
   "license": "MIT",

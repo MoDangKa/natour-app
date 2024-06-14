@@ -16,7 +16,7 @@
   "include": [
     "src/**/*.ts",
     "src/@types/**/*",
-    "src/data/import-and-delete.ts",
+    "src/dev-data/data/import-and-delete.ts",
     "src/eslintrc.ts"
   ],
   "exclude": ["node_modules"]

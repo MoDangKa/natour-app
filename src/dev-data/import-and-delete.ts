@@ -1,9 +1,8 @@
-import { Tour } from '@/models/tour';
-import { readFile } from '@/utils/fileHelper';
-import { exec } from 'child_process';
 import * as dotenv from 'dotenv';
 import path from 'path';
-import connectDatabase from './connectDatabase';
+import { Tour } from '../models/tour';
+import connectDatabase from '../utils/connectDatabase';
+import { readFile } from './fileHelper';
 
 const ENV_FILE_PATH = path.resolve(__dirname, '../config.env');
 const dotenvResult = dotenv.config({ path: ENV_FILE_PATH });
@@ -32,20 +31,20 @@ const deleteData = async () => {
   }
 };
 
-const stopNodemon = () => {
-  exec('pkill -f nodemon', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error stopping nodemon: ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      console.error(`stderr: ${stderr}`);
-      return;
-    }
-    console.log(`Stopped nodemon: ${stdout}`);
-  });
-  process.exit();
-};
+// const stopNodemon = () => {
+//   exec('pkill -f nodemon', (error, stdout, stderr) => {
+//     if (error) {
+//       console.error(`Error stopping nodemon: ${error.message}`);
+//       return;
+//     }
+//     if (stderr) {
+//       console.error(`stderr: ${stderr}`);
+//       return;
+//     }
+//     console.log(`Stopped nodemon: ${stdout}`);
+//   });
+//   process.exit();
+// };
 
 const run = async () => {
   try {
@@ -61,11 +60,10 @@ const run = async () => {
         'Invalid command. Use "--import" to import data or "--delete" to delete all data.',
       );
     }
-
-    stopNodemon();
   } catch (error) {
     console.error('An error occurred:', error);
   }
+  process.exit();
 };
 
 run();

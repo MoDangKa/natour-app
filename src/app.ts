@@ -7,6 +7,12 @@ import morgan from 'morgan';
 import path from 'path';
 import connectDatabase from './utils/connectDatabase';
 
+process.on('uncaughtException', (err: Error) => {
+  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  process.exit(1);
+});
+
 const ENV_FILE_PATH = path.resolve(__dirname, 'config.env');
 const dotenvResult = dotenv.config({ path: ENV_FILE_PATH });
 
@@ -45,31 +51,30 @@ const server = app.listen(parseInt(PORT, 10), HOSTNAME, () => {
   console.log(`Server running on http://${HOSTNAME}:${PORT}`);
 });
 
-const eventError = (err: unknown, event: string) => {
-  if (err instanceof Error) {
-    console.error(`${event}! 💥`, err.message);
-  } else {
-    console.error(`${event}! 💥`, err);
-  }
-  server.close(() => {
-    process.exit(1);
-  });
-};
-
 const startServer = async () => {
   try {
     await connectDatabase();
   } catch (err) {
-    eventError(err, 'ERROR IN DATABASE CONNECTION');
+    if (err instanceof Error) {
+      console.error('Error connecting to the database:', err.message);
+    } else {
+      console.error('An unknown error occurred:', err);
+    }
+    server.close(() => {
+      process.exit(1);
+    });
   }
 };
 
 startServer();
 
-process.on('unhandledRejection', (err) =>
-  eventError(err, 'UNHANDLED REJECTION'),
-);
-process.on('uncaughtException', (err) => eventError(err, 'UNCAUGHT EXCEPTION'));
+process.on('unhandledRejection', (err: Error) => {
+  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
 
 // const handleTerminated = (event: string) => {
 //   console.log(`${event} received. Shutting down gracefully...`);
@@ -80,3 +85,4 @@ process.on('uncaughtException', (err) => eventError(err, 'UNCAUGHT EXCEPTION'));
 
 // process.on('SIGINT', () => handleTerminated('SIGINT'));
 // process.on('SIGTERM', () => handleTerminated('SIGTERM'));
+

@@ -2,6 +2,8 @@ import CustomError from '@/utils/customError';
 import { writeErrorLog } from '@/utils/logger';
 import { NextFunction, Request, Response } from 'express';
 
+const { NODE_ENV } = process.env as Record<string, string | undefined>;
+
 const handleCastErrorDB = (err: any) => {
   const message = `Invalid ${err.path}: ${err.value}`;
   return new CustomError(message, 400);
@@ -54,7 +56,7 @@ const errorMiddleware = (
     message,
   };
 
-  if (process.env.NODE_ENV === 'development') {
+  if (NODE_ENV === 'development' || NODE_ENV === 'alpha') {
     if (Object.keys(errorDetail).length > 0) {
       jsonResponse.error = errorDetail;
     }
