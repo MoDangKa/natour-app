@@ -1,4 +1,4 @@
-import { authorizeAdmin } from '@/controllers/authController';
+import { authenticated } from '@/controllers/authController';
 import {
   aliasTopTours,
   createTour,
@@ -16,7 +16,7 @@ import {
 import { Router } from 'express';
 
 const router = Router();
-router.use('/', authorizeAdmin);
+router.use('/', authenticated);
 
 router.route('/').get(getAllTours).post(validateCreateTour, createTour);
 

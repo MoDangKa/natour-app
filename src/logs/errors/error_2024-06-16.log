@@ -53,3 +53,11 @@
 2024-06-16T05:32:13.709Z - [127.0.0.1] POST /api/v1/auth/signup/v2 400 - UserV2 validation failed: passwordConfirm: Passwords are not the same!
 2024-06-16T05:33:13.419Z - [127.0.0.1] POST /api/v1/auth/signup/v2 400 - Duplicate field value: "solutionx100cc@gmail.com". Please use another value!
 2024-06-16T05:33:27.510Z - [127.0.0.1] POST /api/v1/auth/signup/v2 400 - UserV2 validation failed: passwordConfirm: Passwords are not the same!
+2024-06-16T05:36:16.621Z - [127.0.0.1] POST /api/v1/auth/signup/v2 500 - UserV2 validation failed: passwordConfirm: Passwords are not the same!
+2024-06-16T05:37:05.929Z - [127.0.0.1] POST /api/v1/auth/signup/v2 400 - UserV2 validation failed: passwordConfirm: Passwords are not the same!
+2024-06-16T05:38:00.027Z - [127.0.0.1] POST /api/v1/auth/signup/v2 400 - Duplicate field value: "solutionx100cc@gmail.com". Please use another value!
+2024-06-16T06:17:24.106Z - [127.0.0.1] POST /api/v1/auth/signin 401 - Invalid credentials
+2024-06-16T06:19:27.355Z - [127.0.0.1] POST /api/v1/auth/signin 401 - Invalid credentials
+2024-06-16T06:19:28.529Z - [127.0.0.1] POST /api/v1/auth/signin 401 - Invalid credentials
+2024-06-16T06:19:48.200Z - [127.0.0.1] POST /api/v1/auth/signin 400 - Please provide email and password!
+2024-06-16T06:21:01.505Z - [127.0.0.1] POST /api/v1/auth/signin 400 - Please provide email and password!

@@ -8,5 +8,6 @@ declare namespace NodeJS {
     MONGO_LOCAL: string;
     JWT_TOKEN: string;
     JWT_SECRET: string;
+    JWT_EXPIRES_IN: string;
   }
 }

@@ -9,9 +9,15 @@ const handleCastErrorDB = (err: any) => {
 };
 
 const handleDuplicateFieldsDB = (err: any) => {
-  const value = err?.errorResponse?.errmsg.match(/".+?"/gm)[0];
+  const value = err?.errmsg?.match(/".+?"/)?.[0];
   const errorMessage = `Duplicate field value: ${value}. Please use another value!`;
   return new CustomError(errorMessage, 400);
+};
+
+const extractErrorDetails = (err: any) => {
+  return (
+    err?.error || (err?.errors && err) || (err?.errorResponse && err) || {}
+  );
 };
 
 const errorMiddleware = (
@@ -20,35 +26,23 @@ const errorMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
-  let statusCode: number = err.statusCode || 500;
-  let status: string = err.status || 'error';
-  let message: string = err.message;
+  let statusCode = err.statusCode || 500;
+  let status = err.status || 'error';
+  let message = err.message;
 
-  const errorDetail: Record<string, any> =
-    (err as any)?.error ||
-    ((err as any)?.errors && err) ||
-    ((err as any)?.errorResponse && err) ||
-    {};
+  const errorDetail = extractErrorDetails(err);
 
-  let customError: any;
-
-  if (errorDetail?.path && errorDetail?.value) {
-    console.log('first');
-    customError = handleCastErrorDB(errorDetail);
+  if (errorDetail.path && errorDetail.value) {
+    const customError = handleCastErrorDB(errorDetail);
     statusCode = customError.statusCode;
     status = customError.status;
     message = customError.message;
-  }
-
-  if (errorDetail?.code === 11000) {
-    console.log('second');
-    customError = handleDuplicateFieldsDB(errorDetail);
+  } else if (errorDetail.code === 11000) {
+    const customError = handleDuplicateFieldsDB(errorDetail);
     statusCode = customError.statusCode;
     status = customError.status;
     message = customError.message;
-  }
-
-  if (errorDetail?.errors) {
+  } else if (errorDetail.errors) {
     statusCode = 400;
     status = 'fail';
   }

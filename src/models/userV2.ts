@@ -8,6 +8,10 @@ interface IUserV2 extends Document {
   photo?: string;
   password: string;
   passwordConfirm?: string;
+  correctPassword(
+    candidatePassword: string,
+    userPassword: string,
+  ): Promise<boolean>;
 }
 
 type IUserV2Keys = keyof IUserV2;
@@ -37,6 +41,7 @@ const userV2Schema = new mongoose.Schema<IUserV2>(
       type: String,
       required: [true, 'Please provide a password'],
       minlength: 8,
+      select: false,
     },
     passwordConfirm: {
       type: String,
@@ -77,6 +82,14 @@ userV2Schema.pre<IUserV2>('save', async function (next) {
   this.passwordConfirm = undefined;
   next();
 });
+
+userV2Schema.methods.correctPassword = async function (
+  candidatePassword: string,
+  userPassword: string,
+) {
+  if (!userPassword) return false;
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const UserV2: Model<IUserV2> = mongoose.model<IUserV2>('UserV2', userV2Schema);
 
