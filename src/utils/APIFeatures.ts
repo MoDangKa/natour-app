@@ -79,7 +79,7 @@ export default class APIFeatures<T extends Document> {
     const totalDocs = await this.query.model.countDocuments();
 
     if (this.skip >= totalDocs) {
-      return { errorMessage: 'This page does not exist' };
+      return { error: 'This page does not exist' };
     }
 
     const results = await this.query;

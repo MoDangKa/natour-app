@@ -1,5 +1,5 @@
 2024-06-16T04:08:34.559Z - [127.0.0.1] POST /api/v1/auth/signup 400 - Duplicate field value: "solutionx100cc@gmail.com". Please use another value!
-2024-06-16T04:09:06.454Z - [127.0.0.1] GET /api/v1/tours 403 - Unauthorized
+2024-06-16T04:09:06.454Z - [127.0.0.1] GET /api/v1/tours 403 - You are not logged in! Please log in to get access.
 2024-06-16T04:10:12.875Z - [127.0.0.1] POST /api/v1/auth/signup 400 - Unexpected fields: passwordConfirmm
 2024-06-16T04:18:20.455Z - [127.0.0.1] POST /api/v1/auth/signup 400 - Validation Error: [{"email":"Please provide your email"}]
 2024-06-16T04:18:23.210Z - [127.0.0.1] POST /api/v1/auth/signup 400 - Validation Error: [{"email":"Please provide your email"}]
@@ -61,3 +61,35 @@
 2024-06-16T06:19:28.529Z - [127.0.0.1] POST /api/v1/auth/signin 401 - Invalid credentials
 2024-06-16T06:19:48.200Z - [127.0.0.1] POST /api/v1/auth/signin 400 - Please provide email and password!
 2024-06-16T06:21:01.505Z - [127.0.0.1] POST /api/v1/auth/signin 400 - Please provide email and password!
+2024-06-16T09:47:34.629Z - [127.0.0.1] GET /api/v1/tours 401 - You are not logged in! Please log in to get access.
+2024-06-16T09:55:12.527Z - [127.0.0.1] GET /api/v1/tours 500 - invalid signature
+2024-06-16T09:55:49.641Z - [127.0.0.1] GET /api/v1/tours 500 - invalid signature
+2024-06-16T09:56:13.112Z - [127.0.0.1] GET /api/v1/tours 500 - invalid signature
+2024-06-16T09:57:14.326Z - [127.0.0.1] GET /api/v1/tours 500 - invalid signature
+2024-06-16T10:04:21.241Z - [127.0.0.1] GET /api/v1/tours 401 - Invalid token. Please log in again!
+2024-06-16T10:05:45.691Z - [127.0.0.1] POST /api/v2/auth/signup 400 - Duplicate field value: "solutionx100cc@gmail.comm". Please use another value!
+2024-06-16T10:07:28.043Z - [127.0.0.1] GET /api/v1/tours 500 - jwt expired
+2024-06-16T10:12:45.223Z - [127.0.0.1] GET /api/v1/tours 401 - Your token has expired. Please log in again.
+2024-06-16T10:13:54.545Z - [127.0.0.1] GET /api/v1/tours 401 - Your token has expired. Please log in again.
+2024-06-16T10:15:40.468Z - [127.0.0.1] GET /api/v1/tours 401 - Invalid token. Please log in again!
+2024-06-16T10:17:41.678Z - [127.0.0.1] POST /api/v1/auth/signin 400 - Please provide email and password!
+2024-06-16T10:19:04.364Z - [127.0.0.1] GET /api/v1/tours 401 - Invalid token. Please log in again!
+2024-06-16T10:19:18.047Z - [127.0.0.1] GET /api/v1/tours 500 - invalid signature
+2024-06-16T10:19:34.878Z - [127.0.0.1] GET /api/v1/tours 401 - Invalid token. Please log in again!
+2024-06-16T10:19:39.628Z - [127.0.0.1] POST /api/v1/auth/signin 400 - Please provide email and password!
+2024-06-16T10:21:18.342Z - [127.0.0.1] POST /api/v1/auth/signin 400 - Please provide email and password!
+2024-06-16T10:21:42.012Z - [127.0.0.1] POST /api/v1/auth/signin 400 - Please provide email and password!
+2024-06-16T10:22:20.188Z - [127.0.0.1] POST /api/v1/auth/signin 400 - Please provide email and password!
+2024-06-16T10:23:25.617Z - [127.0.0.1] POST /api/v1/auth/signin 400 - Please provide email and password!
+2024-06-16T10:24:27.108Z - [127.0.0.1] POST /api/v1/auth/signin 400 - Please provide email and password!
+2024-06-16T10:24:50.328Z - [127.0.0.1] POST /api/v1/tours 400 - Unexpected fields: maxGroupSized, difficultyd
+2024-06-16T10:25:29.824Z - [127.0.0.1] POST /api/v1/tours 400 - Unexpected fields: maxGroupSized, difficultyd
+2024-06-16T10:25:40.294Z - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: difficulty: A tour must have a difficulty
+2024-06-16T10:25:52.264Z - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: difficulty: A tour must have a difficulty
+2024-06-16T10:25:53.480Z - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: difficulty: A tour must have a difficulty
+2024-06-16T10:26:18.222Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"maxGroupSize":"Max group size must be a positive number"},{"ratingsAverage":"Ratings average must be a float number between 1.0 and 5.0"}]
+2024-06-16T10:27:18.841Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"maxGroupSize":"Max group size must be a positive number"},{"ratingsAverage":"Ratings average must be a float number between 1.0 and 5.0"}]
+2024-06-16T10:34:24.889Z - [127.0.0.1] GET /api/v1/tours 401 - Your token has expired. Please log in again.
+2024-06-16T10:34:28.560Z - [127.0.0.1] GET /api/v1/tours 401 - Your token has expired. Please log in again.
+2024-06-16T10:39:36.730Z - [127.0.0.1] GET /api/v1/tours 401 - Your token has expired. Please log in again.
+2024-06-16T10:39:42.816Z - [127.0.0.1] GET /api/v1/tours 401 - Your token has expired. Please log in again.

@@ -3,10 +3,11 @@ import notFoundMiddleware from '@/middlewares/notFoundMiddleware';
 import apiV1Router from '@/routes/apiV1Router';
 import connectDatabase from '@/utils/connectDatabase';
 import cookieParser from 'cookie-parser';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import path from 'path';
 import { HOSTNAME, NODE_ENV, PORT } from './config';
+import apiV2Router from './routes/apiV2Router';
 
 const app = express();
 
@@ -18,7 +19,15 @@ if (NODE_ENV === 'development' || NODE_ENV === 'alpha') {
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  req.requestTime = new Date().toISOString();
+  console.log(req.header);
+  next();
+});
+
 app.use('/api/v1', apiV1Router);
+app.use('/api/v2', apiV2Router);
 app.all('*', notFoundMiddleware);
 app.use(errorMiddleware);
 

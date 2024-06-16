@@ -28,8 +28,8 @@ export const getAllTours = asyncHandler(
 
     const response = await features.getResults();
 
-    if (response.errorMessage) {
-      return next(new CustomError(response.errorMessage, 404));
+    if (response.error) {
+      return next(new CustomError(response.error, 404));
     }
 
     const { data = [], page, totalPages, limit, resultsLength } = response;
@@ -64,8 +64,8 @@ export const getTourById = asyncHandler(
     const tour = await Tour.findById(id);
 
     if (!tour) {
-      const errorMessage = 'No tour found with that ID';
-      return next(new CustomError(errorMessage, 404));
+      const message = 'No tour found with that ID';
+      return next(new CustomError(message, 404));
     }
 
     res.status(200).json({
@@ -85,8 +85,8 @@ export const updateTourById = asyncHandler(
     });
 
     if (!tour) {
-      const errorMessage = 'No tour found with that ID';
-      return next(new CustomError(errorMessage, 404));
+      const message = 'No tour found with that ID';
+      return next(new CustomError(message, 404));
     }
 
     res.status(200).json({
@@ -103,8 +103,8 @@ export const deleteTourById = asyncHandler(
     const tour = await Tour.findByIdAndDelete(id);
 
     if (!tour) {
-      const errorMessage = 'No tour found with that ID';
-      return next(new CustomError(errorMessage, 404));
+      const message = 'No tour found with that ID';
+      return next(new CustomError(message, 404));
     }
 
     res.status(204).json({
@@ -166,8 +166,8 @@ export const getMonthlyPlan = asyncHandler(
     ]);
 
     if (!plan || plan.length === 0) {
-      const errorMessage = `Plan with year ${year} not found`;
-      return next(new CustomError(errorMessage, 404));
+      const message = `Plan with year ${year} not found`;
+      return next(new CustomError(message, 404));
     }
 
     const defaultPlan = Array.from({ length: 12 }, (_, i) => ({

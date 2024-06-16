@@ -1,4 +1,5 @@
-import { authenticated } from '@/controllers/authController';
+import { protect } from '@/controllers/authController';
+import { protectV2 } from '@/controllers/authV2Controller';
 import {
   aliasTopTours,
   createTour,
@@ -16,7 +17,7 @@ import {
 import { Router } from 'express';
 
 const router = Router();
-router.use('/', authenticated);
+router.use('/', protectV2);
 
 router.route('/').get(getAllTours).post(validateCreateTour, createTour);
 
