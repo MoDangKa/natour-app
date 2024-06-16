@@ -48,6 +48,11 @@ const errorMiddleware = (
     message = customError.message;
   }
 
+  if (errorDetail?.errors) {
+    statusCode = 400;
+    status = 'fail';
+  }
+
   const jsonResponse: {
     status: string;
     message: string;

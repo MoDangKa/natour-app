@@ -14,7 +14,7 @@ const requireValidations = {
     .withMessage('Please provide a password'),
   passwordConfirm: check('passwordConfirm')
     .custom((value, { req }) => value === req.body.password)
-    .withMessage('Passwords do not match'),
+    .withMessage('Passwords are not the same!'),
 };
 
 const commonValidations = {

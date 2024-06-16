@@ -1,4 +1,5 @@
 import { User } from '@/models/user';
+import { UserV2 } from '@/models/userV2';
 import CustomError from '@/utils/customError';
 import bcrypt from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
@@ -15,6 +16,13 @@ export const signup = asyncHandler(
       password: hashedPassword,
     });
 
+    res.status(201).json({ status: 'success', data: { user: newUser } });
+  },
+);
+
+export const signupV2 = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const newUser = await UserV2.create(req.body);
     res.status(201).json({ status: 'success', data: { user: newUser } });
   },
 );

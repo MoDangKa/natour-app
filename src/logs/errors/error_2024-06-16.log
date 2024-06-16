@@ -41,3 +41,15 @@
 2024-06-16T04:57:42.239Z - [127.0.0.1] POST /api/v1/auth/signup 400 - Validation Error: [{"email":"Please provide your email"},{"passwordConfirm":"Passwords do not match"}]
 2024-06-16T04:57:55.460Z - [127.0.0.1] POST /api/v1/auth/signup 400 - Duplicate field value: "solutionx100cc@gmail.com". Please use another value!
 2024-06-16T04:58:46.025Z - [127.0.0.1] POST /api/v1/auth/signup 400 - Validation Error: [{"passwordConfirm":"Passwords do not match"}]
+2024-06-16T05:23:57.603Z - [127.0.0.1] POST /api/v1/auth/signup/v2 400 - Validation Error: [{"email":"Please provide your email"}]
+2024-06-16T05:24:02.877Z - [127.0.0.1] POST /api/v1/auth/signup/v2 400 - Unexpected fields: passwordConfirmm
+2024-06-16T05:24:09.209Z - [127.0.0.1] POST /api/v1/auth/signup/v2 400 - Validation Error: [{"email":"Please provide your email"}]
+2024-06-16T05:24:17.067Z - [127.0.0.1] POST /api/v1/auth/signup/v2 400 - Duplicate field value: "solutionx100cc@gmail.com". Please use another value!
+2024-06-16T05:24:39.618Z - [127.0.0.1] POST /api/v1/auth/signup/v2 400 - Validation Error: [{"passwordConfirm":"Passwords are not the same!"}]
+2024-06-16T05:28:54.703Z - [127.0.0.1] POST /api/v1/auth/signup/v2 400 - Validation Error: [{"passwordConfirm":"Passwords are not the same!"}]
+2024-06-16T05:29:24.067Z - [127.0.0.1] POST /api/v1/auth/signup/v2 500 - UserV2 validation failed: passwordConfirm: Passwords are not the same!
+2024-06-16T05:31:40.201Z - [127.0.0.1] POST /api/v1/auth/signup/v2 500 - UserV2 validation failed: passwordConfirm: Passwords are not the same!
+2024-06-16T05:31:41.661Z - [127.0.0.1] POST /api/v1/auth/signup/v2 500 - UserV2 validation failed: passwordConfirm: Passwords are not the same!
+2024-06-16T05:32:13.709Z - [127.0.0.1] POST /api/v1/auth/signup/v2 400 - UserV2 validation failed: passwordConfirm: Passwords are not the same!
+2024-06-16T05:33:13.419Z - [127.0.0.1] POST /api/v1/auth/signup/v2 400 - Duplicate field value: "solutionx100cc@gmail.com". Please use another value!
+2024-06-16T05:33:27.510Z - [127.0.0.1] POST /api/v1/auth/signup/v2 400 - UserV2 validation failed: passwordConfirm: Passwords are not the same!
