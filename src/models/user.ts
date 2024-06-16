@@ -37,6 +37,16 @@ const userSchema = new mongoose.Schema<IUser>(
       required: [true, 'Please provide a password'],
       minlength: 8,
     },
+    // passwordConfirm: {
+    //   type: String,
+    //   required: [true, 'Please confirm your password'],
+    //   validate: {
+    //     validator: function (this: IUser, val: string) {
+    //       return val === this.password;
+    //     },
+    //     message: 'Passwords do not match',
+    //   },
+    // },
     photo: String,
   },
   {

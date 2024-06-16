@@ -2,37 +2,14 @@ import errorMiddleware from '@/middlewares/errorMiddleware';
 import notFoundMiddleware from '@/middlewares/notFoundMiddleware';
 import apiV1Router from '@/routes/apiV1Router';
 import connectDatabase from '@/utils/connectDatabase';
-import * as dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import express from 'express';
 import morgan from 'morgan';
 import path from 'path';
-import cookieParser from 'cookie-parser';
-
-process.on('uncaughtException', (err: Error) => {
-  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
-  console.log(err.name, err.message);
-  process.exit(1);
-});
-
-const ENV_FILE_PATH = path.resolve(__dirname, 'config.env');
-const dotenvResult = dotenv.config({ path: ENV_FILE_PATH });
-
-if (dotenvResult.error) {
-  console.error('Error loading environment variables:', dotenvResult.error);
-  process.exit(1);
-}
-
-const { NODE_ENV, PORT, HOSTNAME } = process.env as Record<
-  string,
-  string | undefined
->;
-
-if (!PORT || !HOSTNAME) {
-  console.error('Missing essential environment variables: PORT or HOSTNAME');
-  process.exit(1);
-}
+import { HOSTNAME, NODE_ENV, PORT } from './config';
 
 const app = express();
+
 app.use(cookieParser());
 app.use(express.json());
 
@@ -41,13 +18,11 @@ if (NODE_ENV === 'development' || NODE_ENV === 'alpha') {
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use('/api/v1', apiV1Router);
 app.all('*', notFoundMiddleware);
-
 app.use(errorMiddleware);
 
-const server = app.listen(parseInt(PORT, 10), HOSTNAME, () => {
+const server = app.listen(parseInt(PORT!, 10), HOSTNAME!, () => {
   console.log(`Server running on http://${HOSTNAME}:${PORT}`);
 });
 
@@ -68,6 +43,14 @@ const startServer = async () => {
 
 startServer();
 
+process.on('uncaughtException', (err: Error) => {
+  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
 process.on('unhandledRejection', (err: Error) => {
   console.log('UNHANDLED REJECTION! 💥 Shutting down...');
   console.log(err.name, err.message);
@@ -76,12 +59,12 @@ process.on('unhandledRejection', (err: Error) => {
   });
 });
 
-// const handleTerminated = (event: string) => {
-//   console.log(`${event} received. Shutting down gracefully...`);
+// const handleShutdown = (message: string) => {
+//   console.log(`${message} received. Shutting down gracefully...`);
 //   server.close(() => {
 //     console.log('Process terminated!');
 //   });
 // };
 
-// process.on('SIGINT', () => handleTerminated('SIGINT'));
-// process.on('SIGTERM', () => handleTerminated('SIGTERM'));
+// process.on('SIGINT', () => handleShutdown('SIGINT'));
+// process.on('SIGTERM', () => handleShutdown('SIGTERM'));

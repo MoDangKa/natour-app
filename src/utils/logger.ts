@@ -31,7 +31,7 @@ const getLogFilePath = (logType?: LogType): string | null => {
 export const writeLogFile = async (
   message: string,
   logType?: LogType,
-): Promise<void> => {
+) => {
   const logFilePath: string | null = getLogFilePath(logType);
 
   if (!logFilePath) {
@@ -54,7 +54,7 @@ export const writeErrorLog = async (
   pathname: string,
   stateCode: number,
   errorMessage: string,
-): Promise<void> => {
+) => {
   const logMessage: string = `[${ip}] ${method} ${pathname} ${stateCode} - ${errorMessage}`;
   await writeLogFile(logMessage, 'error');
 };

@@ -6,7 +6,7 @@ import asyncHandler from 'express-async-handler';
 import { SignJWT, jwtVerify } from 'jose';
 
 export const signup = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { password, ...userDetails } = req.body;
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -20,7 +20,7 @@ export const signup = asyncHandler(
 );
 
 export const signin = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 
@@ -50,7 +50,7 @@ export const signin = asyncHandler(
 );
 
 export const authorizeAdmin = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const jwtToken = process.env.JWT_TOKEN!;
     const token = req.cookies[jwtToken];
 

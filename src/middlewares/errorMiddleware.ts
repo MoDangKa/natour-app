@@ -1,18 +1,17 @@
+import { NODE_ENV } from '@/config';
 import CustomError from '@/utils/customError';
 import { writeErrorLog } from '@/utils/logger';
 import { NextFunction, Request, Response } from 'express';
 
-const { NODE_ENV } = process.env as Record<string, string | undefined>;
-
 const handleCastErrorDB = (err: any) => {
-  const message = `Invalid ${err.path}: ${err.value}`;
-  return new CustomError(message, 400);
+  const errorMessage = `Invalid ${err.path}: ${err.value}`;
+  return new CustomError(errorMessage, 400);
 };
 
 const handleDuplicateFieldsDB = (err: any) => {
   const value = err?.errorResponse?.errmsg.match(/".+?"/gm)[0];
-  const message = `Duplicate field value: ${value}. Please use another value!`;
-  return new CustomError(message, 400);
+  const errorMessage = `Duplicate field value: ${value}. Please use another value!`;
+  return new CustomError(errorMessage, 400);
 };
 
 const errorMiddleware = (
@@ -24,27 +23,30 @@ const errorMiddleware = (
   let statusCode: number = err.statusCode || 500;
   let status: string = err.status || 'error';
   let message: string = err.message;
-  let customError: any = { ...err };
-
-  if (customError?.path && customError?.value) {
-    customError = handleCastErrorDB(customError);
-    statusCode = customError.statusCode;
-    status = customError.status;
-    message = customError.message;
-  }
-
-  if (customError?.code === 11000) {
-    customError = handleDuplicateFieldsDB(customError);
-    statusCode = customError.statusCode;
-    status = customError.status;
-    message = customError.message;
-  }
 
   const errorDetail: Record<string, any> =
-    customError?.error ||
-    (customError?.errors && err) ||
-    (customError?.errorResponse && err) ||
+    (err as any)?.error ||
+    ((err as any)?.errors && err) ||
+    ((err as any)?.errorResponse && err) ||
     {};
+
+  let customError: any;
+
+  if (errorDetail?.path && errorDetail?.value) {
+    console.log('first');
+    customError = handleCastErrorDB(errorDetail);
+    statusCode = customError.statusCode;
+    status = customError.status;
+    message = customError.message;
+  }
+
+  if (errorDetail?.code === 11000) {
+    console.log('second');
+    customError = handleDuplicateFieldsDB(errorDetail);
+    statusCode = customError.statusCode;
+    status = customError.status;
+    message = customError.message;
+  }
 
   const jsonResponse: {
     status: string;
