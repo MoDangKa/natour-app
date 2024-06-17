@@ -25,3 +25,12 @@
 2024-06-17T02:53:39.878Z - [127.0.0.1] GET /api/v2/tours 401 - User recently changed password! Please log in again.
 2024-06-17T02:57:08.697Z - [127.0.0.1] POST /api/v2/auth/signup 400 - Unexpected fields: passwordChangedAt
 2024-06-17T02:58:10.908Z - [127.0.0.1] POST /api/v2/auth/signup 400 - Validation Error: [{"passwordConfirm":"Passwords are not the same!"}]
+2024-06-17T03:23:52.011Z - [127.0.0.1] GET / 404 - Can't find / on this server!
+2024-06-17T03:23:52.202Z - [127.0.0.1] GET /robots.txt?477387 404 - Can't find /robots.txt?477387 on this server!
+2024-06-17T05:28:53.927Z - [127.0.0.1] POST /api/v2/auth/signup 400 - Validation Error: [{"role":"Role is either: user, guide, lead-guide, admin"}]
+2024-06-17T05:29:09.157Z - [127.0.0.1] POST /api/v2/auth/signup 400 - Duplicate field value: "solutionx100cc@gmail.com". Please use another value!
+2024-06-17T05:30:33.557Z - [127.0.0.1] POST /api/v1/auth/signup 400 - Validation Error: [{"passwordConfirm":"Passwords are not the same!"}]
+2024-06-17T05:31:55.753Z - [127.0.0.1] DELETE /api/v1/tours/666bfd1a9cdaa81429aeee4f 404 - No tour found with that ID
+2024-06-17T05:31:58.476Z - [127.0.0.1] DELETE /api/v1/tours/666bfd1a9cdaa81429aeee4f 404 - No tour found with that ID
+2024-06-17T05:32:24.714Z - [127.0.0.1] DELETE /api/v2/tours/666bfd1a9cdaa81429aeee50 403 - You do not have permission to perform this action
+2024-06-17T05:47:39.186Z - [127.0.0.1] DELETE /api/v1/tours/666fcbcb2da3dddbefffebd2 403 - You do not have permission to perform this action

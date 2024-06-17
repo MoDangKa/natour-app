@@ -1,4 +1,4 @@
-import { Difficulty, tourKeys } from '@/models/tour';
+import { TDifficulty, tourKeys } from '@/models/tour';
 import { check } from 'express-validator';
 import {
   handleValidationErrors,
@@ -22,7 +22,7 @@ const requireValidations = {
     .isInt({ gt: 0 })
     .withMessage('Max group size must be a positive number'),
   difficulty: check('difficulty')
-    .isIn(['easy', 'medium', 'difficult'] as Difficulty[])
+    .isIn(['easy', 'medium', 'difficult'] as TDifficulty[])
     .withMessage('Difficulty must be one of: easy, medium, difficult'),
   price: check('price')
     .isFloat({ gt: 0 })

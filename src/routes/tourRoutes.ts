@@ -1,4 +1,4 @@
-import { protect } from '@/controllers/authController';
+import { protect, restrictTo } from '@/controllers/authController';
 import {
   aliasTopTours,
   createTour,
@@ -16,7 +16,6 @@ import {
 import { Router } from 'express';
 
 const router = Router();
-router.use('/', protect);
 
 router.route('/').get(getAllTours).post(validateCreateTour, createTour);
 
@@ -28,7 +27,7 @@ router.get('/monthly-plan/:year', getMonthlyPlan);
 router
   .route('/:id')
   .get(getTourById)
-  .patch(validateUpdateTour, updateTourById)
-  .delete(deleteTourById);
+  .patch(protect, validateUpdateTour, updateTourById)
+  .delete(protect, restrictTo('admin', 'lead-guide'), deleteTourById);
 
 export default router;

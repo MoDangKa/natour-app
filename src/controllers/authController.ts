@@ -1,5 +1,5 @@
 import { JWT_EXPIRES_IN, JWT_SECRET, JWT_TOKEN, NODE_ENV } from '@/config';
-import { User } from '@/models/user';
+import { User,TRole } from '@/models/user';
 import CustomError from '@/utils/customError';
 import bcrypt from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
@@ -83,6 +83,17 @@ export const protect = asyncHandler(
       return next(new CustomError(message, 401));
     }
 
+    req.user = user;
     next();
   },
 );
+
+
+export const restrictTo = (...roles: TRole[]) =>
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    if (req.user?.role && !roles.includes(req.user.role)) {
+      const message = 'You do not have permission to perform this action';
+      return next(new CustomError(message, 403));
+    }
+    next();
+  });

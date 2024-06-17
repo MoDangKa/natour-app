@@ -2,14 +2,14 @@ import mongoose, { Document, Model, Query } from 'mongoose';
 import slugify from 'slugify';
 import validator from 'validator';
 
-type Difficulty = 'easy' | 'medium' | 'difficult';
+type TDifficulty = 'easy' | 'medium' | 'difficult';
 
 interface ITour extends Document {
   name: string;
   slug: string; // DOCUMENT MIDDLEWARE
   duration: number;
   maxGroupSize: number;
-  difficulty: Difficulty;
+  difficulty: TDifficulty;
   price: number;
   priceDiscount?: number;
   ratingsAverage?: number;
@@ -70,7 +70,7 @@ const tourSchema = new mongoose.Schema<ITour>(
       type: String,
       required: [true, 'A tour must have a difficulty'],
       enum: {
-        values: ['easy', 'medium', 'difficult'] as Difficulty[],
+        values: ['easy', 'medium', 'difficult'] as TDifficulty[],
         message: 'Difficulty is either: easy, medium, difficult',
       },
     },
@@ -197,4 +197,4 @@ tourSchema.pre('aggregate', function (next) {
 
 const Tour: Model<ITour> = mongoose.model<ITour>('Tour', tourSchema);
 
-export { Difficulty, ITour, Tour, tourKeys };
+export { TDifficulty, ITour, Tour, tourKeys };

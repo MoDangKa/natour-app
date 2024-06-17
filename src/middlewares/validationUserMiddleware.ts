@@ -1,5 +1,5 @@
 import { userKeys } from '@/models/user';
-import { userV2Keys } from '@/models/userV2';
+import { TRole, userV2Keys } from '@/models/userV2';
 import { check } from 'express-validator';
 import {
   handleValidationErrors,
@@ -23,6 +23,10 @@ const commonValidations = {
     .optional()
     .isString()
     .withMessage('Photo must be a string'),
+  role: check('role')
+    .optional()
+    .isIn(['user', 'guide', 'lead-guide', 'admin'] as TRole[])
+    .withMessage('Role is either: user, guide, lead-guide, admin'),
 };
 
 export const validateCreateUser = [

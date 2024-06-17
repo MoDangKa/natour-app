@@ -1,5 +1,5 @@
 import { JWT_EXPIRES_IN, JWT_SECRET, JWT_TOKEN, NODE_ENV } from '@/config';
-import { UserV2 } from '@/models/userV2';
+import { TRole, UserV2 } from '@/models/userV2';
 import CustomError from '@/utils/customError';
 import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
@@ -75,7 +75,6 @@ export const protectV2 = asyncHandler(
     }
 
     const decoded = await verifyToken(token, JWT_SECRET!);
-    console.log('decoded: ', decoded);
 
     if (!decoded.sub) {
       const message = 'User ID not found in the JWT payload';
@@ -96,6 +95,7 @@ export const protectV2 = asyncHandler(
       return next(new CustomError(message, 401));
     }
 
+    req.user = user;
     next();
   },
 );

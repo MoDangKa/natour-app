@@ -1,10 +1,13 @@
 import mongoose, { Document, Model } from 'mongoose';
 import validator from 'validator';
 
+type TRole = 'user' | 'guide' | 'lead-guide' | 'admin';
+
 interface IUser extends Document {
   name: string;
   email: string;
   photo?: string;
+  role?: TRole;
   password: string;
   passwordConfirm: string;
   passwordChangedAt?: Date;
@@ -17,6 +20,7 @@ const userKeys: IUserKeys[] = [
   'name',
   'email',
   'photo',
+  'role',
   'password',
   'passwordConfirm',
 ];
@@ -35,6 +39,14 @@ const userSchema = new mongoose.Schema<IUser>(
       validate: [validator.isEmail, 'Please provide a valid email'],
     },
     photo: String,
+    role: {
+      type: String,
+      enum: {
+        values: ['user', 'guide', 'lead-guide', 'admin'] as TRole[],
+        message: 'Role is either: user, guide, lead-guide, admin',
+      },
+      default: 'user',
+    },
     password: {
       type: String,
       required: [true, 'Please provide a password'],
@@ -81,4 +93,4 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp: number) {
 
 const User: Model<IUser> = mongoose.model<IUser>('User', userSchema);
 
-export { IUser, User, userKeys };
+export { IUser, TRole, User, userKeys };

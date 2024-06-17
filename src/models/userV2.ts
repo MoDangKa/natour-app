@@ -2,10 +2,13 @@ import bcrypt from 'bcrypt';
 import mongoose, { Document, Model } from 'mongoose';
 import validator from 'validator';
 
+type TRole = 'user' | 'guide' | 'lead-guide' | 'admin';
+
 interface IUserV2 extends Document {
   name: string;
   email: string;
   photo?: string;
+  role?: TRole;
   password: string;
   passwordConfirm?: string;
   passwordChangedAt?: Date;
@@ -22,6 +25,7 @@ const userV2Keys: IUserV2Keys[] = [
   'name',
   'email',
   'photo',
+  'role',
   'password',
   'passwordConfirm',
 ];
@@ -40,6 +44,14 @@ const userV2Schema = new mongoose.Schema<IUserV2>(
       validate: [validator.isEmail, 'Please provide a valid email'],
     },
     photo: String,
+    role: {
+      type: String,
+      enum: {
+        values: ['user', 'guide', 'lead-guide', 'admin'] as TRole[],
+        message: 'Role is either: user, guide, lead-guide, admin',
+      },
+      default: 'user',
+    },
     password: {
       type: String,
       required: [true, 'Please provide a password'],
@@ -112,4 +124,4 @@ userV2Schema.methods.changedPasswordAfter = function (JWTTimestamp: number) {
 
 const UserV2: Model<IUserV2> = mongoose.model<IUserV2>('UserV2', userV2Schema);
 
-export { IUserV2, UserV2, userV2Keys };
+export { IUserV2, TRole, UserV2, userV2Keys };
