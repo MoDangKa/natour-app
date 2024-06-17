@@ -99,3 +99,12 @@ export const protectV2 = asyncHandler(
     next();
   },
 );
+
+export const restrictToV2 = (...roles: TRole[]) =>
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    if (req.user?.role && !roles.includes(req.user.role)) {
+      const message = 'You do not have permission to perform this action';
+      return next(new CustomError(message, 403));
+    }
+    next();
+  });

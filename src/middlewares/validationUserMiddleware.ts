@@ -42,3 +42,16 @@ export const validateCreateUserV2 = [
   ...Object.values(commonValidations),
   handleValidationErrors,
 ];
+
+export const validateForgotPassword = [
+  validateNoExtraFields(['email']),
+  requireValidations.email,
+  handleValidationErrors,
+];
+
+export const validateResetPassword = [
+  validateNoExtraFields(['password', 'passwordConfirm']),
+  requireValidations.password,
+  requireValidations.passwordConfirm,
+  handleValidationErrors,
+];

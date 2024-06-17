@@ -19,6 +19,12 @@ const {
   JWT_SECRET,
   JWT_TOKEN,
   JWT_EXPIRES_IN,
+  EMAIL_USERNAME,
+  EMAIL_PASSWORD,
+  EMAIL_HOST,
+  EMAIL_PORT,
+  GMAIL_USERNAME,
+  GMAIL_PASSWORD,
 } = process.env as Record<string, string | undefined>;
 
 const validateEnvVariable = (
@@ -38,6 +44,12 @@ validateEnvVariable('JWT_TOKEN', JWT_TOKEN);
 validateEnvVariable('JWT_EXPIRES_IN', JWT_EXPIRES_IN);
 
 export {
+  EMAIL_HOST,
+  EMAIL_PASSWORD,
+  EMAIL_PORT,
+  EMAIL_USERNAME,
+  GMAIL_PASSWORD,
+  GMAIL_USERNAME,
   HOSTNAME,
   JWT_EXPIRES_IN,
   JWT_SECRET,

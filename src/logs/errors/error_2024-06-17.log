@@ -34,3 +34,23 @@
 2024-06-17T05:31:58.476Z - [127.0.0.1] DELETE /api/v1/tours/666bfd1a9cdaa81429aeee4f 404 - No tour found with that ID
 2024-06-17T05:32:24.714Z - [127.0.0.1] DELETE /api/v2/tours/666bfd1a9cdaa81429aeee50 403 - You do not have permission to perform this action
 2024-06-17T05:47:39.186Z - [127.0.0.1] DELETE /api/v1/tours/666fcbcb2da3dddbefffebd2 403 - You do not have permission to perform this action
+2024-06-17T06:48:57.257Z - [127.0.0.1] POST /api/v1/auth/forgotPassword 404 - There is no user with email address.
+2024-06-17T06:52:37.946Z - [127.0.0.1] POST /api/v1/auth/forgotPassword 404 - Can't find /api/v1/auth/forgotPassword on this server!
+2024-06-17T06:52:47.036Z - [127.0.0.1] POST /api/v1/users/forgotPassword 404 - There is no user with email address.
+2024-06-17T06:58:48.990Z - [127.0.0.1] POST /api/v1/users/forgotPassword 400 - Validation Error: [{"email":"Please provide your email"}]
+2024-06-17T06:59:06.857Z - [127.0.0.1] POST /api/v1/users/forgotPassword 404 - Can't find /api/v1/users/forgotPassword on this server!
+2024-06-17T07:00:24.455Z - [127.0.0.1] POST /api/v1/users/forgotPassword 404 - Can't find /api/v1/users/forgotPassword on this server!
+2024-06-17T07:00:46.366Z - [127.0.0.1] POST /api/v1/users/forgotPassword 404 - Can't find /api/v1/users/forgotPassword on this server!
+2024-06-17T07:05:11.112Z - [127.0.0.1] POST /api/v1/users/forgotPassword 404 - Can't find /api/v1/users/forgotPassword on this server!
+2024-06-17T09:07:24.848Z - [127.0.0.1] POST /api/v1/users/forgotPassword 500 - There was an error sending the email. Try again later!
+2024-06-17T09:28:36.810Z - [127.0.0.1] PATCH /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d 404 - Can't find /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d on this server!
+2024-06-17T09:29:08.806Z - [127.0.0.1] PATCH /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d 404 - Can't find /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d on this server!
+2024-06-17T09:30:03.113Z - [127.0.0.1] PATCH /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d 404 - Can't find /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d on this server!
+2024-06-17T09:33:05.255Z - [127.0.0.1] PATCH /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d 404 - Can't find /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d on this server!
+2024-06-17T09:33:35.345Z - [127.0.0.1] PATCH /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d 404 - Can't find /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d on this server!
+2024-06-17T09:34:44.717Z - [127.0.0.1] PATCH /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d 404 - Can't find /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d on this server!
+2024-06-17T09:34:45.942Z - [127.0.0.1] PATCH /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d 404 - Can't find /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d on this server!
+2024-06-17T09:36:20.874Z - [127.0.0.1] PATCH /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d 400 - Validation Error: [{"passwordConfirm":"Passwords are not the same!"}]
+2024-06-17T09:51:23.083Z - [127.0.0.1] PATCH /api/v1/users/resetPassword/8534e6ca75fbeb882be94e729d3f51db8b706c26323777f140d702af01c99e8d 400 - Token is invalid or has expired
+2024-06-17T09:58:37.229Z - [127.0.0.1] POST /api/v1/users/signup 400 - Validation Error: [{"passwordConfirm":"Passwords are not the same!"}]
+2024-06-17T10:00:05.371Z - [127.0.0.1] POST /api/v1/users/signin 401 - Incorrect email or password
