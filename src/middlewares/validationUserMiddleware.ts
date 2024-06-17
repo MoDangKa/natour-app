@@ -1,4 +1,5 @@
 import { userKeys } from '@/models/user';
+import { userV2Keys } from '@/models/userV2';
 import { check } from 'express-validator';
 import {
   handleValidationErrors,
@@ -26,6 +27,13 @@ const commonValidations = {
 
 export const validateCreateUser = [
   validateNoExtraFields(userKeys),
+  ...Object.values(requireValidations),
+  ...Object.values(commonValidations),
+  handleValidationErrors,
+];
+
+export const validateCreateUserV2 = [
+  validateNoExtraFields(userV2Keys),
   ...Object.values(requireValidations),
   ...Object.values(commonValidations),
   handleValidationErrors,

@@ -40,6 +40,13 @@ const generateErrorResponse = (
     message,
   };
 
+  // if (errorDetail?.isOperational) {
+  //   delete errorDetail.statusCode;
+  //   delete errorDetail.status;
+  //   delete errorDetail.isOperational;
+  //   if (!Object.keys(errorDetail.error).length) delete errorDetail.error;
+  // }
+
   if (
     (NODE_ENV === 'development' || NODE_ENV === 'alpha') &&
     Object.keys(errorDetail).length > 0

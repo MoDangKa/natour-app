@@ -7,6 +7,8 @@ interface IUser extends Document {
   photo?: string;
   password: string;
   passwordConfirm: string;
+  passwordChangedAt?: Date;
+  changedPasswordAfter(JWTTimestamp: number): boolean;
 }
 
 type IUserKeys = keyof IUser;
@@ -32,13 +34,17 @@ const userSchema = new mongoose.Schema<IUser>(
       lowercase: true,
       validate: [validator.isEmail, 'Please provide a valid email'],
     },
+    photo: String,
     password: {
       type: String,
       required: [true, 'Please provide a password'],
       minlength: 8,
       select: false,
     },
-    photo: String,
+    passwordChangedAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     toJSON: {
@@ -60,6 +66,18 @@ const userSchema = new mongoose.Schema<IUser>(
     collection: 'users',
   },
 );
+
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp: number) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      (this.passwordChangedAt.getTime() / 1000).toString(),
+      10,
+    );
+    return JWTTimestamp < changedTimestamp;
+  }
+
+  return false;
+};
 
 const User: Model<IUser> = mongoose.model<IUser>('User', userSchema);
 

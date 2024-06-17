@@ -8,10 +8,12 @@ interface IUserV2 extends Document {
   photo?: string;
   password: string;
   passwordConfirm?: string;
+  passwordChangedAt?: Date;
   correctPassword(
     candidatePassword: string,
     userPassword: string,
   ): Promise<boolean>;
+  changedPasswordAfter(JWTTimestamp: number): boolean;
 }
 
 type IUserV2Keys = keyof IUserV2;
@@ -37,6 +39,7 @@ const userV2Schema = new mongoose.Schema<IUserV2>(
       lowercase: true,
       validate: [validator.isEmail, 'Please provide a valid email'],
     },
+    photo: String,
     password: {
       type: String,
       required: [true, 'Please provide a password'],
@@ -53,7 +56,10 @@ const userV2Schema = new mongoose.Schema<IUserV2>(
         message: 'Passwords are not the same!',
       },
     },
-    photo: String,
+    passwordChangedAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     toJSON: {
@@ -89,6 +95,19 @@ userV2Schema.methods.correctPassword = async function (
 ) {
   if (!userPassword) return false;
   return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+userV2Schema.methods.changedPasswordAfter = function (JWTTimestamp: number) {
+  console.log(this);
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      (this.passwordChangedAt.getTime() / 1000).toString(),
+      10,
+    );
+    return JWTTimestamp < changedTimestamp;
+  }
+
+  return false;
 };
 
 const UserV2: Model<IUserV2> = mongoose.model<IUserV2>('UserV2', userV2Schema);

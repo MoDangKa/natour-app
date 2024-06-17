@@ -58,22 +58,29 @@ export const protect = asyncHandler(
 
     if (!token) {
       const message = 'You are not logged in! Please log in to get access.';
-      next(new CustomError(message, 401));
+      return next(new CustomError(message, 401));
     }
 
     const secret: Uint8Array = new TextEncoder().encode(JWT_SECRET!);
     const { payload } = await jwtVerify(token, secret);
 
-    if (!payload.sub) {
+    if (!payload.sub || !payload.iat) {
       const message = 'User ID not found in the JWT payload';
-      next(new CustomError(message, 403));
+      return next(new CustomError(message, 401));
     }
 
-    const user = await User.findOne({ _id: payload.sub });
+    const user = await User.findById(payload.sub);
 
     if (!user) {
       const message = 'User not found or unauthorized access';
-      next(new CustomError(message, 403));
+      return next(new CustomError(message, 401));
+    }
+
+    const passwordChanged = user.changedPasswordAfter(payload.iat);
+
+    if (passwordChanged) {
+      const message = 'User recently changed password! Please log in again.';
+      return next(new CustomError(message, 401));
     }
 
     next();

@@ -1,0 +1,27 @@
+2024-06-17T02:14:04.155Z - [127.0.0.1] GET /api/v1/tours 401 - User ID not found in the JWT payload
+2024-06-17T02:14:12.420Z - [127.0.0.1] GET /api/v1/tours 401 - User ID not found in the JWT payload
+2024-06-17T02:16:40.356Z - [127.0.0.1] GET /api/v1/tours 401 - User ID not found in the JWT payload
+2024-06-17T02:17:15.598Z - [127.0.0.1] GET /api/v1/tours 401 - User ID not found in the JWT payload
+2024-06-17T02:27:03.357Z - [127.0.0.1] GET /api/v1/tours 400 - Invalid _id: 1718590750
+2024-06-17T02:31:38.709Z - [127.0.0.1] GET /api/v1/tours 401 - User recently changed password! Please log in again.
+2024-06-17T02:42:43.231Z - [127.0.0.1] GET /api/v2/tours 401 - User ID not found in the JWT payload
+2024-06-17T02:43:04.838Z - [127.0.0.1] GET /api/v2/tours 401 - User ID not found in the JWT payload
+2024-06-17T02:43:29.115Z - [127.0.0.1] GET /api/v2/tours 401 - User ID not found in the JWT payload
+2024-06-17T02:45:37.681Z - [127.0.0.1] GET /api/v2/tours 401 - User ID not found in the JWT payload
+2024-06-17T02:46:05.764Z - [127.0.0.1] GET /api/v2/tours 401 - User ID not found in the JWT payload
+2024-06-17T02:46:27.132Z - [127.0.0.1] GET /api/v2/tours 401 - User ID not found in the JWT payload
+2024-06-17T02:47:32.575Z - [127.0.0.1] GET /api/v1/tours 401 - User ID not found in the JWT payload
+2024-06-17T02:47:39.339Z - [127.0.0.1] GET /api/v2/tours 401 - User ID not found in the JWT payload
+2024-06-17T02:47:56.589Z - [127.0.0.1] GET /api/v2/tours 401 - User recently changed password! Please log in again.
+2024-06-17T02:48:09.911Z - [127.0.0.1] GET /api/v2/tours 401 - User recently changed password! Please log in again.
+2024-06-17T02:48:24.813Z - [127.0.0.1] GET /api/v2/tours 401 - User recently changed password! Please log in again.
+2024-06-17T02:49:14.186Z - [127.0.0.1] GET /api/v2/tours 401 - User recently changed password! Please log in again.
+2024-06-17T02:49:16.070Z - [127.0.0.1] GET /api/v2/tours 401 - User recently changed password! Please log in again.
+2024-06-17T02:49:41.320Z - [127.0.0.1] GET /api/v1/tours 401 - User recently changed password! Please log in again.
+2024-06-17T02:49:45.082Z - [127.0.0.1] GET /api/v2/tours 401 - User recently changed password! Please log in again.
+2024-06-17T02:50:02.658Z - [127.0.0.1] GET /api/v1/tours 401 - User recently changed password! Please log in again.
+2024-06-17T02:50:03.861Z - [127.0.0.1] GET /api/v1/tours 401 - User recently changed password! Please log in again.
+2024-06-17T02:52:53.379Z - [127.0.0.1] GET /api/v2/tours 401 - User recently changed password! Please log in again.
+2024-06-17T02:53:39.878Z - [127.0.0.1] GET /api/v2/tours 401 - User recently changed password! Please log in again.
+2024-06-17T02:57:08.697Z - [127.0.0.1] POST /api/v2/auth/signup 400 - Unexpected fields: passwordChangedAt
+2024-06-17T02:58:10.908Z - [127.0.0.1] POST /api/v2/auth/signup 400 - Validation Error: [{"passwordConfirm":"Passwords are not the same!"}]

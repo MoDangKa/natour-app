@@ -12,7 +12,7 @@ interface DecodedToken extends JwtPayload {
 }
 
 const signToken = (id: string) => {
-  return jwt.sign({ id }, JWT_SECRET!, {
+  return jwt.sign({ sub: id }, JWT_SECRET!, {
     expiresIn: JWT_EXPIRES_IN,
   });
 };
@@ -35,7 +35,7 @@ export const signupV2 = asyncHandler(
 
     const token = signToken(newUser.id);
 
-    res.status(201).json({ status: 'success', token });
+    res.status(201).json({ status: 'success', token, data: { user: newUser } });
   },
 );
 
@@ -71,36 +71,30 @@ export const protectV2 = asyncHandler(
 
     if (!token) {
       const message = 'You are not logged in! Please log in to get access.';
-      next(new CustomError(message, 401));
+      return next(new CustomError(message, 401));
     }
 
     const decoded = await verifyToken(token, JWT_SECRET!);
     console.log('decoded: ', decoded);
-    // try {
 
-    // } catch (err) {
-    //   return next(
-    //     new CustomError(
-    //       'Unauthorized! Token verification failed or expired.',
-    //       401,
-    //     ),
-    //   );
-    // }
+    if (!decoded.sub) {
+      const message = 'User ID not found in the JWT payload';
+      return next(new CustomError(message, 401));
+    }
 
-    // const secret: Uint8Array = new TextEncoder().encode(JWT_SECRET!);
-    // const { payload } = await jwtVerify(token, secret);
+    const user = await UserV2.findById(decoded.sub);
 
-    // if (!payload.sub) {
-    //   res.cookie(JWT_TOKEN!, '', { expires: new Date(0) });
-    //   next(new CustomError('User ID not found in the JWT payload', 401));
-    // }
+    if (!user) {
+      const message = 'User not found or unauthorized access';
+      return next(new CustomError(message, 401));
+    }
 
-    // const user = await User.findOne({ _id: payload.sub });
+    const passwordChanged = user.changedPasswordAfter(decoded.iat);
 
-    // if (!user) {
-    //   res.cookie(JWT_TOKEN!, '', { expires: new Date(0) }); // Maybe no use
-    //   next(new CustomError('User not found or unauthorized access', 403));
-    // }
+    if (passwordChanged) {
+      const message = 'User recently changed password! Please log in again.';
+      return next(new CustomError(message, 401));
+    }
 
     next();
   },
