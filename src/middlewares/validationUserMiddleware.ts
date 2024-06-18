@@ -66,3 +66,12 @@ export const validateUpdatePassword = [
   requireValidations.passwordConfirm,
   handleValidationErrors,
 ];
+
+export const validateUpdateMe = [
+  validateNoExtraFields(['name', 'email', 'photo', 'role']),
+  requireValidations.name.optional(),
+  requireValidations.email.optional(),
+  commonValidations.photo,
+  commonValidations.role,
+  handleValidationErrors,
+];

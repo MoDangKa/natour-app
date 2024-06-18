@@ -1,19 +1,16 @@
+import { TObject } from '@/@types/types';
 import { Document, Query } from 'mongoose';
 
 export default class APIFeatures<T extends Document> {
   private query: Query<T[], T>;
-  private queryString: Record<string, any>;
+  private queryString: TObject;
   private fields: string[];
 
   private page: number;
   private limit: number;
   private skip: number;
 
-  constructor(
-    query: Query<T[], T>,
-    queryString: Record<string, any>,
-    fields: string[],
-  ) {
+  constructor(query: Query<T[], T>, queryString: TObject, fields: string[]) {
     this.query = query;
     this.queryString = queryString;
     this.fields = fields;
@@ -30,7 +27,7 @@ export default class APIFeatures<T extends Document> {
   }
 
   filter() {
-    const queryFields: Record<string, any> = {};
+    const queryFields: TObject = {};
 
     this.fields.forEach((field) => {
       if (this.queryString[field]) {

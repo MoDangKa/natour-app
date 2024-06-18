@@ -4,3 +4,20 @@
 2024-06-18T03:50:59.334Z - [127.0.0.1] GET /api/v1/tours 401 - You are not logged in! Please log in to get access.
 2024-06-18T03:55:36.554Z - [127.0.0.1] POST /api/v1/users/updateMyPassword 404 - Can't find /api/v1/users/updateMyPassword on this server!
 2024-06-18T03:55:42.789Z - [127.0.0.1] PATCH /api/v1/users/updateMyPassword 401 - Your current password is wrong.
+2024-06-18T05:28:58.588Z - [127.0.0.1] PATCH /api/v2/users/resetPassword/96a7c329f6d15eb52523b8b1971e447ac2ab47f342c9fb39b6da68d1d3e5b29d 500 - UserV2 validation failed: passwordConfirm: Please confirm your password
+2024-06-18T05:30:11.443Z - [127.0.0.1] PATCH /api/v2/users/resetPassword/96a7c329f6d15eb52523b8b1971e447ac2ab47f342c9fb39b6da68d1d3e5b29d 500 - UserV2 validation failed: passwordConfirm: Please confirm your password
+2024-06-18T05:33:59.982Z - [127.0.0.1] PATCH /api/v2/users/resetPassword/96a7c329f6d15eb52523b8b1971e447ac2ab47f342c9fb39b6da68d1d3e5b29d 500 - UserV2 validation failed: passwordConfirm: Please confirm your password
+2024-06-18T05:34:24.719Z - [127.0.0.1] PATCH /api/v2/users/resetPassword/96a7c329f6d15eb52523b8b1971e447ac2ab47f342c9fb39b6da68d1d3e5b29d 400 - Token is invalid or has expired.
+2024-06-18T05:40:43.492Z - [127.0.0.1] PATCH /api/v2/users/updateMyPassword 500 - UserV2 validation failed: passwordConfirm: Please confirm your password
+2024-06-18T05:41:04.802Z - [127.0.0.1] PATCH /api/v2/users/updateMyPassword 401 - Your current password is wrong.
+2024-06-18T05:41:12.792Z - [127.0.0.1] PATCH /api/v2/users/updateMyPassword 500 - UserV2 validation failed: passwordConfirm: Please confirm your password
+2024-06-18T05:41:52.422Z - [127.0.0.1] POST /api/v2/users/signin 401 - Incorrect email or password.
+2024-06-18T06:16:21.758Z - [127.0.0.1] GET /api/v1/users 401 - You are not logged in! Please log in to get access.
+2024-06-18T06:17:18.401Z - [127.0.0.1] POST /api/v2/users/signin 401 - Incorrect email or password.
+2024-06-18T06:17:21.207Z - [127.0.0.1] POST /api/v2/users/signin 401 - Incorrect email or password.
+2024-06-18T06:45:36.075Z - [127.0.0.1] PATCH /api/v1/users/updateMe/asdf 400 - Unexpected fields: password
+2024-06-18T06:50:10.987Z - [127.0.0.1] GET /api/v1/tours 401 - You are not logged in! Please log in to get access.
+2024-06-18T07:19:48.491Z - [127.0.0.1] PATCH /api/v1/users/updateMe/asdf 404 - Can't find /api/v1/users/updateMe/asdf on this server!
+2024-06-18T07:22:37.934Z - [127.0.0.1] PATCH /api/v1/users/updateMe 400 - Validation Error: [{"role":"Role is either: user, guide, lead-guide, admin"}]
+2024-06-18T07:30:41.071Z - [127.0.0.1] POST /api/v1/users/forgotPassword 401 - You are not logged in! Please log in to get access.
+2024-06-18T07:30:47.274Z - [127.0.0.1] POST /api/v1/users/signin 401 - You are not logged in! Please log in to get access.

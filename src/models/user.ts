@@ -1,8 +1,7 @@
+import { TRole } from '@/@types/types';
 import crypto from 'crypto';
 import mongoose, { Document, Model } from 'mongoose';
 import validator from 'validator';
-
-type TRole = 'user' | 'guide' | 'lead-guide' | 'admin';
 
 interface IUser extends Document {
   name: string;

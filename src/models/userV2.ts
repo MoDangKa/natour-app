@@ -1,9 +1,8 @@
-import bcrypt from 'bcrypt';
+import { TRole } from '@/@types/types';
+import { hashPassword } from '@/utils/utils';
 import crypto from 'crypto';
 import mongoose, { Document, Model } from 'mongoose';
 import validator from 'validator';
-
-type TRole = 'user' | 'guide' | 'lead-guide' | 'admin';
 
 interface IUserV2 extends Document {
   name: string;
@@ -95,7 +94,7 @@ const userV2Schema = new mongoose.Schema<IUserV2>(
 
 userV2Schema.pre<IUserV2>('save', async function (next) {
   if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 12);
+  this.password = await hashPassword(this.password);
   this.passwordConfirm = undefined;
   next();
 });

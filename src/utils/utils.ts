@@ -1,11 +1,21 @@
-import { DecodedToken, ICleanUser } from '@/@types/types';
-import { JWT_EXPIRES_IN, JWT_SECRET, JWT_TOKEN, NODE_ENV } from '@/config';
+import { DecodedToken, ICleanUser, TObject } from '@/@types/types';
+import {
+  HASHING_SALT_ROUNDS,
+  JWT_EXPIRES_IN,
+  JWT_SECRET,
+  JWT_TOKEN,
+  NODE_ENV,
+} from '@/config';
 import { IUser } from '@/models/user';
 import { IUserV2 } from '@/models/userV2';
 import bcrypt from 'bcrypt';
 import { Response } from 'express';
 import { SignJWT } from 'jose';
 import jwt from 'jsonwebtoken';
+
+export const hashPassword = async (password: string): Promise<string> => {
+  return await bcrypt.hash(password, parseInt(HASHING_SALT_ROUNDS!, 10));
+};
 
 export const correctPassword = async function (
   candidatePassword: string,
@@ -93,4 +103,12 @@ export const createSendTokenV2 = (
     role: user.role!,
   };
   createSendTokenCommon(token, cleanUser, statusCode, res);
+};
+
+export const filterObj = (obj: TObject, ...allowedFields: string[]) => {
+  const newObj: TObject = {};
+  Object.keys(obj).forEach((el) => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
 };

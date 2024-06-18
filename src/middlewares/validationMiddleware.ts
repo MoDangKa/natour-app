@@ -8,8 +8,9 @@ export const validateNoExtraFields = (expectedFields: string[]) => {
       (field) => !expectedFields.includes(field),
     );
     if (extraFields.length) {
-      const errorMessage = `Unexpected fields: ${extraFields.join(', ')}`;
-      return next(new CustomError(errorMessage, 400));
+      return next(
+        new CustomError(`Unexpected fields: ${extraFields.join(', ')}`, 400),
+      );
     }
     next();
   };
@@ -25,8 +26,13 @@ export const handleValidationErrors = (
     const errorFields = errors.array().map((err: any) => ({
       [err.path]: err.msg,
     }));
-    const errorMessage = `Validation Error: ${JSON.stringify(errorFields)}`;
-    return next(new CustomError(errorMessage, 400, errors.array()));
+    return next(
+      new CustomError(
+        `Validation Error: ${JSON.stringify(errorFields)}`,
+        400,
+        errors.array(),
+      ),
+    );
   }
   next();
 };

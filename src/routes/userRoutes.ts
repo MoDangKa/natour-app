@@ -2,14 +2,24 @@ import {
   forgotPassword,
   protect,
   resetPassword,
+  restrictTo,
   signin,
   signup,
   updatePassword,
 } from '@/controllers/authController';
 import {
+  createUser,
+  deleteUserById,
+  getAllUsers,
+  getUserById,
+  updateMe,
+  updateUserById,
+} from '@/controllers/userController';
+import {
   validateCreateUser,
   validateForgotPassword,
   validateResetPassword,
+  validateUpdateMe,
   validateUpdatePassword,
 } from '@/middlewares/validationUserMiddleware';
 import { Router } from 'express';
@@ -21,11 +31,19 @@ router.post('/signin', signin);
 
 router.post('/forgotPassword', validateForgotPassword, forgotPassword);
 router.patch('/resetPassword/:token', validateResetPassword, resetPassword);
-router.patch(
-  '/updateMyPassword',
-  protect,
-  validateUpdatePassword,
-  updatePassword,
-);
+
+router.use(protect);
+
+router.patch('/updateMyPassword', validateUpdatePassword, updatePassword);
+router.patch('/updateMe', validateUpdateMe, updateMe);
+
+router.get('/', getAllUsers);
+
+router
+  .route('/:id')
+  .get(getUserById)
+  .post(createUser)
+  .patch(updateUserById)
+  .delete(restrictTo('admin'), deleteUserById);
 
 export default router;

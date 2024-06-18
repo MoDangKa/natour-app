@@ -1,9 +1,8 @@
-import { HASHING_SALT_ROUNDS, JWT_SECRET, JWT_TOKEN } from '@/config';
+import { JWT_SECRET, JWT_TOKEN } from '@/config';
 import { TRole, UserV2 } from '@/models/userV2';
 import CustomError from '@/utils/customError';
 import sendEmail from '@/utils/email';
 import { correctPassword, createSendTokenV2, verifyToken } from '@/utils/utils';
-import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
@@ -23,9 +22,8 @@ export const signinV2 = asyncHandler(
     }
 
     const user = await UserV2.findOne({ email }).select('+password');
-
     if (!user || !(await correctPassword(password, user.password))) {
-      return next(new CustomError('Incorrect email or password', 401));
+      return next(new CustomError('Incorrect email or password.', 401));
     }
 
     createSendTokenV2(user, 200, res);
@@ -35,7 +33,6 @@ export const signinV2 = asyncHandler(
 export const protectV2 = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies[JWT_TOKEN!];
-
     if (!token) {
       return next(
         new CustomError(
@@ -46,22 +43,20 @@ export const protectV2 = asyncHandler(
     }
 
     const decoded = await verifyToken(token, JWT_SECRET!);
-
     if (!decoded.sub) {
-      return next(new CustomError('User ID not found in the JWT payload', 401));
-    }
-
-    const user = await UserV2.findById(decoded.sub);
-
-    if (!user) {
       return next(
-        new CustomError('User not found or unauthorized access', 401),
+        new CustomError('User ID not found in the JWT payload.', 401),
       );
     }
 
-    const passwordChanged = user.changedPasswordAfter(decoded.iat);
+    const user = await UserV2.findById(decoded.sub);
+    if (!user) {
+      return next(
+        new CustomError('User not found or unauthorized access.', 401),
+      );
+    }
 
-    if (passwordChanged) {
+    if (user.changedPasswordAfter(decoded.iat)) {
       return next(
         new CustomError(
           'User recently changed password! Please log in again.',
@@ -75,23 +70,20 @@ export const protectV2 = asyncHandler(
   },
 );
 
-export const restrictToV2 = (...roles: TRole[]) => {
-  return asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
-      if (req.user?.role && !roles.includes(req.user.role)) {
-        return next(
-          new CustomError(
-            'You do not have permission to perform this action',
-            403,
-          ),
-        );
-      }
-      next();
-    },
-  );
-};
+export const restrictToV2 = (...roles: TRole[]) =>
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    if (req.user?.role && !roles.includes(req.user.role)) {
+      return next(
+        new CustomError(
+          'You do not have permission to perform this action.',
+          403,
+        ),
+      );
+    }
+    next();
+  });
 
-export const forgotPassword = asyncHandler(
+export const forgotPasswordV2 = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await UserV2.findOne({ email: req.body.email });
     if (!user) {
@@ -104,7 +96,6 @@ export const forgotPassword = asyncHandler(
     await user.save({ validateBeforeSave: false });
 
     const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
-
     const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
 
     try {
@@ -133,8 +124,10 @@ export const forgotPassword = asyncHandler(
   },
 );
 
-export const resetPassword = asyncHandler(
+export const resetPasswordV2 = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
+    const { password, passwordConfirm } = req.body;
+
     const hashedToken = crypto
       .createHash('sha256')
       .update(req.params.token)
@@ -149,10 +142,8 @@ export const resetPassword = asyncHandler(
       return next(new CustomError('Token is invalid or has expired.', 400));
     }
 
-    user.password = await bcrypt.hash(
-      req.body.password,
-      parseInt(HASHING_SALT_ROUNDS!, 10),
-    );
+    user.password = password;
+    user.passwordConfirm = passwordConfirm;
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save();
@@ -161,7 +152,7 @@ export const resetPassword = asyncHandler(
   },
 );
 
-export const updatePassword = asyncHandler(
+export const updatePasswordV2 = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { passwordCurrent, password, passwordConfirm } = req.body;
 
@@ -170,16 +161,12 @@ export const updatePassword = asyncHandler(
     }
 
     const user = await UserV2.findById(req.user?.id).select('+password');
-
     if (!user || !(await correctPassword(passwordCurrent, user.password))) {
       return next(new CustomError('Your current password is wrong.', 401));
     }
 
-    user.password = await bcrypt.hash(
-      password,
-      parseInt(HASHING_SALT_ROUNDS!, 10),
-    );
-
+    user.password = password;
+    user.passwordConfirm = passwordConfirm;
     await user.save();
 
     createSendTokenV2(user, 200, res);

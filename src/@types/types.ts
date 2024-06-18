@@ -12,3 +12,6 @@ export interface ICleanUser {
   email: string;
   role: string;
 }
+
+export type TRole = 'user' | 'guide' | 'lead-guide' | 'admin';
+export type TObject = Record<string, any>;
