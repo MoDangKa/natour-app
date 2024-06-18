@@ -1,0 +1,6 @@
+2024-06-18T03:47:40.163Z - [127.0.0.1] PATCH /api/v1/users/updateMyPassword 401 - Your current password is wrong.
+2024-06-18T03:47:50.522Z - [127.0.0.1] PATCH /api/v1/users/updateMyPassword 400 - Validation Error: [{"passwordConfirm":"Passwords are not the same!"}]
+2024-06-18T03:48:00.229Z - [127.0.0.1] PATCH /api/v1/users/updateMyPassword 500 - Invalid salt. Salt must be in the form of: $Vers$log2(NumRounds)$saltvalue
+2024-06-18T03:50:59.334Z - [127.0.0.1] GET /api/v1/tours 401 - You are not logged in! Please log in to get access.
+2024-06-18T03:55:36.554Z - [127.0.0.1] POST /api/v1/users/updateMyPassword 404 - Can't find /api/v1/users/updateMyPassword on this server!
+2024-06-18T03:55:42.789Z - [127.0.0.1] PATCH /api/v1/users/updateMyPassword 401 - Your current password is wrong.

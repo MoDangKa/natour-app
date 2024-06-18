@@ -55,3 +55,14 @@ export const validateResetPassword = [
   requireValidations.passwordConfirm,
   handleValidationErrors,
 ];
+
+export const validateUpdatePassword = [
+  validateNoExtraFields(['passwordCurrent', 'password', 'passwordConfirm']),
+  check('passwordCurrent')
+    .isStrongPassword()
+    .isLength({ min: 8 })
+    .withMessage('Please provide a current password'),
+  requireValidations.password,
+  requireValidations.passwordConfirm,
+  handleValidationErrors,
+];

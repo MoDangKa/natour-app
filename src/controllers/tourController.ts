@@ -33,19 +33,15 @@ export const getAllTours = asyncHandler(
     }
 
     const { data = [], page, totalPages, limit, resultsLength } = response;
-
-    const pagination = req.query.pagination;
-    const hidePagination = pagination === '0';
-
-    const responseData = {
-      tours: data,
-      ...(!hidePagination && { page, totalPages, limit }),
-    };
+    const hidePagination = req.query.pagination === '0';
 
     res.status(200).json({
       status: 'success',
       results: resultsLength,
-      data: responseData,
+      data: {
+        tours: data,
+        ...(!hidePagination && { page, totalPages, limit }),
+      },
     });
   },
 );
@@ -53,58 +49,62 @@ export const getAllTours = asyncHandler(
 export const createTour = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const newTour = await Tour.create(req.body);
-    res.status(201).json({ status: 'success', data: { tour: newTour } });
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        tour: newTour,
+      },
+    });
   },
 );
 
 export const getTourById = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-
+    const { id } = req.params;
     const tour = await Tour.findById(id);
 
     if (!tour) {
-      const message = 'No tour found with that ID';
-      return next(new CustomError(message, 404));
+      return next(new CustomError('No tour found with that ID', 404));
     }
 
     res.status(200).json({
       status: 'success',
-      data: { tour },
+      data: {
+        tour,
+      },
     });
   },
 );
 
 export const updateTourById = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-
+    const { id } = req.params;
     const tour = await Tour.findByIdAndUpdate(id, req.body, {
       new: true,
       runValidators: true,
     });
 
     if (!tour) {
-      const message = 'No tour found with that ID';
-      return next(new CustomError(message, 404));
+      return next(new CustomError('No tour found with that ID', 404));
     }
 
     res.status(200).json({
       status: 'success',
-      data: { tour },
+      data: {
+        tour,
+      },
     });
   },
 );
 
 export const deleteTourById = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-
+    const { id } = req.params;
     const tour = await Tour.findByIdAndDelete(id);
 
     if (!tour) {
-      const message = 'No tour found with that ID';
-      return next(new CustomError(message, 404));
+      return next(new CustomError('No tour found with that ID', 404));
     }
 
     res.status(204).json({
@@ -166,8 +166,7 @@ export const getMonthlyPlan = asyncHandler(
     ]);
 
     if (!plan || plan.length === 0) {
-      const message = `Plan with year ${year} not found`;
-      return next(new CustomError(message, 404));
+      return next(new CustomError(`Plan with year ${year} not found`, 404));
     }
 
     const defaultPlan = Array.from({ length: 12 }, (_, i) => ({
@@ -177,8 +176,7 @@ export const getMonthlyPlan = asyncHandler(
     }));
 
     plan.forEach(({ month, numTourStarts, tours }) => {
-      const monthIndex = month - 1;
-      defaultPlan[monthIndex] = { month, numTourStarts, tours };
+      defaultPlan[month - 1] = { month, numTourStarts, tours };
     });
 
     res.status(200).json({

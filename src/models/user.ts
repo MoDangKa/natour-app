@@ -1,7 +1,6 @@
+import crypto from 'crypto';
 import mongoose, { Document, Model } from 'mongoose';
 import validator from 'validator';
-import crypto from 'crypto';
-import { NextFunction } from 'express';
 
 type TRole = 'user' | 'guide' | 'lead-guide' | 'admin';
 
@@ -11,6 +10,7 @@ interface IUser extends Document {
   photo?: string;
   role?: TRole;
   password: string;
+  passwordCurrent: string;
   passwordConfirm: string;
   passwordChangedAt?: Date;
   changedPasswordAfter(JWTTimestamp: number): boolean;

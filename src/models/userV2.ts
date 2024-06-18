@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import mongoose, { Document, Model } from 'mongoose';
 import validator from 'validator';
 
@@ -12,11 +13,10 @@ interface IUserV2 extends Document {
   password: string;
   passwordConfirm?: string;
   passwordChangedAt?: Date;
-  correctPassword(
-    candidatePassword: string,
-    userPassword: string,
-  ): Promise<boolean>;
   changedPasswordAfter(JWTTimestamp: number): boolean;
+  passwordResetToken?: String;
+  passwordResetExpires?: Date;
+  createPasswordResetToken: () => string;
 }
 
 type IUserV2Keys = keyof IUserV2;
@@ -68,10 +68,9 @@ const userV2Schema = new mongoose.Schema<IUserV2>(
         message: 'Passwords are not the same!',
       },
     },
-    passwordChangedAt: {
-      type: Date,
-      default: Date.now,
-    },
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
   },
   {
     toJSON: {
@@ -101,16 +100,7 @@ userV2Schema.pre<IUserV2>('save', async function (next) {
   next();
 });
 
-userV2Schema.methods.correctPassword = async function (
-  candidatePassword: string,
-  userPassword: string,
-) {
-  if (!userPassword) return false;
-  return await bcrypt.compare(candidatePassword, userPassword);
-};
-
 userV2Schema.methods.changedPasswordAfter = function (JWTTimestamp: number) {
-  console.log(this);
   if (this.passwordChangedAt) {
     const changedTimestamp = parseInt(
       (this.passwordChangedAt.getTime() / 1000).toString(),
@@ -120,6 +110,21 @@ userV2Schema.methods.changedPasswordAfter = function (JWTTimestamp: number) {
   }
 
   return false;
+};
+
+userV2Schema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  console.log({ resetToken }, this.passwordResetToken);
+
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
 };
 
 const UserV2: Model<IUserV2> = mongoose.model<IUserV2>('UserV2', userV2Schema);

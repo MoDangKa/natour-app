@@ -17,6 +17,8 @@ import { Router } from 'express';
 
 const router = Router();
 
+router.use('/', protectV2);
+
 router.route('/').get(getAllTours).post(validateCreateTour, createTour);
 
 router.get('/top-5-cheap', aliasTopTours, getAllTours);
@@ -27,7 +29,7 @@ router.get('/monthly-plan/:year', getMonthlyPlan);
 router
   .route('/:id')
   .get(getTourById)
-  .patch(protectV2, validateUpdateTour, updateTourById)
-  .delete(protectV2, restrictToV2('admin', 'lead-guide'), deleteTourById);
+  .patch(validateUpdateTour, updateTourById)
+  .delete(restrictToV2('admin', 'lead-guide'), deleteTourById);
 
 export default router;
