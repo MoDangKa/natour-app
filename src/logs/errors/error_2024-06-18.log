@@ -21,3 +21,6 @@
 2024-06-18T07:22:37.934Z - [127.0.0.1] PATCH /api/v1/users/updateMe 400 - Validation Error: [{"role":"Role is either: user, guide, lead-guide, admin"}]
 2024-06-18T07:30:41.071Z - [127.0.0.1] POST /api/v1/users/forgotPassword 401 - You are not logged in! Please log in to get access.
 2024-06-18T07:30:47.274Z - [127.0.0.1] POST /api/v1/users/signin 401 - You are not logged in! Please log in to get access.
+2024-06-18T09:35:09.038Z - [127.0.0.1] POST /api/v1/users/signin 401 - Incorrect email or password.
+2024-06-18T09:45:28.191Z - [127.0.0.1] POST /api/v1/users/signin 401 - Incorrect email or password.
+2024-06-18T09:45:47.252Z - [127.0.0.1] POST /api/v1/users/signin 401 - Incorrect email or password.

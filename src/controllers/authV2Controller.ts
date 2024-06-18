@@ -21,9 +21,17 @@ export const signinV2 = asyncHandler(
       return next(new CustomError('Please provide email and password!', 400));
     }
 
-    const user = await UserV2.findOne({ email }).select('+password');
+    const user = await UserV2.findOne({ email }).select([
+      '+password',
+      '+active',
+    ]);
+
     if (!user || !(await correctPassword(password, user.password))) {
       return next(new CustomError('Incorrect email or password.', 401));
+    }
+
+    if (!user.active) {
+      return next(new CustomError('The user is inactive!', 403));
     }
 
     createSendTokenV2(user, 200, res);
@@ -49,11 +57,16 @@ export const protectV2 = asyncHandler(
       );
     }
 
-    const user = await UserV2.findById(decoded.sub);
+    const user = await UserV2.findById(decoded.sub).select('+active');
+
     if (!user) {
       return next(
         new CustomError('User not found or unauthorized access.', 401),
       );
+    }
+
+    if (!user.active) {
+      return next(new CustomError('The user is inactive!', 403));
     }
 
     if (user.changedPasswordAfter(decoded.iat)) {

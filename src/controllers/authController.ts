@@ -35,10 +35,17 @@ export const signin = asyncHandler(
       return next(new CustomError('Please provide email and password!', 400));
     }
 
-    const user = await User.findOne<IUser>({ email }).select('+password');
+    const user = await User.findOne<IUser>({ email }).select([
+      '+password',
+      '+active',
+    ]);
 
     if (!user || !(await correctPassword(password, user.password))) {
       return next(new CustomError('Incorrect email or password.', 401));
+    }
+
+    if (!user.active) {
+      return next(new CustomError('The user is inactive!', 403));
     }
 
     createSendToken(user, 200, res);
@@ -66,11 +73,16 @@ export const protect = asyncHandler(
       );
     }
 
-    const user = await User.findById(payload.sub);
+    const user = await User.findById(payload.sub).select('+active');
+
     if (!user) {
       return next(
         new CustomError('User not found or unauthorized access.', 401),
       );
+    }
+
+    if (!user.active) {
+      return next(new CustomError('The user is inactive!', 403));
     }
 
     if (user.changedPasswordAfter(payload.iat)) {

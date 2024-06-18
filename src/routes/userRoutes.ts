@@ -9,6 +9,7 @@ import {
 } from '@/controllers/authController';
 import {
   createUser,
+  deleteMe,
   deleteUserById,
   getAllUsers,
   getUserById,
@@ -36,6 +37,7 @@ router.use(protect);
 
 router.patch('/updateMyPassword', validateUpdatePassword, updatePassword);
 router.patch('/updateMe', validateUpdateMe, updateMe);
+router.delete('/deleteMe', deleteMe);
 
 router.get('/', getAllUsers);
 

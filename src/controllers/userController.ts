@@ -27,6 +27,23 @@ export const updateMe = asyncHandler(
   },
 );
 
+export const deleteMe = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await User.findByIdAndUpdate(req.user?.id, {
+      active: false,
+    });
+
+    if (!user) {
+      return next(new CustomError('Something went wrong!', 500));
+    }
+
+    res.status(201).json({
+      status: 'success',
+      data: null,
+    });
+  },
+);
+
 export const getAllUsers = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const features = new APIFeatures<IUser>(User.find(), req.query, userKeys)

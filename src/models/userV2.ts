@@ -16,6 +16,7 @@ interface IUserV2 extends Document {
   passwordResetToken?: String;
   passwordResetExpires?: Date;
   createPasswordResetToken: () => string;
+  active?: boolean;
 }
 
 type IUserV2Keys = keyof IUserV2;
@@ -70,6 +71,11 @@ const userV2Schema = new mongoose.Schema<IUserV2>(
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
+    },
   },
   {
     toJSON: {
