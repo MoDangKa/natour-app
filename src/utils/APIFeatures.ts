@@ -51,6 +51,7 @@ export default class APIFeatures<T extends Document> {
 
   sort() {
     if (this.queryString.sort) {
+      console.log('this.queryString.sort: ', this.queryString.sort);
       const sortBy = (this.queryString.sort as string).split(',').join(' ');
       this.query = this.query.sort(sortBy);
     } else {
