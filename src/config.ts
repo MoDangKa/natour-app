@@ -26,6 +26,7 @@ const {
   GMAIL_USERNAME,
   GMAIL_PASSWORD,
   HASHING_SALT_ROUNDS,
+  JWT_COOKIE_EXPIRES_IN,
 } = process.env as Record<string, string | undefined>;
 
 const validateEnvVariable = (
@@ -43,6 +44,7 @@ validateEnvVariable('HOSTNAME', HOSTNAME);
 validateEnvVariable('JWT_SECRET', JWT_SECRET);
 validateEnvVariable('JWT_TOKEN', JWT_TOKEN);
 validateEnvVariable('JWT_EXPIRES_IN', JWT_EXPIRES_IN);
+validateEnvVariable('JWT_COOKIE_EXPIRES_IN', JWT_COOKIE_EXPIRES_IN);
 validateEnvVariable('HASHING_SALT_ROUNDS', HASHING_SALT_ROUNDS);
 
 export {
@@ -54,6 +56,7 @@ export {
   GMAIL_USERNAME,
   HASHING_SALT_ROUNDS,
   HOSTNAME,
+  JWT_COOKIE_EXPIRES_IN,
   JWT_EXPIRES_IN,
   JWT_SECRET,
   JWT_TOKEN,

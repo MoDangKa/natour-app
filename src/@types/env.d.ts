@@ -9,6 +9,7 @@ declare namespace NodeJS {
     JWT_TOKEN: string;
     JWT_SECRET: string;
     JWT_EXPIRES_IN: string;
+    JWT_COOKIE_EXPIRES_IN: string;
     HASHING_SALT_ROUNDS: string;
     EMAIL_HOST: string;
     EMAIL_PORT: string;

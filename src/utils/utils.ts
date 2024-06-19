@@ -1,17 +1,19 @@
 import { DecodedToken, ICleanUser, TObject } from '@/@types/types';
 import {
   HASHING_SALT_ROUNDS,
+  JWT_COOKIE_EXPIRES_IN,
   JWT_EXPIRES_IN,
   JWT_SECRET,
   JWT_TOKEN,
   NODE_ENV,
 } from '@/config';
-import { IUser } from '@/models/user';
-import { IUserV2 } from '@/models/userV2';
+import { IUser } from '@/models/userModel';
+import { IUserV2 } from '@/models/userV2Model';
 import bcrypt from 'bcrypt';
 import { Response } from 'express';
 import { SignJWT } from 'jose';
 import jwt from 'jsonwebtoken';
+import CustomError from './customError';
 
 export const hashPassword = async (password: string): Promise<string> => {
   return await bcrypt.hash(password, parseInt(HASHING_SALT_ROUNDS!, 10));
@@ -62,10 +64,22 @@ const createSendTokenCommon = (
   statusCode: number,
   res: Response,
 ) => {
+  const cookieExpiresInDays = parseInt(JWT_COOKIE_EXPIRES_IN!, 10);
+
+  if (isNaN(cookieExpiresInDays)) {
+    return new CustomError(
+      'Invalid JWT_COOKIE_EXPIRES_IN value in environment variables',
+      400,
+    );
+  }
+
+  const maxAge = cookieExpiresInDays * 24 * 60 * 60 * 1000;
+
   res.cookie(JWT_TOKEN!, token, {
     httpOnly: true,
     secure: NODE_ENV === 'production',
     sameSite: 'strict',
+    maxAge,
   });
 
   res.status(statusCode).json({

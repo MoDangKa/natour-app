@@ -1,28 +1,35 @@
 import errorMiddleware from '@/middlewares/errorMiddleware';
 import notFoundMiddleware from '@/middlewares/notFoundMiddleware';
 import apiV1Router from '@/routes/apiV1Router';
+import apiV2Router from '@/routes/apiV2Router';
 import connectDatabase from '@/utils/connectDatabase';
 import cookieParser from 'cookie-parser';
 import express, { NextFunction, Request, Response } from 'express';
+import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import path from 'path';
 import { HOSTNAME, NODE_ENV, PORT } from './config';
-import apiV2Router from './routes/apiV2Router';
 
 const app = express();
-
-app.use(cookieParser());
-app.use(express.json());
 
 if (NODE_ENV === 'development' || NODE_ENV === 'alpha') {
   app.use(morgan('dev'));
 }
 
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many request from this IP, please try again in an hour!',
+});
+
+app.use('/api', limiter);
+
+app.use(cookieParser());
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   req.requestTime = new Date().toISOString();
-  console.log(req.header);
   next();
 });
 
