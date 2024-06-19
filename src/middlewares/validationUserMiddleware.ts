@@ -1,5 +1,5 @@
-import { userKeys } from '@/models/user';
-import { TRole, userV2Keys } from '@/models/userV2';
+import { userKeys } from '@/models/userModel';
+import { TRole, userV2Keys } from '@/models/userV2Model';
 import { check } from 'express-validator';
 import {
   handleValidationErrors,

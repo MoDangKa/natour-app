@@ -1,5 +1,5 @@
 import { JWT_SECRET, JWT_TOKEN } from '@/config';
-import { TRole, UserV2 } from '@/models/userV2';
+import { TRole, UserV2 } from '@/models/userV2Model';
 import CustomError from '@/utils/customError';
 import sendEmail from '@/utils/email';
 import { correctPassword, createSendTokenV2, verifyToken } from '@/utils/utils';

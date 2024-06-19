@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import path from 'path';
-import { Tour } from '../models/tour';
+import { Tour } from '../models/tourModel';
 import { readFile } from './fileHelper';
 
 const ENV_FILE_PATH = path.resolve(__dirname, '../config.env');

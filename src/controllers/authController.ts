@@ -1,5 +1,5 @@
 import { JWT_SECRET, JWT_TOKEN } from '@/config';
-import { IUser, TRole, User } from '@/models/user';
+import { IUser, TRole, User } from '@/models/userModel';
 import CustomError from '@/utils/customError';
 import sendEmail from '@/utils/email';
 import { correctPassword, createSendToken, hashPassword } from '@/utils/utils';

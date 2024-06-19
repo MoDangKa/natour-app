@@ -1,0 +1,7 @@
+2024-06-19T05:53:22.215Z - [127.0.0.1] GET /api/v1/users 401 - You are not logged in! Please log in to get access.
+2024-06-19T05:53:27.554Z - [127.0.0.1] POST /api/v1/users/signin 403 - The user is inactive!
+2024-06-19T05:53:30.548Z - [127.0.0.1] GET /api/v1/users 401 - You are not logged in! Please log in to get access.
+2024-06-19T05:53:32.409Z - [127.0.0.1] GET /api/v1/users 401 - You are not logged in! Please log in to get access.
+2024-06-19T05:53:36.667Z - [127.0.0.1] POST /api/v1/users/signin 403 - The user is inactive!
+2024-06-19T05:54:17.885Z - [127.0.0.1] GET /api/v1/users 401 - User not found or unauthorized access.
+2024-06-19T05:54:32.152Z - [127.0.0.1] GET /api/v1/users 401 - User not found or unauthorized access.

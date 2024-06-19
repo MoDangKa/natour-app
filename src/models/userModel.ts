@@ -1,6 +1,6 @@
 import { TRole } from '@/@types/types';
 import crypto from 'crypto';
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose, { Document, Model, Query } from 'mongoose';
 import validator from 'validator';
 
 interface IUser extends Document {
@@ -91,6 +91,19 @@ const userSchema = new mongoose.Schema<IUser>(
 userSchema.pre<IUser>('save', function (next) {
   if (!this.isModified('password') || this.isNew) return next();
   this.passwordChangedAt = new Date(Date.now());
+  next();
+});
+
+userSchema.pre<Query<any, IUser>>(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
+  (this as any).start = Date.now();
+  next();
+});
+
+userSchema.post<Query<any, IUser>>(/^find/, function (doc, next) {
+  console.log(
+    `User query took ${Date.now() - (this as any).start} milliseconds!`,
+  );
   next();
 });
 

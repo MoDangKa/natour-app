@@ -1,4 +1,4 @@
-import { ITour, Tour, tourKeys } from '@/models/tour';
+import { ITour, Tour, tourKeys } from '@/models/tourModel';
 import APIFeatures from '@/utils/apiFeatures';
 import CustomError from '@/utils/customError';
 import { NextFunction, Request, Response } from 'express';

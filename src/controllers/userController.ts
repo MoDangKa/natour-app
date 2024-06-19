@@ -1,4 +1,4 @@
-import { IUser, User, userKeys } from '@/models/user';
+import { IUser, User, userKeys } from '@/models/userModel';
 import APIFeatures from '@/utils/apiFeatures';
 import CustomError from '@/utils/customError';
 import { filterObj } from '@/utils/utils';
