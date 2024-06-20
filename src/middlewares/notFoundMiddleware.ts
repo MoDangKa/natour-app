@@ -1,5 +1,6 @@
-import CustomError from '@/utils/customError';
 import { NextFunction, Request, Response } from 'express';
+
+import CustomError from '@/utils/customError';
 
 const notFoundMiddleware = (
   req: Request,

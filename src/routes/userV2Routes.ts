@@ -1,3 +1,5 @@
+import { Router } from 'express';
+
 import {
   forgotPasswordV2,
   protectV2,
@@ -12,7 +14,6 @@ import {
   validateResetPassword,
   validateUpdatePassword,
 } from '@/middlewares/validationUserMiddleware';
-import { Router } from 'express';
 
 const router = Router();
 

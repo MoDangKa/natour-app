@@ -1,3 +1,5 @@
+import nodemailer from 'nodemailer';
+
 import {
   EMAIL_HOST,
   EMAIL_PASSWORD,
@@ -5,7 +7,6 @@ import {
   EMAIL_USERNAME,
   GMAIL_USERNAME,
 } from '@/config';
-import nodemailer from 'nodemailer';
 
 interface EmailOptions {
   email: string;

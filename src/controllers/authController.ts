@@ -1,12 +1,13 @@
+import crypto from 'crypto';
+import { NextFunction, Request, Response } from 'express';
+import asyncHandler from 'express-async-handler';
+import { jwtVerify } from 'jose';
+
 import { JWT_SECRET, JWT_TOKEN } from '@/config';
 import { IUser, TRole, User } from '@/models/userModel';
 import CustomError from '@/utils/customError';
 import sendEmail from '@/utils/email';
 import { correctPassword, createSendToken, hashPassword } from '@/utils/utils';
-import crypto from 'crypto';
-import { NextFunction, Request, Response } from 'express';
-import asyncHandler from 'express-async-handler';
-import { jwtVerify } from 'jose';
 
 export const signup = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {

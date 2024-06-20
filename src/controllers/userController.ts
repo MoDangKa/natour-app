@@ -1,9 +1,10 @@
+import { NextFunction, Request, Response } from 'express';
+import asyncHandler from 'express-async-handler';
+
 import { IUser, User, userKeys } from '@/models/userModel';
 import APIFeatures from '@/utils/apiFeatures';
 import CustomError from '@/utils/customError';
 import { filterObj } from '@/utils/utils';
-import { NextFunction, Request, Response } from 'express';
-import asyncHandler from 'express-async-handler';
 
 export const updateMe = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {

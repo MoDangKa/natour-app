@@ -1,7 +1,8 @@
+import { NextFunction, Request, Response } from 'express';
+
 import { NODE_ENV } from '@/config';
 import CustomError from '@/utils/customError';
 import { writeErrorLog } from '@/utils/logger';
-import { NextFunction, Request, Response } from 'express';
 
 const handleCastErrorDB = (err: any): CustomError => {
   const message = `Invalid ${err.path}: ${err.value}`;

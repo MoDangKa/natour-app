@@ -1,8 +1,9 @@
+import { NextFunction, Request, Response } from 'express';
+import asyncHandler from 'express-async-handler';
+
 import { ITour, Tour, tourKeys } from '@/models/tourModel';
 import APIFeatures from '@/utils/apiFeatures';
 import CustomError from '@/utils/customError';
-import { NextFunction, Request, Response } from 'express';
-import asyncHandler from 'express-async-handler';
 
 export const aliasTopTours = (
   req: Request,

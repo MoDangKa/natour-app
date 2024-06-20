@@ -1,7 +1,8 @@
-import { TRole } from '@/@types/types';
 import crypto from 'crypto';
 import mongoose, { Document, Model, Query } from 'mongoose';
 import validator from 'validator';
+
+import { TRole } from '@/@types/types';
 
 interface IUser extends Document {
   name: string;

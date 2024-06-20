@@ -1,3 +1,5 @@
+import { Router } from 'express';
+
 import { protect, restrictTo } from '@/controllers/authController';
 import {
   aliasTopTours,
@@ -13,7 +15,6 @@ import {
   validateCreateTour,
   validateUpdateTour,
 } from '@/middlewares/validationTourMiddleware';
-import { Router } from 'express';
 
 const router = Router();
 

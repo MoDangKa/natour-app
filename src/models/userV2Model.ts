@@ -1,8 +1,9 @@
-import { TRole } from '@/@types/types';
-import { hashPassword } from '@/utils/utils';
 import crypto from 'crypto';
 import mongoose, { Document, Model } from 'mongoose';
 import validator from 'validator';
+
+import { TRole } from '@/@types/types';
+import { hashPassword } from '@/utils/utils';
 
 interface IUserV2 extends Document {
   name: string;

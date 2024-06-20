@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import userV2Routes from './userV2Routes';
 
 const apiV2Router = Router();

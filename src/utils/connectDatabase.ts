@@ -1,5 +1,6 @@
-import { MONGO_LOCAL, MONGO_PASSWORD, MONGO_URI, NODE_ENV } from '@/config';
 import mongoose from 'mongoose';
+
+import { MONGO_LOCAL, MONGO_PASSWORD, MONGO_URI, NODE_ENV } from '@/config';
 
 const connectDatabase = async () => {
   const databaseUrl =

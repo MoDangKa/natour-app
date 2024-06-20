@@ -1,5 +1,6 @@
-import { TDifficulty, tourKeys } from '@/models/tourModel';
 import { check } from 'express-validator';
+
+import { TDifficulty, tourKeys } from '@/models/tourModel';
 import {
   handleValidationErrors,
   validateNoExtraFields,
