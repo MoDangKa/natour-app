@@ -35,7 +35,7 @@ const connectDatabase = async () => {
 
 const importData = async () => {
   try {
-    const tours = await readFile('tours-simple.json');
+    const tours = await readFile('tours.json');
     await Tour.create(tours);
     console.log('Data successfully imported!');
   } catch (error) {

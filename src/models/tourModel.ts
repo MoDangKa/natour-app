@@ -1,6 +1,5 @@
-import mongoose, { Document, Model, Query } from 'mongoose';
+import mongoose, { Document, Model, Query, Schema } from 'mongoose';
 import slugify from 'slugify';
-import validator from 'validator';
 
 type TDifficulty = 'easy' | 'medium' | 'difficult';
 
@@ -22,6 +21,19 @@ interface ITour extends Document {
   secretTour?: boolean;
   createdAt?: Date;
   durationWeeks?: number;
+  startLocation?: {
+    type: 'Point';
+    coordinates: number[];
+    address: string;
+    description: string;
+  };
+  locations?: {
+    type: 'Point';
+    coordinates: number[];
+    address: string;
+    description: string;
+    day: number;
+  }[];
 }
 
 type ITourKeys = keyof ITour;
@@ -44,7 +56,40 @@ const tourKeys: ITourKeys[] = [
   'secretTour',
   'createdAt',
   'durationWeeks',
+  'startLocation',
+  'locations',
 ];
+
+const locationSchema = new Schema(
+  {
+    type: {
+      type: String,
+      enum: ['Point'],
+      default: 'Point',
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+    address: String,
+    description: String,
+    day: Number,
+  },
+  {
+    toJSON: {
+      virtuals: true,
+      transform: (doc, ret) => {
+        delete ret.id;
+      },
+    },
+    toObject: {
+      virtuals: true,
+      transform: (doc, ret) => {
+        delete ret.id;
+      },
+    },
+  },
+);
 
 const tourSchema = new mongoose.Schema<ITour>(
   {
@@ -124,6 +169,17 @@ const tourSchema = new mongoose.Schema<ITour>(
       type: Boolean,
       default: false,
     },
+    startLocation: {
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    locations: [locationSchema],
     createdAt: {
       type: Date,
       default: Date.now,
@@ -148,6 +204,7 @@ const tourSchema = new mongoose.Schema<ITour>(
       },
     },
     collection: 'tours',
+    timestamps: true,
   },
 );
 
@@ -197,4 +254,4 @@ tourSchema.pre('aggregate', function (next) {
 
 const Tour: Model<ITour> = mongoose.model<ITour>('Tour', tourSchema);
 
-export { TDifficulty, ITour, Tour, tourKeys };
+export { ITour, TDifficulty, Tour, tourKeys };
