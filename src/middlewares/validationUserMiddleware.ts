@@ -1,36 +1,38 @@
-import { check } from 'express-validator';
+import { ValidationChain, body } from 'express-validator';
 
-import { userKeys } from '@/models/userModel';
+import { requiredUserKeys, userKeys } from '@/models/userModel';
 import { TRole, userV2Keys } from '@/models/userV2Model';
 import {
   handleValidationErrors,
   validateNoExtraFields,
+  validateRequiredFields,
 } from './validationMiddleware';
 
-const requireValidations = {
-  name: check('name').isString().withMessage('Please tell us your name!'),
-  email: check('email').isEmail().withMessage('Please provide your email'),
-  password: check('password')
+const requireValidations: Record<string, ValidationChain> = {
+  name: body('name').isString().withMessage('Please tell us your name!'),
+  email: body('email').isEmail().withMessage('Please provide your email'),
+  password: body('password')
     .isStrongPassword()
     .isLength({ min: 8 })
     .withMessage('Please provide a password'),
-  passwordConfirm: check('passwordConfirm')
+  passwordConfirm: body('passwordConfirm')
     .custom((value, { req }) => value === req.body.password)
     .withMessage('Passwords are not the same!'),
 };
 
-const commonValidations = {
-  photo: check('photo')
+const commonValidations: Record<string, ValidationChain> = {
+  photo: body('photo')
     .optional()
     .isString()
     .withMessage('Photo must be a string'),
-  role: check('role')
+  role: body('role')
     .optional()
     .isIn(['user', 'guide', 'lead-guide', 'admin'] as TRole[])
     .withMessage('Role is either: user, guide, lead-guide, admin'),
 };
 
 export const validateCreateUser = [
+  validateRequiredFields(requiredUserKeys),
   validateNoExtraFields(userKeys),
   ...Object.values(requireValidations),
   ...Object.values(commonValidations),
@@ -38,6 +40,7 @@ export const validateCreateUser = [
 ];
 
 export const validateCreateUserV2 = [
+  validateRequiredFields(requiredUserKeys),
   validateNoExtraFields(userV2Keys),
   ...Object.values(requireValidations),
   ...Object.values(commonValidations),
@@ -59,7 +62,7 @@ export const validateResetPassword = [
 
 export const validateUpdatePassword = [
   validateNoExtraFields(['passwordCurrent', 'password', 'passwordConfirm']),
-  check('passwordCurrent')
+  body('passwordCurrent')
     .isStrongPassword()
     .isLength({ min: 8 })
     .withMessage('Please provide a current password'),

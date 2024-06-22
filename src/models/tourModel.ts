@@ -34,23 +34,26 @@ interface ITour extends Document {
     description: string;
     day: number;
   }[];
+  guides?: mongoose.Types.ObjectId[];
 }
 
-type ITourKeys = keyof ITour;
+type TTourKeys = keyof ITour;
 
-const tourKeys: ITourKeys[] = [
+const requireTourKeys: TTourKeys[] = [
   'name',
-  'slug', // DOCUMENT MIDDLEWARE
   'duration',
   'maxGroupSize',
   'difficulty',
   'price',
+  'description',
+  'imageCover',
+];
+
+const commonTourKeys: TTourKeys[] = [
   'priceDiscount',
   'ratingsAverage',
   'ratingsQuantity',
   'summary',
-  'description',
-  'imageCover',
   'images',
   'startDates',
   'secretTour',
@@ -58,7 +61,10 @@ const tourKeys: ITourKeys[] = [
   'durationWeeks',
   'startLocation',
   'locations',
+  'guides',
 ];
+
+const tourKeys: TTourKeys[] = [...requireTourKeys, ...commonTourKeys];
 
 const locationSchema = new Schema(
   {
@@ -180,6 +186,12 @@ const tourSchema = new mongoose.Schema<ITour>(
       description: String,
     },
     locations: [locationSchema],
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
     createdAt: {
       type: Date,
       default: Date.now,
@@ -217,6 +229,33 @@ tourSchema.pre<ITour>('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
+
+/*
+tourSchema.pre<ITour>('save', async function (next) {
+  try {
+    const guides = this.guides || [];
+
+    if (!guides.length) {
+      return next();
+    }
+
+    const guidesPromises = guides.map(
+      async (id) => await User.findById<IUser>(id),
+    );
+
+    const guidesData = await Promise.all(guidesPromises);
+
+    this.guides = guidesData.filter(
+      (guide): guide is IUser => guide !== null,
+    ) as (mongoose.Types.ObjectId | IUser)[];
+
+    next();
+  } catch (error) {
+    next(new CustomError('Error during guides retrieval', 400));
+  }
+});
+*/
+
 /*
 tourSchema.pre('save', function (next) {
   // For refer
@@ -230,18 +269,40 @@ tourSchema.post('save', function (doc, next) {
   next();
 });
 */
+
+// Virtual populate
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
+
+// // Execute the virtual populate
+// tourSchema.pre('find', function (next) {
+//   this.populate('reviews');
+//   next();
+// });
+
 tourSchema.pre<Query<any, ITour>>(/^find/, function (next) {
-  this.find({ secretTour: { $ne: true } });
-  (this as any).start = Date.now();
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt',
+  });
   next();
 });
 
-tourSchema.post<Query<any, ITour>>(/^find/, function (doc, next) {
-  console.log(
-    `Tour query took ${Date.now() - (this as any).start} milliseconds!`,
-  );
-  next();
-});
+// tourSchema.pre<Query<any, ITour>>(/^find/, function (next) {
+//   this.find({ secretTour: { $ne: true } });
+//   (this as any).start = Date.now();
+//   next();
+// });
+
+// tourSchema.post<Query<any, ITour>>(/^find/, function (doc, next) {
+//   console.log(
+//     `Tour query took ${Date.now() - (this as any).start} milliseconds!`,
+//   );
+//   next();
+// });
 
 // AGGREGATION MIDDLEWARE
 tourSchema.pre('aggregate', function (next) {
@@ -254,4 +315,4 @@ tourSchema.pre('aggregate', function (next) {
 
 const Tour: Model<ITour> = mongoose.model<ITour>('Tour', tourSchema);
 
-export { ITour, TDifficulty, Tour, tourKeys };
+export { ITour, TDifficulty, Tour, commonTourKeys, requireTourKeys, tourKeys };

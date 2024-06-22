@@ -1,0 +1,59 @@
+2024-06-22T02:08:15.180Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"ratingsAverage":"Ratings average must be a float number between 1.0 and 5.0"}]
+2024-06-22T02:08:56.780Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"ratingsAverage":"Ratings average must be a float number between 1.0 and 5.0"}]
+2024-06-22T02:09:31.298Z - [127.0.0.1] POST /api/v1/tours 400 - Unexpected fields: durations
+2024-06-22T02:09:33.323Z - [127.0.0.1] POST /api/v1/tours 400 - Unexpected fields: durations
+2024-06-22T02:10:16.611Z - [127.0.0.1] POST /api/v1/tours 400 - Unexpected fields: durations
+2024-06-22T02:10:52.611Z - [127.0.0.1] POST /api/v1/tours 400 - Unexpected fields: durations
+2024-06-22T02:11:39.879Z - [127.0.0.1] POST /api/v1/tours 400 - Unexpected fields: durations
+2024-06-22T02:13:08.201Z - [127.0.0.1] POST /api/v1/tours 400 - Unexpected fields: durations
+2024-06-22T02:15:48.181Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"ratingsAverage":"Ratings average must be a float number between 1.0 and 5.0"}]
+2024-06-22T02:16:06.728Z - [127.0.0.1] POST /api/v1/tours 401 - Validation Error: [{"duration":"A tour must have a duration"}]
+2024-06-22T02:18:27.308Z - [127.0.0.1] POST /api/v1/tours 401 - Validation Error: [{"duration":"A tour must have a duration"}]
+2024-06-22T02:18:28.983Z - [127.0.0.1] POST /api/v1/tours 401 - Validation Error: [{"duration":"A tour must have a duration"}]
+2024-06-22T02:18:48.440Z - [127.0.0.1] POST /api/v1/tours 401 - Validation Error: [{"duration":"A tour must have a duration"}]
+2024-06-22T02:19:40.465Z - [127.0.0.1] POST /api/v1/tours 401 - Validation Error: [{"duration":"A tour must have a duration"}]
+2024-06-22T02:19:41.684Z - [127.0.0.1] POST /api/v1/tours 401 - Validation Error: [{"duration":"A tour must have a duration"}]
+2024-06-22T02:32:54.788Z - [127.0.0.1] POST /api/v1/tours 401 - Validation Error: [{"duration":"A tour must have a duration"}]
+2024-06-22T02:36:17.850Z - [127.0.0.1] POST /api/v1/tours 401 - Validation Error: [{"duration":"A tour must have a duration"}]
+2024-06-22T02:40:51.748Z - [127.0.0.1] POST /api/v1/tours 400 - Required fields: duration
+2024-06-22T02:41:03.857Z - [127.0.0.1] POST /api/v1/tours 500 - body is not defined
+2024-06-22T02:41:16.477Z - [127.0.0.1] POST /api/v1/tours 500 - body is not defined
+2024-06-22T02:41:21.132Z - [127.0.0.1] POST /api/v1/tours 500 - body is not defined
+2024-06-22T02:41:32.841Z - [127.0.0.1] POST /api/v1/tours 400 - Required fields: duration
+2024-06-22T02:42:04.966Z - [127.0.0.1] POST /api/v1/tours 400 - Required fields: duration
+2024-06-22T02:42:14.717Z - [127.0.0.1] POST /api/v1/tours 400 - Required fields: duration, maxGroupSize
+2024-06-22T02:42:32.043Z - [127.0.0.1] POST /api/v1/tours 401 - Validation Error: [{},{},{},{},{}]
+2024-06-22T02:56:16.108Z - [127.0.0.1] POST /api/v1/tours 400 - Required fields: duration
+2024-06-22T02:56:31.152Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"duration":"A tour must have a duration"}]
+2024-06-22T03:01:55.885Z - [127.0.0.1] POST /api/v1/tours 400 - Required fields: duration
+2024-06-22T03:10:47.550Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"ratingsQuantity":"Ratings quantity must be greater than or equal to 0"},{"summary":"Summary must be a string"},{"images":"Images must be an array"},{"startDates":"Start dates must be an array"},{"startLocation":"Invalid value"},{"startLocation.type":"Invalid value"},{"startLocation.type":"startLocation.type must be \"Point\""},{"startLocation.coordinates":"Invalid value"},{"startLocation.coordinates":"startLocation.coordinates must be an array of two numbers"},{"startLocation.address":"startLocation.address must be a string"},{"startLocation.description":"startLocation.description must be a string"},{"locations":"Invalid value"}]
+2024-06-22T03:12:31.576Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"ratingsQuantity":"Ratings quantity must be greater than or equal to 0"},{"summary":"Summary must be a string"},{"images":"Images must be an array"},{"startDates":"Start dates must be an array"},{"startLocation":"Invalid value"},{"startLocation.type":"Invalid value"},{"startLocation.type":"startLocation.type must be \"Point\""},{"startLocation.coordinates":"Invalid value"},{"startLocation.coordinates":"startLocation.coordinates must be an array of two numbers"},{"startLocation.address":"startLocation.address must be a string"},{"startLocation.description":"startLocation.description must be a string"},{"locations":"Invalid value"}]
+2024-06-22T03:13:47.236Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"ratingsQuantity":"Ratings quantity must be greater than or equal to 0"},{"summary":"Summary must be a string"},{"images":"Images must be an array"},{"startDates":"Start dates must be an array"},{"startLocation":"Invalid value"},{"startLocation.type":"Invalid value"},{"startLocation.type":"startLocation.type must be \"Point\""},{"startLocation.coordinates":"Invalid value"},{"startLocation.coordinates":"startLocation.coordinates must be an array of two numbers"},{"startLocation.address":"startLocation.address must be a string"},{"startLocation.description":"startLocation.description must be a string"},{"locations":"Invalid value"}]
+2024-06-22T03:13:48.190Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"ratingsQuantity":"Ratings quantity must be greater than or equal to 0"},{"summary":"Summary must be a string"},{"images":"Images must be an array"},{"startDates":"Start dates must be an array"},{"startLocation":"Invalid value"},{"startLocation.type":"Invalid value"},{"startLocation.type":"startLocation.type must be \"Point\""},{"startLocation.coordinates":"Invalid value"},{"startLocation.coordinates":"startLocation.coordinates must be an array of two numbers"},{"startLocation.address":"startLocation.address must be a string"},{"startLocation.description":"startLocation.description must be a string"},{"locations":"Invalid value"}]
+2024-06-22T03:14:06.417Z - [127.0.0.1] POST /api/v1/tours 400 - Duplicate field value: "Test Tour Price 6". Please use another value!
+2024-06-22T03:15:08.005Z - [127.0.0.1] POST /api/v1/tours 400 - Duplicate field value: "Test Tour Price 6". Please use another value!
+2024-06-22T03:15:20.425Z - [127.0.0.1] POST /api/v1/tours 400 - Duplicate field value: "Test Tour Price 6". Please use another value!
+2024-06-22T03:16:31.330Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"duration":"Duration must be a positive number"}]
+2024-06-22T03:16:47.552Z - [127.0.0.1] POST /api/v1/tours 400 - Required fields: duration
+2024-06-22T06:06:06.157Z - [127.0.0.1] GET /api/v1/reviews 404 - This page does not exist
+2024-06-22T06:09:35.599Z - [127.0.0.1] POST /api/v1/reviews 400 - Required fields: createAt
+2024-06-22T06:20:51.252Z - [127.0.0.1] POST /api/v1/reviews 400 - Validation Error: [{"rating":"Path `rating` (6) is more than maximum allowed value (5)."}]
+2024-06-22T06:30:51.342Z - [127.0.0.1] GET /api/v1/reviews 400 - Validation Error: [{},{},{},{}]
+2024-06-22T06:31:15.678Z - [127.0.0.1] GET /api/v1/reviews 400 - Validation Error: [{},{},{},{}]
+2024-06-22T06:34:44.310Z - [127.0.0.1] POST /api/v1/users/signup 400 - Required fields: duration, maxGroupSize, difficulty, price, description, imageCover
+2024-06-22T06:35:00.082Z - [127.0.0.1] POST /api/v1/users/signup 400 - Required fields: duration, maxGroupSize, difficulty, price, description, imageCover
+2024-06-22T06:41:12.549Z - [127.0.0.1] POST /api/v1/reviews 400 - Validation Error: [{"rating":"Path `rating` (6) is more than maximum allowed value (5)."}]
+2024-06-22T06:41:25.236Z - [127.0.0.1] POST /api/v1/reviews 400 - Validation Error: [{},{"rating":"Path `rating` (6) is more than maximum allowed value (5)."}]
+2024-06-22T06:42:47.596Z - [127.0.0.1] POST /api/v1/reviews 400 - Validation Error: [{},{"rating":"Path `rating` (6) is more than maximum allowed value (5)."}]
+2024-06-22T06:42:53.608Z - [127.0.0.1] POST /api/v1/reviews 400 - Validation Error: [{"rating":"Path `rating` (6) is more than maximum allowed value (5)."}]
+2024-06-22T06:49:32.418Z - [127.0.0.1] POST /api/v1/reviews 400 - Validation Error: [{"rating":"Rating must be an integer number"},{"rating":"Rating must be an integer number between 1 and 5"}]
+2024-06-22T06:49:47.609Z - [127.0.0.1] POST /api/v1/reviews 400 - Validation Error: [{"rating":"Rating must be an integer number between 1 and 5"}]
+2024-06-22T06:58:44.666Z - [127.0.0.1] POST /api/v1/reviews 400 - Validation Error: [{"rating":"Rating must be an integer number between 1 and 5"}]
+2024-06-22T06:58:49.838Z - [127.0.0.1] POST /api/v1/reviews 400 - Validation Error: [{"rating":"Rating must be an integer number"}]
+2024-06-22T06:59:02.082Z - [127.0.0.1] POST /api/v1/reviews 400 - Validation Error: [{"rating":"Rating must be a numeric value"}]
+2024-06-22T06:59:11.158Z - [127.0.0.1] POST /api/v1/reviews 400 - Validation Error: [{"rating":"Rating must be an integer number"}]
+2024-06-22T07:01:34.340Z - [127.0.0.1] POST /api/v1/reviews 400 - Validation Error: [{"rating":"Rating must be an integer number"}]
+2024-06-22T07:01:43.571Z - [127.0.0.1] POST /api/v1/reviews 400 - Validation Error: [{"rating":"Rating must be an integer number between 1 and 5"}]
+2024-06-22T07:04:11.942Z - [127.0.0.1] GET /api/v1/reviews 400 - Validation Error: [{},{},{},{}]
+2024-06-22T07:11:02.763Z - [127.0.0.1] GET /api/v1/reviews 400 - Validation Error: [{},{},{},{}]
+2024-06-22T07:50:18.770Z - [127.0.0.1] GET /api/v1/tours/5c88fa8cf4afda39709c2966 400 - Validation Error: [{},{},{},{}]

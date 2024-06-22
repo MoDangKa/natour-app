@@ -20,9 +20,9 @@ interface IUserV2 extends Document {
   active?: boolean;
 }
 
-type IUserV2Keys = keyof IUserV2;
+type TUserV2Keys = keyof IUserV2;
 
-const userV2Keys: IUserV2Keys[] = [
+const userV2Keys: TUserV2Keys[] = [
   'name',
   'email',
   'photo',

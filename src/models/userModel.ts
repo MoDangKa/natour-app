@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import mongoose, { Document, Model, Query } from 'mongoose';
+import mongoose, { Document, Model } from 'mongoose';
 import validator from 'validator';
 
 import { TRole } from '@/@types/types';
@@ -20,16 +20,18 @@ interface IUser extends Document {
   active?: boolean;
 }
 
-type IUserKeys = keyof IUser;
+type TUserKeys = keyof IUser;
 
-const userKeys: IUserKeys[] = [
+const requiredUserKeys: TUserKeys[] = [
   'name',
   'email',
-  'photo',
-  'role',
   'password',
   'passwordConfirm',
 ];
+
+const commonUserKeys: TUserKeys[] = ['photo', 'role'];
+
+const userKeys: TUserKeys[] = [...requiredUserKeys, ...commonUserKeys];
 
 const userSchema = new mongoose.Schema<IUser>(
   {
@@ -95,18 +97,18 @@ userSchema.pre<IUser>('save', function (next) {
   next();
 });
 
-userSchema.pre<Query<any, IUser>>(/^find/, function (next) {
-  this.find({ active: { $ne: false } });
-  (this as any).start = Date.now();
-  next();
-});
+// userSchema.pre<Query<any, IUser>>(/^find/, function (next) {
+//   this.find({ active: { $ne: false } });
+//   (this as any).start = Date.now();
+//   next();
+// });
 
-userSchema.post<Query<any, IUser>>(/^find/, function (doc, next) {
-  console.log(
-    `User query took ${Date.now() - (this as any).start} milliseconds!`,
-  );
-  next();
-});
+// userSchema.post<Query<any, IUser>>(/^find/, function (doc, next) {
+//   console.log(
+//     `User query took ${Date.now() - (this as any).start} milliseconds!`,
+//   );
+//   next();
+// });
 
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp: number) {
   if (this.passwordChangedAt) {
@@ -137,4 +139,4 @@ userSchema.methods.createPasswordResetToken = function () {
 
 const User: Model<IUser> = mongoose.model<IUser>('User', userSchema);
 
-export { IUser, TRole, User, userKeys };
+export { IUser, TRole, User, commonUserKeys, requiredUserKeys, userKeys };

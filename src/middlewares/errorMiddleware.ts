@@ -1,18 +1,18 @@
-import { NextFunction, Request, Response } from 'express';
-
 import { NODE_ENV } from '@/config';
 import CustomError from '@/utils/customError';
 import { writeErrorLog } from '@/utils/logger';
+import { NextFunction, Request, Response } from 'express';
 
 const handleCastErrorDB = (err: any): CustomError => {
-  const message = `Invalid ${err.path}: ${err.value}`;
-  return new CustomError(message, 400);
+  return new CustomError(`Invalid ${err.path}: ${err.value}`, 400);
 };
 
 const handleDuplicateFieldsDB = (err: any): CustomError => {
   const value = err?.errmsg?.match(/".+?"/)?.[0];
-  const message = `Duplicate field value: ${value}. Please use another value!`;
-  return new CustomError(message, 400);
+  return new CustomError(
+    `Duplicate field value: ${value}. Please use another value!`,
+    400,
+  );
 };
 
 const handleJWTError = (): CustomError =>
@@ -21,22 +21,24 @@ const handleJWTError = (): CustomError =>
 const handleJWTExpiredError = (): CustomError =>
   new CustomError('Your token has expired. Please log in again.', 401);
 
-const extractErrorDetails = (err: any): any => {
-  return err?.error || err?.errors || err?.errorResponse || err || {};
+const handleValidationError = (errors: any[]): CustomError => {
+  const errorFields = errors.map((err: any) => ({
+    [err.path]: err?.properties?.message,
+  }));
+  const message = `Validation Error: ${JSON.stringify(errorFields)}`;
+  return new CustomError(message, 400, errorFields);
 };
+
+const extractErrorDetails = (err: any): any =>
+  err?.error || err?.errors || err?.errorResponse || err || {};
 
 const generateErrorResponse = (
   err: CustomError,
-  errorDetail: any,
   statusCode: number,
   message: string,
+  errorDetail: any = {},
 ): { status: string; message: string; error?: {}; stack?: string } => {
-  const response: {
-    status: string;
-    message: string;
-    error?: any;
-    stack?: any;
-  } = {
+  const response: any = {
     status: statusCode < 500 ? 'fail' : 'error',
     message,
   };
@@ -58,7 +60,9 @@ const handleSpecificErrors = (errorDetail: any): CustomError | null => {
   if (errorDetail.code === 11000) return handleDuplicateFieldsDB(errorDetail);
   if (errorDetail.name === 'JsonWebTokenError') return handleJWTError();
   if (errorDetail.name === 'TokenExpiredError') return handleJWTExpiredError();
-  if (errorDetail.errors) return new CustomError('Validation error', 400);
+  if (Array.isArray(errorDetail)) return handleValidationError(errorDetail);
+  if (Object.values(errorDetail).length)
+    return handleValidationError(Object.values(errorDetail));
   return null;
 };
 
@@ -68,6 +72,23 @@ const errorMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
+  if (err?.isOperational) {
+    writeErrorLog(
+      req.ip,
+      req.method,
+      req.originalUrl,
+      err.statusCode,
+      err.message,
+    );
+    const jsonResponse = generateErrorResponse(
+      err,
+      err?.statusCode,
+      err?.message,
+      err?.error || {},
+    );
+    return res.status(err.statusCode).json(jsonResponse);
+  }
+
   const errorDetail = extractErrorDetails(err);
   let { statusCode = 500, message = 'An unexpected error occurred' } = err;
 
@@ -79,14 +100,13 @@ const errorMiddleware = (
 
   const jsonResponse = generateErrorResponse(
     err,
-    errorDetail,
     statusCode,
     message,
+    errorDetail,
   );
-
   writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
 
-  res.status(statusCode).json(jsonResponse);
+  return res.status(statusCode).json(jsonResponse);
 };
 
 export default errorMiddleware;
