@@ -7,8 +7,11 @@ import CustomError from '@/utils/customError';
 
 export const getAllReviews = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
+    let filter = {};
+    if (req.params.tourId) filter = { tour: req.params.tourId };
+
     const features = new APIFeatures<IReview>(
-      Review.find(),
+      Review.find(filter),
       req.query,
       reviewKeys,
     )

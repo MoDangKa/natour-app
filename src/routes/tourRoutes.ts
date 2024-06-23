@@ -42,6 +42,6 @@ router
 //   .post(restrictTo('user'), validateCreateReviewV2, createReview);
 
 // Nested Routes
-router.use('/:tourId/reviews', reviewRoutes);
+router.use('/:tourId/reviews', restrictTo('user'), reviewRoutes);
 
 export default router;
