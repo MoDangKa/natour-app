@@ -89,7 +89,6 @@ const reviewMongooseSchema = new mongoose.Schema<IReview>(
     toJSON: {
       virtuals: true,
       transform: (doc, ret) => {
-        delete ret.id;
         delete ret.__v;
         return ret;
       },
@@ -97,7 +96,6 @@ const reviewMongooseSchema = new mongoose.Schema<IReview>(
     toObject: {
       virtuals: true,
       transform: (doc, ret) => {
-        delete ret.id;
         delete ret.__v;
         return ret;
       },

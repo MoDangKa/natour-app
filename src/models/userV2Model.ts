@@ -82,7 +82,6 @@ const userV2Schema = new mongoose.Schema<IUserV2>(
     toJSON: {
       virtuals: true,
       transform: (doc, ret) => {
-        delete ret.id;
         delete ret.__v;
         return ret;
       },
@@ -90,7 +89,6 @@ const userV2Schema = new mongoose.Schema<IUserV2>(
     toObject: {
       virtuals: true,
       transform: (doc, ret) => {
-        delete ret.id;
         delete ret.__v;
         return ret;
       },
@@ -136,3 +134,4 @@ userV2Schema.methods.createPasswordResetToken = function () {
 const UserV2: Model<IUserV2> = mongoose.model<IUserV2>('UserV2', userV2Schema);
 
 export { IUserV2, TRole, UserV2, userV2Keys };
+

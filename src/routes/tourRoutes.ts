@@ -11,10 +11,14 @@ import {
   getTourStats,
   updateTourById,
 } from '@/controllers/tourController';
+
 import {
   validateCreateTour,
   validateUpdateTour,
 } from '@/middlewares/validationTourMiddleware';
+import reviewRoutes from './reviewRoutes';
+// import { createReview } from '@/controllers/reviewController';
+// import { validateCreateReviewV2 } from '@/middlewares/validationReviewMiddleware';
 
 const router = Router();
 
@@ -32,5 +36,12 @@ router
   .get(getTourById)
   .patch(validateUpdateTour, updateTourById)
   .delete(restrictTo('admin', 'lead-guide'), deleteTourById);
+
+// router
+//   .route('/:tourId/reviews')
+//   .post(restrictTo('user'), validateCreateReviewV2, createReview);
+
+// Nested Routes
+router.use('/:tourId/reviews', reviewRoutes);
 
 export default router;

@@ -39,6 +39,10 @@ export const getAllReviews = asyncHandler(
 
 export const createReview = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
+    // Alow nested routes
+    if (!req.body.tour) req.body.tour = req.params.tourId;
+    if (!req.body.user) req.body.user = req.user.id;
+
     const newReview = await Review.create(req.body);
 
     res.status(201).json({

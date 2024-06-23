@@ -85,13 +85,15 @@ const locationSchema = new Schema(
     toJSON: {
       virtuals: true,
       transform: (doc, ret) => {
-        delete ret.id;
+        delete ret.__v;
+        return ret;
       },
     },
     toObject: {
       virtuals: true,
       transform: (doc, ret) => {
-        delete ret.id;
+        delete ret.__v;
+        return ret;
       },
     },
   },
@@ -202,7 +204,6 @@ const tourSchema = new mongoose.Schema<ITour>(
     toJSON: {
       virtuals: true,
       transform: (doc, ret) => {
-        delete ret.id;
         delete ret.__v;
         return ret;
       },
@@ -210,7 +211,6 @@ const tourSchema = new mongoose.Schema<ITour>(
     toObject: {
       virtuals: true,
       transform: (doc, ret) => {
-        delete ret.id;
         delete ret.__v;
         return ret;
       },

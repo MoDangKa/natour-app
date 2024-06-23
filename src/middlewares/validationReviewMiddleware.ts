@@ -1,4 +1,4 @@
-import { ValidationChain, body, checkSchema } from 'express-validator';
+import { ValidationChain, body, checkSchema, param } from 'express-validator';
 import { isValidObjectId } from 'mongoose';
 
 import { reviewKeys, reviewSchema } from '@/models/reviewModel';
@@ -34,5 +34,16 @@ export const validateCreateReview = [
   validateRequiredFields(reviewKeys),
   validateNoExtraFields(reviewKeys),
   checkSchema(reviewSchema),
+  handleValidationErrors,
+];
+
+export const validateCreateReviewV2 = [
+  param('tourId')
+    .custom(isValidObjectId)
+    .withMessage('Tour id must be a valid ObjectId.'),
+  validateRequiredFields(['review', 'rating']),
+  validateNoExtraFields(reviewKeys),
+  requireValidations.review,
+  requireValidations.rating,
   handleValidationErrors,
 ];

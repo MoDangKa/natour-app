@@ -74,7 +74,6 @@ const userSchema = new mongoose.Schema<IUser>(
     toJSON: {
       virtuals: true,
       transform: (doc, ret) => {
-        delete ret.id;
         delete ret.__v;
         return ret;
       },
@@ -82,7 +81,6 @@ const userSchema = new mongoose.Schema<IUser>(
     toObject: {
       virtuals: true,
       transform: (doc, ret) => {
-        delete ret.id;
         delete ret.__v;
         return ret;
       },
