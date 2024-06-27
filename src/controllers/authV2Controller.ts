@@ -2,20 +2,21 @@ import crypto from 'crypto';
 import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 
+import { TRole } from '@/@types/types';
 import { JWT_SECRET, JWT_TOKEN } from '@/config';
-import { TRole, UserV2 } from '@/models/userV2Model';
+import { UserV2 } from '@/models/userV2Model';
 import CustomError from '@/utils/customError';
 import sendEmail from '@/utils/email';
 import { correctPassword, createSendTokenV2, verifyToken } from '@/utils/utils';
 
-export const signupV2 = asyncHandler(
+const signup = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const newUser = await UserV2.create(req.body);
     createSendTokenV2(newUser, 201, res);
   },
 );
 
-export const signinV2 = asyncHandler(
+const signin = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -39,7 +40,7 @@ export const signinV2 = asyncHandler(
   },
 );
 
-export const protectV2 = asyncHandler(
+const protect = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies[JWT_TOKEN!];
     if (!token) {
@@ -54,7 +55,7 @@ export const protectV2 = asyncHandler(
     const decoded = await verifyToken(token, JWT_SECRET!);
     if (!decoded.sub) {
       return next(
-        new CustomError('User ID not found in the JWT payload.', 401),
+        new CustomError('UserV2 ID not found in the JWT payload.', 401),
       );
     }
 
@@ -62,7 +63,7 @@ export const protectV2 = asyncHandler(
 
     if (!user) {
       return next(
-        new CustomError('User not found or unauthorized access.', 401),
+        new CustomError('UserV2 not found or unauthorized access.', 401),
       );
     }
 
@@ -73,7 +74,7 @@ export const protectV2 = asyncHandler(
     if (user.changedPasswordAfter(decoded.iat)) {
       return next(
         new CustomError(
-          'User recently changed password! Please log in again.',
+          'UserV2 recently changed password! Please log in again.',
           401,
         ),
       );
@@ -84,7 +85,7 @@ export const protectV2 = asyncHandler(
   },
 );
 
-export const restrictToV2 = (...roles: TRole[]) =>
+const restrictTo = (...roles: TRole[]) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     if (req.user?.role && !roles.includes(req.user.role)) {
       return next(
@@ -97,7 +98,7 @@ export const restrictToV2 = (...roles: TRole[]) =>
     next();
   });
 
-export const forgotPasswordV2 = asyncHandler(
+const forgotPassword = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await UserV2.findOne({ email: req.body.email });
     if (!user) {
@@ -138,7 +139,7 @@ export const forgotPasswordV2 = asyncHandler(
   },
 );
 
-export const resetPasswordV2 = asyncHandler(
+const resetPassword = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { password, passwordConfirm } = req.body;
 
@@ -166,7 +167,7 @@ export const resetPasswordV2 = asyncHandler(
   },
 );
 
-export const updatePasswordV2 = asyncHandler(
+const updatePassword = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { passwordCurrent, password, passwordConfirm } = req.body;
 
@@ -186,3 +187,15 @@ export const updatePasswordV2 = asyncHandler(
     createSendTokenV2(user, 200, res);
   },
 );
+
+const authController = {
+  signup,
+  signin,
+  protect,
+  restrictTo,
+  forgotPassword,
+  resetPassword,
+  updatePassword,
+};
+
+export default authController;

@@ -4,12 +4,13 @@ import asyncHandler from 'express-async-handler';
 import { jwtVerify } from 'jose';
 
 import { JWT_SECRET, JWT_TOKEN } from '@/config';
-import { IUser, TRole, User } from '@/models/userModel';
+import { IUser, User } from '@/models/userModel';
 import CustomError from '@/utils/customError';
 import sendEmail from '@/utils/email';
 import { correctPassword, createSendToken, hashPassword } from '@/utils/utils';
+import { TRole } from '@/@types/types';
 
-export const signup = asyncHandler(
+const signup = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { password, email, ...userDetails } = req.body;
 
@@ -29,7 +30,7 @@ export const signup = asyncHandler(
   },
 );
 
-export const signin = asyncHandler(
+const signin = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -53,7 +54,7 @@ export const signin = asyncHandler(
   },
 );
 
-export const protect = asyncHandler(
+const protect = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies[JWT_TOKEN!];
     if (!token) {
@@ -100,7 +101,7 @@ export const protect = asyncHandler(
   },
 );
 
-export const restrictTo = (...roles: TRole[]) =>
+const restrictTo = (...roles: TRole[]) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     if (req.user?.role && !roles.includes(req.user.role)) {
       return next(
@@ -113,7 +114,7 @@ export const restrictTo = (...roles: TRole[]) =>
     next();
   });
 
-export const forgotPassword = asyncHandler(
+const forgotPassword = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
@@ -154,7 +155,7 @@ export const forgotPassword = asyncHandler(
   },
 );
 
-export const resetPassword = asyncHandler(
+const resetPassword = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const hashedToken = crypto
       .createHash('sha256')
@@ -179,7 +180,7 @@ export const resetPassword = asyncHandler(
   },
 );
 
-export const updatePassword = asyncHandler(
+const updatePassword = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { passwordCurrent, password, passwordConfirm } = req.body;
 
@@ -198,3 +199,15 @@ export const updatePassword = asyncHandler(
     createSendToken(user, 200, res);
   },
 );
+
+const authController = {
+  signup,
+  signin,
+  protect,
+  restrictTo,
+  forgotPassword,
+  resetPassword,
+  updatePassword,
+};
+
+export default authController;

@@ -112,7 +112,7 @@ reviewMongooseSchema.pre<Query<any, IReview>>(/^find/, function (next) {
   //   path: 'user',
   //   select: 'name photo',
   // });
-  
+
   this.populate({
     path: 'user',
     select: 'name photo',

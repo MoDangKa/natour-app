@@ -15,10 +15,7 @@ export const readFile = async <T = any>(fileName: string): Promise<T> => {
   }
 };
 
-export const writeFile = async <T = any>(
-  fileName: string,
-  data: T,
-) => {
+export const writeFile = async <T = any>(fileName: string, data: T) => {
   try {
     const toursFilePath = getFilePath(fileName);
     const formattedTours = JSON.stringify(data, null, 2);

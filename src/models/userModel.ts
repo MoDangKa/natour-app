@@ -137,4 +137,4 @@ userSchema.methods.createPasswordResetToken = function () {
 
 const User: Model<IUser> = mongoose.model<IUser>('User', userSchema);
 
-export { IUser, TRole, User, commonUserKeys, requiredUserKeys, userKeys };
+export { IUser, User, commonUserKeys, requiredUserKeys, userKeys };

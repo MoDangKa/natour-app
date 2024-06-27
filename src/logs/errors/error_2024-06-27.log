@@ -1,0 +1,8 @@
+2024-06-27T02:48:30.033Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{},{},{},{},{}]
+2024-06-27T02:54:32.213Z - [127.0.0.1] POST /api/v1/tours 400 - Entity Parse Failed.
+2024-06-27T02:59:34.825Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"duration":"Duration must be a positive number"}]
+2024-06-27T02:59:42.248Z - [127.0.0.1] POST /api/v1/tours 400 - Duplicate field value: "Test Tour Price 1". Please use another value!
+2024-06-27T08:47:20.610Z - [127.0.0.1] GET /api/v1/users 403 - The user is inactive!
+2024-06-27T08:59:22.463Z - [127.0.0.1] DELETE /api/v1/tours/667671043cb1923f338265e7 403 - You do not have permission to perform this action.
+2024-06-27T09:01:52.230Z - [127.0.0.1] DELETE /api/v1/tours/667671043cb1923f338265e7 404 - No Document found with that ID
+2024-06-27T09:01:54.917Z - [127.0.0.1] DELETE /api/v1/tours/667671043cb1923f338265e7 404 - No Document found with that ID

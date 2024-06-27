@@ -2,13 +2,15 @@ import { NODE_ENV } from '@/config';
 import CustomError from '@/utils/customError';
 import { writeErrorLog } from '@/utils/logger';
 import { NextFunction, Request, Response } from 'express';
+import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
+import { MongoError } from 'mongodb';
 
-const handleCastErrorDB = (err: any): CustomError => {
+const handleCastErrorDB = (err: { path: string; value: any }): CustomError => {
   return new CustomError(`Invalid ${err.path}: ${err.value}`, 400);
 };
 
-const handleDuplicateFieldsDB = (err: any): CustomError => {
-  const value = err?.errmsg?.match(/".+?"/)?.[0];
+const handleDuplicateFieldsDB = (err: MongoError): CustomError => {
+  const value = (err as any).errmsg?.match(/".+?"/)?.[0];
   return new CustomError(
     `Duplicate field value: ${value}. Please use another value!`,
     400,
@@ -20,6 +22,9 @@ const handleJWTError = (): CustomError =>
 
 const handleJWTExpiredError = (): CustomError =>
   new CustomError('Your token has expired. Please log in again.', 401);
+
+const handleEntityError = (): CustomError =>
+  new CustomError('Entity Parse Failed.', 400);
 
 const handleValidationError = (errors: any[]): CustomError => {
   const errorFields = errors.map((err: any) => ({
@@ -37,7 +42,12 @@ const generateErrorResponse = (
   statusCode: number,
   message: string,
   errorDetail: any = {},
-): { status: string; message: string; error?: {}; stack?: string } => {
+): {
+  status: string;
+  message: string;
+  error?: Record<string, any>;
+  stack?: string;
+} => {
   const response: any = {
     status: statusCode < 500 ? 'fail' : 'error',
     message,
@@ -58,11 +68,14 @@ const handleSpecificErrors = (errorDetail: any): CustomError | null => {
   if (errorDetail.path && errorDetail.value)
     return handleCastErrorDB(errorDetail);
   if (errorDetail.code === 11000) return handleDuplicateFieldsDB(errorDetail);
-  if (errorDetail.name === 'JsonWebTokenError') return handleJWTError();
-  if (errorDetail.name === 'TokenExpiredError') return handleJWTExpiredError();
+  if (errorDetail instanceof JsonWebTokenError) return handleJWTError();
+  if (errorDetail instanceof TokenExpiredError) return handleJWTExpiredError();
+  if (errorDetail.expose === true && errorDetail.type)
+    return handleEntityError();
   if (Array.isArray(errorDetail)) return handleValidationError(errorDetail);
   if (Object.values(errorDetail).length)
     return handleValidationError(Object.values(errorDetail));
+
   return null;
 };
 
@@ -71,7 +84,7 @@ const errorMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
+): Response | void => {
   if (err?.isOperational) {
     writeErrorLog(
       req.ip,
@@ -82,9 +95,9 @@ const errorMiddleware = (
     );
     const jsonResponse = generateErrorResponse(
       err,
-      err?.statusCode,
-      err?.message,
-      err?.error || {},
+      err.statusCode,
+      err.message,
+      err.error || {},
     );
     return res.status(err.statusCode).json(jsonResponse);
   }

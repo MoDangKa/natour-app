@@ -1,23 +1,7 @@
 import { Router } from 'express';
 
-import {
-  forgotPassword,
-  protect,
-  resetPassword,
-  restrictTo,
-  signin,
-  signup,
-  updatePassword,
-} from '@/controllers/authController';
-import {
-  createUser,
-  deleteMe,
-  deleteUserById,
-  getAllUsers,
-  getUserById,
-  updateMe,
-  updateUserById,
-} from '@/controllers/userController';
+import authController from '@/controllers/authController';
+import userController from '@/controllers/userController';
 import {
   validateCreateUser,
   validateForgotPassword,
@@ -28,25 +12,37 @@ import {
 
 const router = Router();
 
-router.post('/signup', validateCreateUser, signup);
-router.post('/signin', signin);
+router.post('/signup', validateCreateUser, authController.signup);
+router.post('/signin', authController.signin);
 
-router.post('/forgotPassword', validateForgotPassword, forgotPassword);
-router.patch('/resetPassword/:token', validateResetPassword, resetPassword);
+router.post(
+  '/forgotPassword',
+  validateForgotPassword,
+  authController.forgotPassword,
+);
+router.patch(
+  '/resetPassword/:token',
+  validateResetPassword,
+  authController.resetPassword,
+);
 
-router.use(protect);
+router.use(authController.protect);
 
-router.patch('/updateMyPassword', validateUpdatePassword, updatePassword);
-router.patch('/updateMe', validateUpdateMe, updateMe);
-router.delete('/deleteMe', deleteMe);
+router.patch(
+  '/updateMyPassword',
+  validateUpdatePassword,
+  authController.updatePassword,
+);
+router.patch('/updateMe', validateUpdateMe, userController.updateMe);
+router.delete('/deleteMe', userController.deleteMe);
 
-router.get('/', getAllUsers);
+router.get('/', userController.getAllUsers);
 
 router
   .route('/:id')
-  .get(getUserById)
-  .post(createUser)
-  .patch(updateUserById)
-  .delete(restrictTo('admin'), deleteUserById);
+  .get(userController.getUser)
+  .post(userController.createUser)
+  .patch(userController.updateUser)
+  .delete(authController.restrictTo('admin'), userController.deleteUser);
 
 export default router;

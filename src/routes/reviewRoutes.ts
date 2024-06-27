@@ -1,12 +1,12 @@
 import { Router } from 'express';
 
-import { protect } from '@/controllers/authController';
-import { createReview, getAllReviews } from '@/controllers/reviewController';
-import { validateCreateReview } from '@/middlewares/validationReviewMiddleware';
+import authController from '@/controllers/authController';
+import reviewController from '@/controllers/reviewController';
+// import { validateCreateReview } from '@/middlewares/validationReviewMiddleware';
 
 const router = Router({ mergeParams: true });
 
-router.use(protect);
+router.use(authController.protect);
 
 // router
 //   .route('/')
@@ -14,6 +14,11 @@ router.use(protect);
 //   .post(...validateCreateReview, createReview);
 
 // Nested Routes
-router.route('/').get(getAllReviews).post(createReview);
+router
+  .route('/')
+  .get(reviewController.getAllReviews)
+  .post(reviewController.createReview);
+
+router.route('/:id').delete(reviewController.deleteReview);
 
 export default router;

@@ -28,10 +28,7 @@ const getLogFilePath = (logType?: LogType): string | null => {
   return path.join(logsDirectory, logFileName);
 };
 
-export const writeLogFile = async (
-  message: string,
-  logType?: LogType,
-) => {
+export const writeLogFile = async (message: string, logType?: LogType) => {
   const logFilePath: string | null = getLogFilePath(logType);
 
   if (!logFilePath) {

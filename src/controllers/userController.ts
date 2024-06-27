@@ -6,7 +6,7 @@ import APIFeatures from '@/utils/apiFeatures';
 import CustomError from '@/utils/customError';
 import { filterObj } from '@/utils/utils';
 
-export const updateMe = asyncHandler(
+const updateMe = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const filteredBody = filterObj(req.body, 'name', 'email', 'role', 'photo');
 
@@ -28,7 +28,7 @@ export const updateMe = asyncHandler(
   },
 );
 
-export const deleteMe = asyncHandler(
+const deleteMe = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findByIdAndUpdate(req.user?.id, {
       active: false,
@@ -45,7 +45,7 @@ export const deleteMe = asyncHandler(
   },
 );
 
-export const getAllUsers = asyncHandler(
+const getAllUsers = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const features = new APIFeatures<IUser>(User.find(), req.query, userKeys)
       .filter()
@@ -73,7 +73,7 @@ export const getAllUsers = asyncHandler(
   },
 );
 
-export const createUser = asyncHandler(
+const createUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     res.status(500).json({
       status: 'error',
@@ -82,7 +82,7 @@ export const createUser = asyncHandler(
   },
 );
 
-export const getUserById = asyncHandler(
+const getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const user = await User.findById(id);
@@ -100,7 +100,7 @@ export const getUserById = asyncHandler(
   },
 );
 
-export const updateUserById = asyncHandler(
+const updateUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({
       status: 'error',
@@ -109,7 +109,7 @@ export const updateUserById = asyncHandler(
   },
 );
 
-export const deleteUserById = asyncHandler(
+const deleteUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({
       status: 'error',
@@ -117,3 +117,15 @@ export const deleteUserById = asyncHandler(
     });
   },
 );
+
+const userController = {
+  updateMe,
+  deleteMe,
+  getAllUsers,
+  createUser,
+  getUser,
+  updateUser,
+  deleteUser,
+};
+
+export default userController;

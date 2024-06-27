@@ -1,13 +1,6 @@
 import { Router } from 'express';
 
-import {
-  forgotPasswordV2,
-  protectV2,
-  resetPasswordV2,
-  signinV2,
-  signupV2,
-  updatePasswordV2,
-} from '@/controllers/authV2Controller';
+import authV2Controller from '@/controllers/authV2Controller';
 import {
   validateCreateUserV2,
   validateForgotPassword,
@@ -17,16 +10,24 @@ import {
 
 const router = Router();
 
-router.post('/signup', validateCreateUserV2, signupV2);
-router.post('/signin', signinV2);
+router.post('/signup', validateCreateUserV2, authV2Controller.signup);
+router.post('/signin', authV2Controller.signin);
 
-router.post('/forgotPassword', validateForgotPassword, forgotPasswordV2);
-router.patch('/resetPassword/:token', validateResetPassword, resetPasswordV2);
+router.post(
+  '/forgotPassword',
+  validateForgotPassword,
+  authV2Controller.forgotPassword,
+);
+router.patch(
+  '/resetPassword/:token',
+  validateResetPassword,
+  authV2Controller.resetPassword,
+);
 router.patch(
   '/updateMyPassword',
-  protectV2,
+  authV2Controller.protect,
   validateUpdatePassword,
-  updatePasswordV2,
+  authV2Controller.updatePassword,
 );
 
 export default router;

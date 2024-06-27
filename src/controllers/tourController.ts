@@ -4,12 +4,9 @@ import asyncHandler from 'express-async-handler';
 import { ITour, Tour, tourKeys } from '@/models/tourModel';
 import APIFeatures from '@/utils/apiFeatures';
 import CustomError from '@/utils/customError';
+import factory from './handlerFactory';
 
-export const aliasTopTours = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+const aliasTopTours = (req: Request, res: Response, next: NextFunction) => {
   Object.assign(req.query, {
     limit: '5',
     sort: '-ratingsAverage,price',
@@ -19,7 +16,7 @@ export const aliasTopTours = (
   next();
 };
 
-export const getAllTours = asyncHandler(
+const getAllTours = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const features = new APIFeatures<ITour>(Tour.find(), req.query, tourKeys)
       .filter()
@@ -47,7 +44,7 @@ export const getAllTours = asyncHandler(
   },
 );
 
-export const createTour = asyncHandler(
+const createTour = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const newTour = await Tour.create(req.body);
 
@@ -60,7 +57,7 @@ export const createTour = asyncHandler(
   },
 );
 
-export const getTourById = asyncHandler(
+const getTour = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const tour = await Tour.findById(id).populate('reviews');
@@ -78,7 +75,7 @@ export const getTourById = asyncHandler(
   },
 );
 
-export const updateTourById = asyncHandler(
+const updateTour = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const tour = await Tour.findByIdAndUpdate(id, req.body, {
@@ -99,23 +96,25 @@ export const updateTourById = asyncHandler(
   },
 );
 
-export const deleteTourById = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    const tour = await Tour.findByIdAndDelete(id);
+const deleteTour = factory.deleteOne(Tour);
 
-    if (!tour) {
-      return next(new CustomError('No tour found with that ID', 404));
-    }
+// const deleteTour = asyncHandler(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const { id } = req.params;
+//     const tour = await Tour.findByIdAndDelete(id);
 
-    res.status(204).json({
-      status: 'success',
-      data: null,
-    });
-  },
-);
+//     if (!tour) {
+//       return next(new CustomError('No tour found with that ID', 404));
+//     }
 
-export const getTourStats = asyncHandler(
+//     res.status(204).json({
+//       status: 'success',
+//       data: null,
+//     });
+//   },
+// );
+
+const getTourStats = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const stats = await Tour.aggregate([
       { $match: { ratingsAverage: { $gte: 4.5 } } },
@@ -140,7 +139,7 @@ export const getTourStats = asyncHandler(
   },
 );
 
-export const getMonthlyPlan = asyncHandler(
+const getMonthlyPlan = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const year = parseInt(req.params.year) || new Date().getFullYear();
     const plan = await Tour.aggregate([
@@ -186,3 +185,16 @@ export const getMonthlyPlan = asyncHandler(
     });
   },
 );
+
+const tourController = {
+  aliasTopTours,
+  getAllTours,
+  createTour,
+  getTour,
+  updateTour,
+  deleteTour,
+  getTourStats,
+  getMonthlyPlan,
+};
+
+export default tourController;
