@@ -7,7 +7,7 @@ import CustomError from '@/utils/customError';
 import factory from './handlerFactory';
 
 const getAllReviews = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       let filter = {};
       if (req.params.tourId) {
@@ -47,8 +47,9 @@ const getAllReviews = asyncHandler(
   },
 );
 
+/*
 const createReview = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       // Allow nested routes
       if (!req.body.tour) req.body.tour = req.params.tourId;
@@ -67,9 +68,32 @@ const createReview = asyncHandler(
     }
   },
 );
+*/
 
+const getReview = factory.getOne(Review);
+
+const setTourUserIds = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  // All nested routes
+  if (!req.body.tour) req.body.tour = req.params.tourId;
+  if (!req.body.user) req.body.user = req.user?.id;
+  next();
+};
+
+const createReview = factory.createOne(Review);
+const updateReview = factory.updateOne(Review);
 const deleteReview = factory.deleteOne(Review);
 
-const reviewController = { getAllReviews, createReview, deleteReview };
+const reviewController = {
+  getAllReviews,
+  getReview,
+  setTourUserIds,
+  createReview,
+  updateReview,
+  deleteReview,
+};
 
 export default reviewController;

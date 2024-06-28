@@ -17,8 +17,16 @@ router.use(authController.protect);
 router
   .route('/')
   .get(reviewController.getAllReviews)
-  .post(reviewController.createReview);
+  .post(
+    authController.restrictTo('user'),
+    reviewController.setTourUserIds,
+    reviewController.createReview,
+  );
 
-router.route('/:id').delete(reviewController.deleteReview);
+router
+  .route('/:id')
+  .get(reviewController.getReview)
+  .patch(reviewController.updateReview)
+  .delete(reviewController.deleteReview);
 
 export default router;

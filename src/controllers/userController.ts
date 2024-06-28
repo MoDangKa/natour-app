@@ -5,6 +5,7 @@ import { IUser, User, userKeys } from '@/models/userModel';
 import APIFeatures from '@/utils/apiFeatures';
 import CustomError from '@/utils/customError';
 import { filterObj } from '@/utils/utils';
+import factory from './handlerFactory';
 
 const updateMe = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -82,6 +83,7 @@ const createUser = asyncHandler(
   },
 );
 
+/*
 const getUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
@@ -108,15 +110,15 @@ const updateUser = asyncHandler(
     });
   },
 );
+*/
 
-const deleteUser = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).json({
-      status: 'error',
-      message: 'This route is not yet defined!',
-    });
-  },
-);
+const getUser = factory.getOne(User);
+
+// const createUser = factory.createOne(User);
+
+// Do not update passwords with this!
+const updateUser = factory.updateOne(User);
+const deleteUser = factory.deleteOne(User);
 
 const userController = {
   updateMe,

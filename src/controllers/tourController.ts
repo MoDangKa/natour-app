@@ -44,23 +44,10 @@ const getAllTours = asyncHandler(
   },
 );
 
-const createTour = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const newTour = await Tour.create(req.body);
-
-    res.status(201).json({
-      status: 'success',
-      data: {
-        tour: newTour,
-      },
-    });
-  },
-);
-
+/*
 const getTour = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    const tour = await Tour.findById(id).populate('reviews');
+    const tour = await Tour.findById(req.params.id).populate('reviews');
 
     if (!tour) {
       return next(new CustomError('No tour found with that ID', 404));
@@ -70,6 +57,20 @@ const getTour = asyncHandler(
       status: 'success',
       data: {
         tour,
+      },
+    });
+  },
+);
+
+
+const createTour = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const newTour = await Tour.create(req.body);
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        tour: newTour,
       },
     });
   },
@@ -96,23 +97,27 @@ const updateTour = asyncHandler(
   },
 );
 
+const deleteTour = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const tour = await Tour.findByIdAndDelete(id);
+
+    if (!tour) {
+      return next(new CustomError('No tour found with that ID', 404));
+    }
+
+    res.status(204).json({
+      status: 'success',
+      data: null,
+    });
+  },
+);
+*/
+
+const getTour = factory.getOne(Tour, { path: 'reviews' });
+const createTour = factory.createOne(Tour);
+const updateTour = factory.updateOne(Tour);
 const deleteTour = factory.deleteOne(Tour);
-
-// const deleteTour = asyncHandler(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const { id } = req.params;
-//     const tour = await Tour.findByIdAndDelete(id);
-
-//     if (!tour) {
-//       return next(new CustomError('No tour found with that ID', 404));
-//     }
-
-//     res.status(204).json({
-//       status: 'success',
-//       data: null,
-//     });
-//   },
-// );
 
 const getTourStats = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {

@@ -1,0 +1,5 @@
+2024-06-28T04:29:34.554Z - [127.0.0.1] DELETE /api/v1/reviews/6674e8965ca929efc1f706e7 404 - No Document found with that ID
+2024-06-28T07:54:21.760Z - [127.0.0.1] PATCH /api/v1/reviews/66767dc6b91eec6653d5c889 400 - Validation Error: [{"rating":"Path `rating` (6) is more than maximum allowed value (5)."}]
+2024-06-28T08:56:01.881Z - [127.0.0.1] POST /api/v1/reviews 403 - You do not have permission to perform this action.
+2024-06-28T08:56:39.117Z - [127.0.0.1] POST /api/v1/tours/5c88fa8cf4afda39709c2970/reviews 403 - You do not have permission to perform this action.
+2024-06-28T08:57:01.755Z - [127.0.0.1] PATCH /api/v1/users/6674e8965ca929efc1f706e7 404 - No document found with that ID

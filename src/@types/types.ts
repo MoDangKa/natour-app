@@ -15,3 +15,9 @@ export interface ICleanUser {
 
 export type TRole = 'user' | 'guide' | 'lead-guide' | 'admin';
 export type TObject = Record<string, any>;
+
+export interface PopOptions {
+  path: string;
+  select?: string;
+  model?: string;
+}

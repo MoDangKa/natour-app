@@ -55,7 +55,7 @@ const protect = asyncHandler(
     const decoded = await verifyToken(token, JWT_SECRET!);
     if (!decoded.sub) {
       return next(
-        new CustomError('UserV2 ID not found in the JWT payload.', 401),
+        new CustomError('User ID not found in the JWT payload.', 401),
       );
     }
 
@@ -63,7 +63,7 @@ const protect = asyncHandler(
 
     if (!user) {
       return next(
-        new CustomError('UserV2 not found or unauthorized access.', 401),
+        new CustomError('User not found or unauthorized access.', 401),
       );
     }
 
@@ -74,7 +74,7 @@ const protect = asyncHandler(
     if (user.changedPasswordAfter(decoded.iat)) {
       return next(
         new CustomError(
-          'UserV2 recently changed password! Please log in again.',
+          'User recently changed password! Please log in again.',
           401,
         ),
       );

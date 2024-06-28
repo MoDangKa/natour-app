@@ -6,3 +6,4 @@
 2024-06-27T08:59:22.463Z - [127.0.0.1] DELETE /api/v1/tours/667671043cb1923f338265e7 403 - You do not have permission to perform this action.
 2024-06-27T09:01:52.230Z - [127.0.0.1] DELETE /api/v1/tours/667671043cb1923f338265e7 404 - No Document found with that ID
 2024-06-27T09:01:54.917Z - [127.0.0.1] DELETE /api/v1/tours/667671043cb1923f338265e7 404 - No Document found with that ID
+2024-06-27T10:50:40.876Z - [127.0.0.1] GET /api/v1/reviews/66767dc7b91eec6653d5c88c 404 - Can't find /api/v1/reviews/66767dc7b91eec6653d5c88c on this server!
