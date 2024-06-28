@@ -3,6 +3,7 @@ import asyncHandler from 'express-async-handler';
 import { Document, Model } from 'mongoose';
 
 import { PopOptions } from '@/@types/types';
+import APIFeatures from '@/utils/apiFeatures';
 import CustomError from '@/utils/customError';
 
 const deleteOne = <T extends Document>(Model: Model<T>) =>
@@ -69,6 +70,33 @@ const getOne = <T extends Document>(Model: Model<T>, popOptions?: PopOptions) =>
     });
   });
 
-const factory = { deleteOne, updateOne, createOne, getOne };
+const getAll = <T extends Document>(Model: Model<T>, keys: string[]) =>
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const features = new APIFeatures<T>(Model.find(), req.query, keys)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+
+    const response = await features.getResults();
+
+    if (response.error) {
+      return next(new CustomError(response.error, 404));
+    }
+
+    const { data = [], page, totalPages, limit, resultsLength } = response;
+    const hidePagination = req.query.pagination === '0';
+
+    res.status(200).json({
+      status: 'success',
+      results: resultsLength,
+      data: {
+        data: data,
+        ...(!hidePagination && { page, totalPages, limit }),
+      },
+    });
+  });
+
+const factory = { deleteOne, updateOne, createOne, getOne, getAll };
 
 export default factory;

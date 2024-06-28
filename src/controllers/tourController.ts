@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 
 import { ITour, Tour, tourKeys } from '@/models/tourModel';
-import APIFeatures from '@/utils/apiFeatures';
 import CustomError from '@/utils/customError';
 import factory from './handlerFactory';
 
@@ -16,6 +15,7 @@ const aliasTopTours = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
+/*
 const getAllTours = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const features = new APIFeatures<ITour>(Tour.find(), req.query, tourKeys)
@@ -44,7 +44,6 @@ const getAllTours = asyncHandler(
   },
 );
 
-/*
 const getTour = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const tour = await Tour.findById(req.params.id).populate('reviews');
@@ -114,6 +113,7 @@ const deleteTour = asyncHandler(
 );
 */
 
+const getAllTours = factory.getAll<ITour>(Tour, tourKeys);
 const getTour = factory.getOne(Tour, { path: 'reviews' });
 const createTour = factory.createOne(Tour);
 const updateTour = factory.updateOne(Tour);
