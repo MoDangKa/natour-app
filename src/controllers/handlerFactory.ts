@@ -22,8 +22,7 @@ const deleteOne = <T extends Document>(Model: Model<T>) =>
 
 const updateOne = <T extends Document>(Model: Model<T>) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    const doc = await Model.findByIdAndUpdate(id, req.body, {
+    const doc = await Model.findByIdAndUpdate(req.params?.id, req.body, {
       new: true,
       runValidators: true,
     });
@@ -72,7 +71,13 @@ const getOne = <T extends Document>(Model: Model<T>, popOptions?: PopOptions) =>
 
 const getAll = <T extends Document>(Model: Model<T>, keys: string[]) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const features = new APIFeatures<T>(Model.find(), req.query, keys)
+    // To allow for nested GET reviews on tour (hack)
+    let filter = {};
+    if (req.params.tourId) {
+      filter = { tour: req.params.tourId };
+    }
+
+    const features = new APIFeatures<T>(Model.find(filter), req.query, keys)
       .filter()
       .sort()
       .limitFields()

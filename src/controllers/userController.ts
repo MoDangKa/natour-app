@@ -1,11 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 
-import { IUser, User, userKeys } from '@/models/userModel';
-import APIFeatures from '@/utils/apiFeatures';
+import { User, userKeys } from '@/models/userModel';
 import CustomError from '@/utils/customError';
 import { filterObj } from '@/utils/utils';
 import factory from './handlerFactory';
+
+const getMe = (req: Request, res: Response, next: NextFunction) => {
+  req.params.id = req?.user?.id;
+  next();
+};
 
 const updateMe = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -45,7 +49,7 @@ const deleteMe = asyncHandler(
     });
   },
 );
-
+/*
 const getAllUsers = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const features = new APIFeatures<IUser>(User.find(), req.query, userKeys)
@@ -73,7 +77,7 @@ const getAllUsers = asyncHandler(
     });
   },
 );
-
+*/
 const createUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     res.status(500).json({
@@ -112,6 +116,7 @@ const updateUser = asyncHandler(
 );
 */
 
+const getAllUsers = factory.getAll(User, userKeys);
 const getUser = factory.getOne(User);
 
 // const createUser = factory.createOne(User);
@@ -121,6 +126,7 @@ const updateUser = factory.updateOne(User);
 const deleteUser = factory.deleteOne(User);
 
 const userController = {
+  getMe,
   updateMe,
   deleteMe,
   getAllUsers,

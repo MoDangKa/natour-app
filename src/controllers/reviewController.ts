@@ -1,11 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import asyncHandler from 'express-async-handler';
 
-import { IReview, Review, reviewKeys } from '@/models/reviewModel';
-import APIFeatures from '@/utils/apiFeatures';
-import CustomError from '@/utils/customError';
+import { Review, reviewKeys } from '@/models/reviewModel';
 import factory from './handlerFactory';
 
+/*
 const getAllReviews = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -47,7 +45,7 @@ const getAllReviews = asyncHandler(
   },
 );
 
-/*
+
 const createReview = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -70,8 +68,6 @@ const createReview = asyncHandler(
 );
 */
 
-const getReview = factory.getOne(Review);
-
 const setTourUserIds = async (
   req: Request,
   res: Response,
@@ -83,6 +79,8 @@ const setTourUserIds = async (
   next();
 };
 
+const getAllReviews = factory.getAll(Review, reviewKeys);
+const getReview = factory.getOne(Review);
 const createReview = factory.createOne(Review);
 const updateReview = factory.updateOne(Review);
 const deleteReview = factory.deleteOne(Review);

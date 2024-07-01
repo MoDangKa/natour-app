@@ -3,12 +3,12 @@ import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { jwtVerify } from 'jose';
 
+import { TRole } from '@/@types/types';
 import { JWT_SECRET, JWT_TOKEN } from '@/config';
 import { IUser, User } from '@/models/userModel';
 import CustomError from '@/utils/customError';
 import sendEmail from '@/utils/email';
 import { correctPassword, createSendToken, hashPassword } from '@/utils/utils';
-import { TRole } from '@/@types/types';
 
 const signup = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -56,7 +56,10 @@ const signin = asyncHandler(
 
 const protect = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies[JWT_TOKEN!];
+    const authHeader = req.headers.authorization;
+    const cookie = req.cookies && req.cookies[JWT_TOKEN!];
+    const token = authHeader?.split(' ')[1] || cookie;
+
     if (!token) {
       return next(
         new CustomError(
@@ -66,38 +69,42 @@ const protect = asyncHandler(
       );
     }
 
-    const secret: Uint8Array = new TextEncoder().encode(JWT_SECRET!);
-    const { payload } = await jwtVerify(token, secret);
+    try {
+      const secret: Uint8Array = new TextEncoder().encode(JWT_SECRET!);
+      const { payload } = await jwtVerify(token, secret);
 
-    if (!payload.sub || !payload.iat) {
-      return next(
-        new CustomError('User ID not found in the JWT payload.', 401),
-      );
+      if (!payload.sub || !payload.iat) {
+        return next(
+          new CustomError('User ID not found in the JWT payload.', 401),
+        );
+      }
+
+      const user = await User.findById(payload.sub).select('+active');
+
+      if (!user) {
+        return next(
+          new CustomError('User not found or unauthorized access.', 401),
+        );
+      }
+
+      if (!user.active) {
+        return next(new CustomError('The user is inactive!', 403));
+      }
+
+      if (user.changedPasswordAfter(payload.iat)) {
+        return next(
+          new CustomError(
+            'User recently changed password! Please log in again.',
+            401,
+          ),
+        );
+      }
+
+      req.user = user;
+      next();
+    } catch (err) {
+      return next(new CustomError('Token verification failed!', 401));
     }
-
-    const user = await User.findById(payload.sub).select('+active');
-
-    if (!user) {
-      return next(
-        new CustomError('User not found or unauthorized access.', 401),
-      );
-    }
-
-    if (!user.active) {
-      return next(new CustomError('The user is inactive!', 403));
-    }
-
-    if (user.changedPasswordAfter(payload.iat)) {
-      return next(
-        new CustomError(
-          'User recently changed password! Please log in again.',
-          401,
-        ),
-      );
-    }
-
-    req.user = user;
-    next();
   },
 );
 

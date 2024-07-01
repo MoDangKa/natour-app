@@ -7,7 +7,7 @@ class CustomError extends Error {
   constructor(message: string, statusCode: number, error?: any) {
     super(message);
     this.statusCode = statusCode;
-    this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
+    this.status = `${statusCode}`.startsWith('4') ? 'failed' : 'error';
     this.error = error;
     this.isOperational = true;
 

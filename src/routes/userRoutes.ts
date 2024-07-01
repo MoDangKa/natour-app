@@ -14,7 +14,6 @@ const router = Router();
 
 router.post('/signup', validateCreateUser, authController.signup);
 router.post('/signin', authController.signin);
-
 router.post(
   '/forgotPassword',
   validateForgotPassword,
@@ -33,16 +32,18 @@ router.patch(
   validateUpdatePassword,
   authController.updatePassword,
 );
+router.get('/me', userController.getMe, userController.getUser);
 router.patch('/updateMe', validateUpdateMe, userController.updateMe);
 router.delete('/deleteMe', userController.deleteMe);
 
-router.get('/', userController.getAllUsers);
+router.use(authController.restrictTo('admin'));
 
+router.get('/', userController.getAllUsers);
 router
   .route('/:id')
   .get(userController.getUser)
   .post(userController.createUser)
   .patch(userController.updateUser)
-  .delete(authController.restrictTo('admin'), userController.deleteUser);
+  .delete(userController.deleteUser);
 
 export default router;

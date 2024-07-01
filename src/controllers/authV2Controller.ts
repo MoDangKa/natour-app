@@ -42,7 +42,10 @@ const signin = asyncHandler(
 
 const protect = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies[JWT_TOKEN!];
+    const authHeader = req.headers.authorization;
+    const cookie = req.cookies && req.cookies[JWT_TOKEN!];
+    const token = authHeader?.split(' ')[1] || cookie;
+
     if (!token) {
       return next(
         new CustomError(
