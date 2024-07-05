@@ -116,8 +116,8 @@ const updateUser = asyncHandler(
 );
 */
 
-const getAllUsers = factory.getAll(User, userKeys);
-const getUser = factory.getOne(User);
+const getAllUsers = factory.getAll(User, userKeys, 'users');
+const getUser = factory.getOne(User, undefined, 'user');
 
 // const createUser = factory.createOne(User);
 

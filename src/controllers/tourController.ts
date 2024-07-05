@@ -113,8 +113,8 @@ const deleteTour = asyncHandler(
 );
 */
 
-const getAllTours = factory.getAll<ITour>(Tour, tourKeys);
-const getTour = factory.getOne(Tour, { path: 'reviews' });
+const getAllTours = factory.getAll<ITour>(Tour, tourKeys, 'tours');
+const getTour = factory.getOne(Tour, { path: 'reviews' }, 'tour');
 const createTour = factory.createOne(Tour);
 const updateTour = factory.updateOne(Tour);
 const deleteTour = factory.deleteOne(Tour);

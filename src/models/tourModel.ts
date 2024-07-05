@@ -51,8 +51,8 @@ const requireTourKeys: TTourKeys[] = [
 
 const commonTourKeys: TTourKeys[] = [
   'priceDiscount',
-  'ratingsAverage',
-  'ratingsQuantity',
+  // 'ratingsAverage',
+  // 'ratingsQuantity',
   'summary',
   'images',
   'startDates',
@@ -219,6 +219,9 @@ const tourSchema = new mongoose.Schema<ITour>(
     timestamps: true,
   },
 );
+
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
 
 tourSchema.virtual<ITour>('durationWeeks').get(function () {
   return this.duration / 7;

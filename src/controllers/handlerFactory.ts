@@ -51,9 +51,14 @@ const createOne = <T extends Document>(Model: Model<T>) =>
     });
   });
 
-const getOne = <T extends Document>(Model: Model<T>, popOptions?: PopOptions) =>
+const getOne = <T extends Document>(
+  Model: Model<T>,
+  popOptions?: PopOptions,
+  keyName: string = 'data',
+) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     let query = Model.findById(req.params.id);
+    console.log('query: ', query);
     if (popOptions) query = query.populate(popOptions);
     const doc = await query;
 
@@ -64,12 +69,16 @@ const getOne = <T extends Document>(Model: Model<T>, popOptions?: PopOptions) =>
     res.status(200).json({
       status: 'success',
       data: {
-        data: doc,
+        [keyName]: doc,
       },
     });
   });
 
-const getAll = <T extends Document>(Model: Model<T>, keys: string[]) =>
+const getAll = <T extends Document>(
+  Model: Model<T>,
+  keys: string[],
+  keyName: string = 'data',
+) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     // To allow for nested GET reviews on tour (hack)
     let filter = {};
@@ -96,7 +105,7 @@ const getAll = <T extends Document>(Model: Model<T>, keys: string[]) =>
       status: 'success',
       results: resultsLength,
       data: {
-        data: data,
+        [keyName]: data,
         ...(!hidePagination && { page, totalPages, limit }),
       },
     });

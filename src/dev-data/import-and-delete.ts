@@ -1,7 +1,9 @@
 import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import path from 'path';
+import { Review } from '../models/reviewModel';
 import { Tour } from '../models/tourModel';
+import { User } from '../models/userModel';
 import { readFile } from './fileHelper';
 
 const ENV_FILE_PATH = path.resolve(__dirname, '../config.env');
@@ -35,8 +37,15 @@ const connectDatabase = async () => {
 
 const importData = async () => {
   try {
-    const tours = await readFile('tours.json');
+    const [tours, users, reviews] = await Promise.all([
+      readFile('tours.json'),
+      readFile('users.json'),
+      readFile('reviews.json'),
+    ]);
     await Tour.create(tours);
+    await User.create(users, { validateBeforeSave: false });
+    await Review.create(reviews);
+
     console.log('Data successfully imported!');
   } catch (error) {
     console.error('Error importing data:', error);
@@ -46,7 +55,10 @@ const importData = async () => {
 const deleteData = async () => {
   try {
     await Tour.deleteMany();
-    console.log('All tour data successfully deleted!');
+    await User.deleteMany();
+    await Review.deleteMany();
+
+    console.log('All data successfully deleted!');
   } catch (error) {
     console.error('Error deleting data:', error);
   }

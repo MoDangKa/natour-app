@@ -49,7 +49,7 @@ const generateErrorResponse = (
   stack?: string;
 } => {
   const response: any = {
-    status: statusCode < 500 ? 'fail' : 'error',
+    status: statusCode < 500 ? 'failed' : 'error',
     message,
   };
 

@@ -1,6 +1,7 @@
 import { Schema } from 'express-validator';
-import mongoose, { Document, Model, Query, isValidObjectId } from 'mongoose';
+import mongoose, { Document, Model, Query } from 'mongoose';
 
+// Interface for the Review document
 interface IReview extends Document {
   review: string;
   rating: number;
@@ -9,10 +10,16 @@ interface IReview extends Document {
   createdAt?: Date;
 }
 
-type TReviewKeys = keyof IReview;
+// Interface for the Review model with the static method
+interface IReviewModel extends Model<IReview> {
+  calcAverageRatings: (tourId: mongoose.Types.ObjectId) => Promise<void>;
+}
 
+// Type for the keys of Review document
+type TReviewKeys = keyof IReview;
 const reviewKeys: TReviewKeys[] = ['review', 'rating', 'tour', 'user'];
 
+// Schema validation using express-validator
 const reviewSchema: Schema = {
   review: {
     in: ['body'],
@@ -25,103 +32,139 @@ const reviewSchema: Schema = {
   },
   rating: {
     in: ['body'],
-    isNumeric: {
-      bail: true,
-      errorMessage: 'Rating must be a numeric value',
-    },
-    custom: {
-      bail: true,
-      options: (value) => {
-        return Number.isInteger(Number(value));
-      },
-      errorMessage: 'Rating must be an integer number',
-    },
     isInt: {
-      bail: true,
       options: { min: 1, max: 5 },
-      errorMessage: 'Rating must be an integer number between 1 and 5',
+      errorMessage: 'Rating must be an integer between 1 and 5',
     },
   },
   tour: {
     in: ['body'],
     custom: {
-      options: isValidObjectId,
+      options: (value) => mongoose.isValidObjectId(value),
       errorMessage: 'Review must belong to a valid tour',
     },
   },
   user: {
     in: ['body'],
     custom: {
-      options: isValidObjectId,
+      options: (value) => mongoose.isValidObjectId(value),
       errorMessage: 'Review must belong to a valid user',
     },
   },
 };
 
+// Mongoose schema definition
 const reviewMongooseSchema = new mongoose.Schema<IReview>(
   {
     review: {
       type: String,
-      require: [true, 'Review can not be empty!'],
+      required: [true, 'Review cannot be empty!'],
     },
     rating: {
       type: Number,
+      required: true,
       min: 1,
       max: 5,
+      validate: {
+        validator: Number.isInteger,
+        message: 'Rating must be an integer.',
+      },
     },
     tour: {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Tour',
       required: [true, 'Review must belong to a tour.'],
     },
     user: {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: [true, 'Review must belong to a user.'],
     },
     createdAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now(),
       select: false,
     },
   },
   {
-    toJSON: {
-      virtuals: true,
-      transform: (doc, ret) => {
-        delete ret.__v;
-        return ret;
-      },
-    },
-    toObject: {
-      virtuals: true,
-      transform: (doc, ret) => {
-        delete ret.__v;
-        return ret;
-      },
-    },
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
     collection: 'reviews',
   },
 );
 
+// Adding a pre-hook for the find and findOne queries
 reviewMongooseSchema.pre<Query<any, IReview>>(/^find/, function (next) {
-  // this.populate({
-  //   path: 'tour',
-  //   select: 'name',
-  // }).populate({
-  //   path: 'user',
-  //   select: 'name photo',
-  // });
-
   this.populate({
     path: 'user',
     select: 'name photo',
   });
-
   next();
 });
 
-const Review: Model<IReview> = mongoose.model<IReview>(
+// Adding static method to calculate average ratings
+reviewMongooseSchema.statics.calcAverageRatings = async function (
+  tourId: mongoose.Types.ObjectId,
+) {
+  const stats = await this.aggregate([
+    {
+      $match: { tour: tourId },
+    },
+    {
+      $group: {
+        _id: '$tour',
+        nRating: { $sum: 1 },
+        avgRating: { $avg: '$rating' },
+      },
+    },
+  ]);
+
+  if (stats.length > 0) {
+    await mongoose.model('Tour').findByIdAndUpdate(tourId, {
+      ratingsQuantity: stats[0].nRating,
+      ratingsAverage: stats[0].avgRating,
+    });
+  } else {
+    await mongoose.model('Tour').findByIdAndUpdate(tourId, {
+      ratingsQuantity: 0,
+      ratingsAverage: 0,
+    });
+  }
+};
+
+// Document middleware to call the method for calculating average ratings
+reviewMongooseSchema.post<IReview>('save', function () {
+  (this.constructor as IReviewModel).calcAverageRatings(this.tour);
+});
+
+// Extend the query object type to include the `r` property
+interface QueryWithDocument<T extends Document> extends Query<any, T> {
+  r?: T | null;
+}
+
+// Pre-middleware for findOneAndUpdate and findOneAndDelete
+reviewMongooseSchema.pre<QueryWithDocument<IReview>>(
+  /^findOneAnd/,
+  async function (next) {
+    this.r = await this.model.findOne(this.getQuery());
+    next();
+  },
+);
+
+// Post-middleware for findOneAndUpdate and findOneAndDelete
+reviewMongooseSchema.post<QueryWithDocument<IReview>>(
+  /^findOneAnd/,
+  async function () {
+    if (this.r) {
+      await (this.r.constructor as IReviewModel).calcAverageRatings(
+        this.r.tour,
+      );
+    }
+  },
+);
+
+// Export the review model
+const Review: IReviewModel = mongoose.model<IReview, IReviewModel>(
   'Review',
   reviewMongooseSchema,
 );

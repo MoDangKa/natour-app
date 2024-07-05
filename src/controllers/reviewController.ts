@@ -79,8 +79,8 @@ const setTourUserIds = async (
   next();
 };
 
-const getAllReviews = factory.getAll(Review, reviewKeys);
-const getReview = factory.getOne(Review);
+const getAllReviews = factory.getAll(Review, reviewKeys, 'reviews');
+const getReview = factory.getOne(Review, undefined, 'review');
 const createReview = factory.createOne(Review);
 const updateReview = factory.updateOne(Review);
 const deleteReview = factory.deleteOne(Review);
