@@ -1,0 +1,77 @@
+2024-07-07T06:35:27.001Z - [127.0.0.1] GET /api/v1/tours-within/233/center/34.088447,-118.399277/unit/mi 404 - Can't find /api/v1/tours-within/233/center/34.088447,-118.399277/unit/mi on this server!
+2024-07-07T06:36:22.861Z - [127.0.0.1] GET /api/v1/tours-within/233/center/34.088447,-118.399277/unit/mi 404 - Can't find /api/v1/tours-within/233/center/34.088447,-118.399277/unit/mi on this server!
+2024-07-07T06:36:24.012Z - [127.0.0.1] GET /api/v1/tours-within/233/center/34.088447,-118.399277/unit/mi 404 - Can't find /api/v1/tours-within/233/center/34.088447,-118.399277/unit/mi on this server!
+2024-07-07T06:46:34.715Z - [127.0.0.1] GET /api/v1/tours/tours-within/400/center/34.088447,-118.399277/unit/mi 400 - Validation Error: [{},{},{},{}]
+2024-07-07T06:48:17.588Z - [127.0.0.1] GET /api/v1/tours/tours-within/400/center/34.088447,-118.399277/unit/mi 400 - Validation Error: [{},{},{},{}]
+2024-07-07T06:49:57.181Z - [127.0.0.1] GET /api/v1/tours/tours-within/400/center/34.088447,-118.399277/unit/mi 400 - Validation Error: [{},{},{},{}]
+2024-07-07T07:00:11.374Z - [127.0.0.1] POST /api/v1/tours 403 - You do not have permission to perform this action.
+2024-07-07T07:03:44.199Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{},{},{}]
+2024-07-07T07:07:58.914Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{},{},{}]
+2024-07-07T07:09:21.883Z - [127.0.0.1] POST /api/v1/tours 400 - Entity Parse Failed.
+2024-07-07T07:09:59.566Z - [127.0.0.1] POST /api/v1/tours 401 - User not found or unauthorized access.
+2024-07-07T07:10:15.710Z - [127.0.0.1] POST /api/v1/tours 400 - Required fields: imageCover
+2024-07-07T07:15:26.779Z - [127.0.0.1] POST /api/v1/tours 400 - Required fields: imageCover
+2024-07-07T07:20:46.535Z - [127.0.0.1] POST /api/v1/tours 400 - Required fields: imageCover
+2024-07-07T07:21:38.370Z - [127.0.0.1] POST /api/v1/tours 400 - Required fields: imageCover
+2024-07-07T07:22:59.529Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"maxGroupSize":"Max group size must be a positive number"}]
+2024-07-07T07:23:26.813Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"maxGroupSize":"Max group size must be a positive number"}]
+2024-07-07T07:23:28.532Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"maxGroupSize":"Max group size must be a positive number"}]
+2024-07-07T07:24:46.612Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"maxGroupSize":"Max group size must be a positive number"}]
+2024-07-07T07:26:25.310Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"maxGroupSize":"Max group size must be a positive number"}]
+2024-07-07T07:27:05.167Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"maxGroupSize":"Max group size must be a positive number"}]
+2024-07-07T07:27:44.333Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{},{},{}]
+2024-07-07T07:29:31.830Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"maxGroupSize":"Rating must be an integer."}]
+2024-07-07T07:42:38.318Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"name":"A tour name must have more or equal than 10 characters"},{"maxGroupSize":"Rating must be an integer."}]
+2024-07-07T07:44:30.611Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{"name":"A tour name must have more or equal than 10 characters"},{"maxGroupSize":"Rating must be an integer."}]
+2024-07-07T07:46:11.799Z - [127.0.0.1] POST /api/v1/tours 400 - failed
+2024-07-07T07:49:15.186Z - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: name: A tour name must have more or equal than 10 characters, maxGroupSize: Rating must be an integer.
+2024-07-07T07:52:45.253Z - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: name: A tour name must have more or equal than 10 characters, maxGroupSize: Rating must be an integer.
+2024-07-07T07:52:49.082Z - [127.0.0.1] POST /api/v1/tours 400 - Tour validation failed: maxGroupSize: Rating must be an integer.
+2024-07-07T07:52:54.881Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{},{},{}]
+2024-07-07T07:53:00.376Z - [127.0.0.1] POST /api/v1/tours 400 - Validation Error: [{},{},{}]
+2024-07-07T07:54:54.329Z - [127.0.0.1] POST /api/v1/tours 400 - Duplicate information!
+2024-07-07T07:56:17.806Z - [127.0.0.1] POST /api/v1/tours 400 - Duplicate information! Please check unique fields.
+2024-07-07T08:03:10.455Z - [127.0.0.1] GET /api/v1/tours?sort=price 401 - Token verification failed!
+2024-07-07T08:03:50.863Z - [127.0.0.1] GET /api/v1/tours?sort=price 401 - Token verification failed!
+2024-07-07T08:11:37.068Z - [127.0.0.1] GET /api/v1/tours?sort=price 401 - Token verification failed!
+2024-07-07T08:11:38.551Z - [127.0.0.1] GET /api/v1/tours?sort=price 401 - Token verification failed!
+2024-07-07T08:11:41.653Z - [127.0.0.1] GET /api/v1/tours?sort=price 401 - Token verification failed!
+2024-07-07T08:11:43.162Z - [127.0.0.1] GET /api/v1/tours?sort=price 401 - Token verification failed!
+2024-07-07T08:11:55.380Z - [127.0.0.1] GET /api/v1/tours?sort=price 401 - Token verification failed!
+2024-07-07T08:14:42.460Z - [127.0.0.1] GET /api/v1/tours?sort=price 401 - Token verification failed!
+2024-07-07T08:15:01.382Z - [127.0.0.1] GET /api/v1/tours?sort=price 403 - The user is inactive!
+2024-07-07T08:15:02.400Z - [127.0.0.1] GET /api/v1/tours?sort=price 403 - The user is inactive!
+2024-07-07T08:16:30.479Z - [127.0.0.1] PATCH /api/v1/users/updateMyPassword 401 - Your current password is wrong.
+2024-07-07T08:16:40.176Z - [127.0.0.1] PATCH /api/v1/users/updateMyPassword 401 - Your current password is wrong.
+2024-07-07T08:17:27.847Z - [127.0.0.1] PATCH /api/v1/users/updateMyPassword 401 - Your current password is wrong.
+2024-07-07T08:20:16.206Z - [127.0.0.1] POST /api/v1/tours 400 - Unique fields are duplicated.
+2024-07-07T08:20:23.610Z - [127.0.0.1] POST /api/v1/tours 400 - Unique fields are duplicated.
+2024-07-07T08:20:30.142Z - [127.0.0.1] POST /api/v1/tours 400 - Unique fields are duplicated.
+2024-07-07T08:20:36.034Z - [127.0.0.1] POST /api/v1/tours 400 - Unique fields are duplicated.
+2024-07-07T08:20:52.689Z - [127.0.0.1] POST /api/v1/tours 400 - Unique fields are duplicated.
+2024-07-07T08:21:05.160Z - [127.0.0.1] POST /api/v1/tours 400 - Unique fields are duplicated.
+2024-07-07T08:24:24.856Z - [127.0.0.1] POST /api/v1/tours 400 - Point must be an array or object, instead got type missing.
+2024-07-07T08:27:17.402Z - [127.0.0.1] POST /api/v1/tours 400 - Point must be an array or object, instead got type missing.
+2024-07-07T08:27:18.329Z - [127.0.0.1] POST /api/v1/tours 400 - Point must be an array or object, instead got type missing.
+2024-07-07T08:34:13.294Z - [127.0.0.1] POST /api/v1/tours 400 - Duplicate field value: "Test Tour Price Test". Please use another value!
+2024-07-07T08:36:23.238Z - [127.0.0.1] POST /api/v1/tours 400 - Duplicate field value: "Test Tour Price Test". Please use another value!
+2024-07-07T08:36:44.156Z - [127.0.0.1] POST /api/v1/tours 400 - Duplicate field value: "Test Tour Price Test". Please use another value!
+2024-07-07T08:37:04.696Z - [127.0.0.1] POST /api/v1/tours 400 - Duplicate field value: "Test Tour Price Test". Please use another value!
+2024-07-07T08:39:45.188Z - [127.0.0.1] GET /api/v1/tours/tours-within/400/center/34.088447,-118.399277/unit/mi 400 - Validation Error: [{},{},{},{}]
+2024-07-07T08:41:30.835Z - [127.0.0.1] GET /api/v1/tours/tours-within/400/center/34.088447,-118.399277/unit/mi 400 - Validation Error: [{},{},{},{}]
+2024-07-07T09:09:03.755Z - [127.0.0.1] POST /api/v1/users/signin 401 - Incorrect email or password.
+2024-07-07T09:09:07.319Z - [127.0.0.1] POST /api/v1/users/signin 401 - Incorrect email or password.
+2024-07-07T09:09:10.570Z - [127.0.0.1] POST /api/v1/users/signup 400 - Duplicate field value: "solutionx100cc@gmail.com". Please use another value!
+2024-07-07T09:09:47.907Z - [127.0.0.1] PATCH /api/v1/users/updateMyPassword 401 - Your current password is wrong.
+2024-07-07T09:10:52.202Z - [127.0.0.1] GET /api/v1/tours?sort=price 401 - User recently changed password! Please log in again.
+2024-07-07T09:10:56.003Z - [127.0.0.1] GET /api/v1/tours?sort=price 401 - User recently changed password! Please log in again.
+2024-07-07T09:21:47.820Z - [127.0.0.1] POST /api/v1/tours 500 - Something went wrong!
+2024-07-07T09:21:54.480Z - [127.0.0.1] POST /api/v1/tours 401 - Token verification failed!
+2024-07-07T09:22:00.224Z - [127.0.0.1] POST /api/v1/users/signin 401 - Incorrect email or password.
+2024-07-07T09:22:09.241Z - [127.0.0.1] POST /api/v1/tours 403 - You do not have permission to perform this action.
+2024-07-07T09:22:59.069Z - [127.0.0.1] POST /api/v1/tours 400 - Duplicate field value: "Test Tour Price Test". Please use another value!
+2024-07-07T09:23:05.331Z - [127.0.0.1] POST /api/v1/tours 400 - Something went wrong!
+2024-07-07T09:25:42.285Z - [127.0.0.1] POST /api/v1/tours 400 - Something went wrong!
+2024-07-07T09:25:43.384Z - [127.0.0.1] POST /api/v1/tours 400 - Something went wrong!
+2024-07-07T09:26:00.455Z - [127.0.0.1] POST /api/v1/tours 400 - Something went wrong!
+2024-07-07T09:26:39.909Z - [127.0.0.1] POST /api/v1/tours 400 - Duplicate field value: "Test Tour Price Test". Please use another value!

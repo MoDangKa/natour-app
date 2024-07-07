@@ -118,6 +118,10 @@ const tourSchema = new mongoose.Schema<ITour>(
       type: Number,
       default: 0,
       min: [0, 'Max group size must be a positive number'],
+      validate: {
+        validator: Number.isInteger,
+        message: 'Rating must be an integer.',
+      },
     },
     difficulty: {
       type: String,
@@ -184,7 +188,10 @@ const tourSchema = new mongoose.Schema<ITour>(
         default: 'Point',
         enum: ['Point'],
       },
-      coordinates: [Number],
+      coordinates: {
+        type: [Number],
+        default: [],
+      },
       address: String,
       description: String,
     },
@@ -223,6 +230,7 @@ const tourSchema = new mongoose.Schema<ITour>(
 
 tourSchema.index({ price: 1, ratingsAverage: -1 });
 tourSchema.index({ slug: 1 });
+tourSchema.index({ startLocation: '2dsphere' });
 
 tourSchema.virtual<ITour>('durationWeeks').get(function () {
   return this.duration / 7;

@@ -1,125 +1,110 @@
-import { NODE_ENV } from '@/config';
-import CustomError from '@/utils/customError';
-import { writeErrorLog } from '@/utils/logger';
 import { NextFunction, Request, Response } from 'express';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
-import { MongoError } from 'mongodb';
+import { NODE_ENV } from '@/config';
+import { writeErrorLog } from '@/utils/logger';
 
-const handleCastErrorDB = (err: { path: string; value: any }): CustomError => {
-  return new CustomError(`Invalid ${err.path}: ${err.value}`, 400);
-};
-
-const handleDuplicateFieldsDB = (err: MongoError): CustomError => {
-  const value = (err as any).errmsg?.match(/".+?"/)?.[0];
-  return new CustomError(
-    `Duplicate field value: ${value}. Please use another value!`,
-    400,
-  );
-};
-
-const handleJWTError = (): CustomError =>
-  new CustomError('Invalid token. Please log in again!', 401);
-
-const handleJWTExpiredError = (): CustomError =>
-  new CustomError('Your token has expired. Please log in again.', 401);
-
-const handleEntityError = (): CustomError =>
-  new CustomError('Entity Parse Failed.', 400);
-
-const handleValidationError = (errors: any[]): CustomError => {
-  const errorFields = errors.map((err: any) => ({
-    [err.path]: err?.properties?.message,
-  }));
-  const message = `Validation Error: ${JSON.stringify(errorFields)}`;
-  return new CustomError(message, 400, errorFields);
-};
-
-const extractErrorDetails = (err: any): any =>
-  err?.error || err?.errors || err?.errorResponse || err || {};
-
-const generateErrorResponse = (
-  err: CustomError,
-  statusCode: number,
-  message: string,
-  errorDetail: any = {},
-): {
-  status: string;
-  message: string;
-  error?: Record<string, any>;
-  stack?: string;
-} => {
-  const response: any = {
-    status: statusCode < 500 ? 'failed' : 'error',
-    message,
+interface CustomError extends Error {
+  statusCode?: number;
+  status?: string;
+  isOperational?: boolean;
+  errorResponse?: {
+    code?: number;
+    errmsg?: string;
   };
+  errors?: any;
+  error?: any;
+}
 
-  if (
-    (NODE_ENV === 'development' || NODE_ENV === 'alpha') &&
-    Object.keys(errorDetail).length > 0
-  ) {
-    response.error = errorDetail;
-    response.stack = err.stack;
+// Response Organizer
+const organize = (
+  status: string,
+  message: string,
+  error?: any,
+  stack?: any,
+) => {
+  const response: any = { status, message };
+
+  if (NODE_ENV === 'development' || NODE_ENV === 'alpha') {
+    if (error) {
+      response.error = error;
+    }
+    if (stack) {
+      response.stack = stack;
+    }
   }
 
   return response;
 };
 
-const handleSpecificErrors = (errorDetail: any): CustomError | null => {
-  if (errorDetail.path && errorDetail.value)
-    return handleCastErrorDB(errorDetail);
-  if (errorDetail.code === 11000) return handleDuplicateFieldsDB(errorDetail);
-  if (errorDetail instanceof JsonWebTokenError) return handleJWTError();
-  if (errorDetail instanceof TokenExpiredError) return handleJWTExpiredError();
-  if (errorDetail.expose === true && errorDetail.type)
-    return handleEntityError();
-  if (Array.isArray(errorDetail)) return handleValidationError(errorDetail);
-  if (Object.values(errorDetail).length)
-    return handleValidationError(Object.values(errorDetail));
-
-  return null;
-};
-
+// Error Middleware
 const errorMiddleware = (
   err: CustomError,
   req: Request,
   res: Response,
   next: NextFunction,
 ): Response | void => {
-  if (err?.isOperational) {
-    writeErrorLog(
-      req.ip,
-      req.method,
-      req.originalUrl,
-      err.statusCode,
-      err.message,
-    );
-    const jsonResponse = generateErrorResponse(
-      err,
-      err.statusCode,
-      err.message,
-      err.error || {},
-    );
-    return res.status(err.statusCode).json(jsonResponse);
+  console.log('err:', err);
+
+  // JWT Errors
+  if (err instanceof JsonWebTokenError || err instanceof TokenExpiredError) {
+    const statusCode = 401;
+    const status = 'failed';
+    const message =
+      err instanceof JsonWebTokenError
+        ? 'Invalid token. Please log in again!'
+        : 'Your token has expired. Please log in again.';
+    writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
+    const response = organize(status, message, undefined, err.stack);
+    return res.status(statusCode).json(response);
   }
 
-  const errorDetail = extractErrorDetails(err);
-  let { statusCode = 500, message = 'An unexpected error occurred' } = err;
-
-  const specificError = handleSpecificErrors(errorDetail);
-  if (specificError) {
-    statusCode = specificError.statusCode;
-    message = specificError.message;
+  // Custom Operational Errors
+  if (err.isOperational) {
+    const statusCode = err.statusCode || 500;
+    const status = err.status || 'error';
+    const message = err.message || 'An operational error occurred';
+    writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
+    const response = organize(status, message, err.error, err.stack);
+    return res.status(statusCode).json(response);
   }
 
-  const jsonResponse = generateErrorResponse(
-    err,
-    statusCode,
-    message,
-    errorDetail,
-  );
+  // Mongoose Validation Errors
+  if (err.errors) {
+    const statusCode = 400;
+    const status = 'failed';
+    const message = err.message || 'Validation failed';
+    writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
+    const response = organize(status, message, err.errors, err.stack);
+    return res.status(statusCode).json(response);
+  }
+
+  // Mongoose Specific Errors
+  if (err.errorResponse) {
+    let statusCode = 400;
+    let status = 'failed';
+    let message = 'Something went wrong!';
+    let error = undefined;
+
+    if (err.errorResponse.code === 11000) {
+      const value = err.errorResponse.errmsg?.match(/".+?"/)?.[0];
+      message = `Duplicate field value: ${value}. Please use another value!`;
+      error = err?.errorResponse;
+    } else if (err.errorResponse.code === 16755) {
+      message = 'Something went wrong!';
+    }
+
+    writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
+    const response = organize(status, message, error, err.stack);
+    return res.status(statusCode).json(response);
+  }
+
+  // Default to 500 Server Error
+  const statusCode = 500;
+  const status = 'error';
+  const message = 'Something went wrong!';
   writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
-
-  return res.status(statusCode).json(jsonResponse);
+  const response = organize(status, message, undefined, err.stack);
+  return res.status(statusCode).json(response);
 };
 
 export default errorMiddleware;
