@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
+
 import { NODE_ENV } from '@/config';
 import { writeErrorLog } from '@/utils/logger';
 
@@ -43,7 +44,7 @@ const errorMiddleware = (
   res: Response,
   next: NextFunction,
 ): Response | void => {
-  console.log('err:', err);
+  console.error('Error:', err); // Changed to console.error for logging errors
 
   // Default to 500 Server Error
   let statusCode = 500;
@@ -54,7 +55,7 @@ const errorMiddleware = (
   if (err instanceof JsonWebTokenError || err instanceof TokenExpiredError) {
     // JWT Errors
     statusCode = 401;
-    status = 'failed';
+    status = 'fail';
     message =
       err instanceof JsonWebTokenError
         ? 'Invalid token. Please log in again!'
@@ -63,24 +64,26 @@ const errorMiddleware = (
     // Custom Operational Errors
     statusCode = err.statusCode || 500;
     status = err.status || 'error';
-    message = err.message || 'An operational error occurred';
+    message = err.message || 'An operational error occurred.';
   } else if (err.errors) {
     // Mongoose Validation Errors
     statusCode = 400;
-    status = 'failed';
+    status = 'fail';
     message = err.message || 'Validation failed';
+    error = err.errors;
   } else if (err.errorResponse) {
     // Mongoose Specific Errors
     statusCode = 400;
-    status = 'failed';
+    status = 'fail';
 
     if (err.errorResponse.code === 11000) {
-      const value = err.errorResponse.errmsg?.match(/".+?"/)?.[0];
-      message = `Duplicate field value: ${value}. Please use another value!`;
-      error = err?.errorResponse;
+      const value = err.errorResponse.errmsg?.match(/\"(.+?)\"/)?.[0];
+      message = `Duplicate field value: "${value}". Please use another value!`;
     } else if (err.errorResponse.code === 16755) {
       message = 'Something went wrong!';
     }
+
+    error = err.errorResponse;
   }
 
   writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
