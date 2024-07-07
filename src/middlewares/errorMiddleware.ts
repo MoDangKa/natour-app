@@ -45,45 +45,34 @@ const errorMiddleware = (
 ): Response | void => {
   console.log('err:', err);
 
-  // JWT Errors
+  // Default to 500 Server Error
+  let statusCode = 500;
+  let status = 'error';
+  let message = 'Something went wrong!';
+  let error = undefined;
+
   if (err instanceof JsonWebTokenError || err instanceof TokenExpiredError) {
-    const statusCode = 401;
-    const status = 'failed';
-    const message =
+    // JWT Errors
+    statusCode = 401;
+    status = 'failed';
+    message =
       err instanceof JsonWebTokenError
         ? 'Invalid token. Please log in again!'
         : 'Your token has expired. Please log in again.';
-    writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
-    const response = organize(status, message, undefined, err.stack);
-    return res.status(statusCode).json(response);
-  }
-
-  // Custom Operational Errors
-  if (err.isOperational) {
-    const statusCode = err.statusCode || 500;
-    const status = err.status || 'error';
-    const message = err.message || 'An operational error occurred';
-    writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
-    const response = organize(status, message, err.error, err.stack);
-    return res.status(statusCode).json(response);
-  }
-
-  // Mongoose Validation Errors
-  if (err.errors) {
-    const statusCode = 400;
-    const status = 'failed';
-    const message = err.message || 'Validation failed';
-    writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
-    const response = organize(status, message, err.errors, err.stack);
-    return res.status(statusCode).json(response);
-  }
-
-  // Mongoose Specific Errors
-  if (err.errorResponse) {
-    let statusCode = 400;
-    let status = 'failed';
-    let message = 'Something went wrong!';
-    let error = undefined;
+  } else if (err.isOperational) {
+    // Custom Operational Errors
+    statusCode = err.statusCode || 500;
+    status = err.status || 'error';
+    message = err.message || 'An operational error occurred';
+  } else if (err.errors) {
+    // Mongoose Validation Errors
+    statusCode = 400;
+    status = 'failed';
+    message = err.message || 'Validation failed';
+  } else if (err.errorResponse) {
+    // Mongoose Specific Errors
+    statusCode = 400;
+    status = 'failed';
 
     if (err.errorResponse.code === 11000) {
       const value = err.errorResponse.errmsg?.match(/".+?"/)?.[0];
@@ -92,18 +81,10 @@ const errorMiddleware = (
     } else if (err.errorResponse.code === 16755) {
       message = 'Something went wrong!';
     }
-
-    writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
-    const response = organize(status, message, error, err.stack);
-    return res.status(statusCode).json(response);
   }
 
-  // Default to 500 Server Error
-  const statusCode = 500;
-  const status = 'error';
-  const message = 'Something went wrong!';
   writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
-  const response = organize(status, message, undefined, err.stack);
+  const response = organize(status, message, error, err.stack);
   return res.status(statusCode).json(response);
 };
 
