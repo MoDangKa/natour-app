@@ -14,3 +14,17 @@
 2024-07-05T03:56:57.296Z - [127.0.0.1] PATCH /api/v1/reviews/66876728dd0bd97d9b1dd920 400 - Validation Error: [{}]
 2024-07-05T04:43:54.572Z - [127.0.0.1] DELETE /api/v1/reviews/668768ecdd0bd97d9b1dd930 404 - No document found with that ID
 2024-07-05T04:44:17.154Z - [127.0.0.1] DELETE /api/v1/reviews/6686742c929e694e8fd468c4 404 - No document found with that ID
+2024-07-05T07:22:15.979Z - [127.0.0.1] POST /api/v1/reviews/668668e955f24f677ef6e800 404 - Can't find /api/v1/reviews/668668e955f24f677ef6e800 on this server!
+2024-07-05T07:22:21.463Z - [127.0.0.1] POST /api/v1/reviews/668668e955f24f677ef6e800 404 - Can't find /api/v1/reviews/668668e955f24f677ef6e800 on this server!
+2024-07-05T08:27:26.905Z - [127.0.0.1] POST /api/v1/reviews/668668e955f24f677ef6e800 404 - Can't find /api/v1/reviews/668668e955f24f677ef6e800 on this server!
+2024-07-05T08:27:42.096Z - [127.0.0.1] POST /api/v1/reviews/668668e955f24f677ef6e800 404 - Can't find /api/v1/reviews/668668e955f24f677ef6e800 on this server!
+2024-07-05T08:27:43.266Z - [127.0.0.1] POST /api/v1/reviews/668668e955f24f677ef6e800 404 - Can't find /api/v1/reviews/668668e955f24f677ef6e800 on this server!
+2024-07-05T08:28:20.446Z - [127.0.0.1] POST /api/v1/reviews 400 - Duplicate field value: undefined. Please use another value!
+2024-07-05T08:28:26.252Z - [127.0.0.1] POST /api/v1/reviews 400 - Duplicate field value: undefined. Please use another value!
+2024-07-05T08:31:59.998Z - [127.0.0.1] POST /api/v1/reviews 400 - Duplicate field value: undefined. Please use another value!
+2024-07-05T08:32:04.428Z - [127.0.0.1] POST /api/v1/reviews 400 - Duplicate field value: undefined. Please use another value!
+2024-07-05T08:32:35.975Z - [127.0.0.1] POST /api/v1/reviews 400 - Duplicate field value: undefined. Please use another value!
+2024-07-05T08:32:38.171Z - [127.0.0.1] POST /api/v1/reviews 400 - Duplicate field value: undefined. Please use another value!
+2024-07-05T08:33:05.313Z - [127.0.0.1] POST /api/v1/tours/668668e955f24f677ef6e800/reviews 400 - Duplicate field value: undefined. Please use another value!
+2024-07-05T08:33:20.991Z - [127.0.0.1] POST /api/v1/tours/668668e955f24f677ef6e800/reviews 400 - Duplicate field value: undefined. Please use another value!
+2024-07-05T08:44:04.413Z - [127.0.0.1] PATCH /api/v1/reviews/6687b08bd74ae76b6061fd4a 400 - Validation Error: [{"rating":"Rating must be an integer."}]

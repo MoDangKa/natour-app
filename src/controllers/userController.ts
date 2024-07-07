@@ -122,7 +122,7 @@ const getUser = factory.getOne(User, undefined, 'user');
 // const createUser = factory.createOne(User);
 
 // Do not update passwords with this!
-const updateUser = factory.updateOne(User);
+const updateUser = factory.updateOne(User, 'review');
 const deleteUser = factory.deleteOne(User);
 
 const userController = {

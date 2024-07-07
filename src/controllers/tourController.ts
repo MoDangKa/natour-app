@@ -115,8 +115,8 @@ const deleteTour = asyncHandler(
 
 const getAllTours = factory.getAll<ITour>(Tour, tourKeys, 'tours');
 const getTour = factory.getOne(Tour, { path: 'reviews' }, 'tour');
-const createTour = factory.createOne(Tour);
-const updateTour = factory.updateOne(Tour);
+const createTour = factory.createOne(Tour, 'review');
+const updateTour = factory.updateOne(Tour, 'review');
 const deleteTour = factory.deleteOne(Tour);
 
 const getTourStats = asyncHandler(
@@ -191,6 +191,31 @@ const getMonthlyPlan = asyncHandler(
   },
 );
 
+// /tours-within/233/center/34.088447, -118.399277/unit/mi
+// /tours-within/:distance/center/:latlng/unit/:unit
+const getToursWithin = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { distance, latlng, unit } = req.params;
+    const [lat, lng] = latlng.split(',');
+
+    if (!lat || !lng) {
+      next(
+        new CustomError(
+          'Please provide latitude and longitude in the format lat,lng.',
+          400,
+        ),
+      );
+    }
+
+    console.log(distance, lat, lng, unit);
+
+    res.status(200).json({
+      status: 'success',
+      // data: { plan: defaultPlan },
+    });
+  },
+);
+
 const tourController = {
   aliasTopTours,
   getAllTours,
@@ -200,6 +225,7 @@ const tourController = {
   deleteTour,
   getTourStats,
   getMonthlyPlan,
+  getToursWithin,
 };
 
 export default tourController;

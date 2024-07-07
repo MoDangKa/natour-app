@@ -93,6 +93,8 @@ const reviewMongooseSchema = new mongoose.Schema<IReview>(
   },
 );
 
+reviewMongooseSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 // Adding a pre-hook for the find and findOne queries
 reviewMongooseSchema.pre<Query<any, IReview>>(/^find/, function (next) {
   this.populate({
@@ -122,7 +124,7 @@ reviewMongooseSchema.statics.calcAverageRatings = async function (
   if (stats.length > 0) {
     await mongoose.model('Tour').findByIdAndUpdate(tourId, {
       ratingsQuantity: stats[0].nRating,
-      ratingsAverage: stats[0].avgRating,
+      ratingsAverage: parseFloat(stats[0].avgRating.toFixed(1)),
     });
   } else {
     await mongoose.model('Tour').findByIdAndUpdate(tourId, {

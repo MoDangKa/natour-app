@@ -20,7 +20,10 @@ const deleteOne = <T extends Document>(Model: Model<T>) =>
     });
   });
 
-const updateOne = <T extends Document>(Model: Model<T>) =>
+const updateOne = <T extends Document>(
+  Model: Model<T>,
+  keyName: string = 'data',
+) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const doc = await Model.findByIdAndUpdate(req.params?.id, req.body, {
       new: true,
@@ -34,19 +37,22 @@ const updateOne = <T extends Document>(Model: Model<T>) =>
     res.status(200).json({
       status: 'success',
       data: {
-        data: doc,
+        [keyName]: doc,
       },
     });
   });
 
-const createOne = <T extends Document>(Model: Model<T>) =>
+const createOne = <T extends Document>(
+  Model: Model<T>,
+  keyName: string = 'data',
+) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const newDoc = await Model.create(req.body);
 
     res.status(201).json({
       status: 'success',
       data: {
-        date: newDoc,
+        [keyName]: newDoc,
       },
     });
   });

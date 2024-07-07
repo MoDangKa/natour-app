@@ -81,8 +81,8 @@ const setTourUserIds = async (
 
 const getAllReviews = factory.getAll(Review, reviewKeys, 'reviews');
 const getReview = factory.getOne(Review, undefined, 'review');
-const createReview = factory.createOne(Review);
-const updateReview = factory.updateOne(Review);
+const createReview = factory.createOne(Review, 'review');
+const updateReview = factory.updateOne(Review, 'review');
 const deleteReview = factory.deleteOne(Review);
 
 const reviewController = {
