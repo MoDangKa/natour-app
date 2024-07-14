@@ -18,6 +18,12 @@ import { HOSTNAME, NODE_ENV, PORT } from './config';
 // Create express application instance
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, '/views'));
+
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
+
 /**
  * Middleware Configurations
  */
@@ -51,13 +57,11 @@ app.use(xss());
 
 // Prevent parameter pollution
 app.use(
-  hpp({
-    whitelist: ['duration', 'ratingsQuantity'], // Example
-  }),
+  hpp(),
+  // hpp({
+  //   whitelist: ['duration', 'ratingsQuantity'], // Example
+  // }),
 );
-
-// Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Add request timestamp to each request
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -70,6 +74,13 @@ app.use((req: Request, res: Response, next: NextFunction) => {
  */
 
 // Mount API routes
+app.get('/', (req: Request, res: Response) => {
+  res.status(200).render('base', {
+    tour: 'The Forest Hiker',
+    user: 'Jonas',
+  });
+});
+
 app.use('/api/v1', apiV1Router);
 app.use('/api/v2', apiV2Router);
 

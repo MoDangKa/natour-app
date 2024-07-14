@@ -11,12 +11,7 @@ export default class APIFeatures<T extends Document> {
   private limit: number;
   private skip: number;
 
-  constructor(
-    query: Query<T[], T>,
-    queryString: TObject,
-    fields: string[],
-    dataName: string = 'data',
-  ) {
+  constructor(query: Query<T[], T>, queryString: TObject, fields: string[]) {
     this.query = query;
     this.queryString = queryString;
     this.fields = fields;

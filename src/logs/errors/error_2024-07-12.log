@@ -1,0 +1,21 @@
+2024-07-12T08:09:40.898Z - [127.0.0.1] GET /api/v1/tours/distances/34.088447,-118.399277/unit/mi 404 - Can't find /api/v1/tours/distances/34.088447,-118.399277/unit/mi on this server!
+2024-07-12T08:10:14.212Z - [127.0.0.1] GET /api/v1/tours/distances/34.088447,-118.399277/unit/mi 400 - Something went wrong!
+2024-07-12T08:10:15.325Z - [127.0.0.1] GET /api/v1/tours/distances/34.088447,-118.399277/unit/mi 400 - Something went wrong!
+2024-07-12T08:13:09.875Z - [127.0.0.1] GET /api/v1/tours/distances/34.088447,-118.399277/unit/mi 400 - Something went wrong!
+2024-07-12T08:16:04.603Z - [127.0.0.1] GET /api/v1/tours/distances/34.088447,-118.399277/unit/mi 400 - Something went wrong!
+2024-07-12T08:16:05.513Z - [127.0.0.1] GET /api/v1/tours/distances/34.088447,-118.399277/unit/mi 400 - Something went wrong!
+2024-07-12T08:17:14.159Z - [127.0.0.1] GET /api/v1/tours/distances/34.111745,-118.113491/unit/mi 400 - Something went wrong!
+2024-07-12T08:17:15.075Z - [127.0.0.1] GET /api/v1/tours/distances/34.111745,-118.113491/unit/mi 400 - Something went wrong!
+2024-07-12T08:42:47.130Z - [127.0.0.1] POST /api/v1/users/signin 500 - Something went wrong!
+2024-07-12T08:46:03.196Z - [127.0.0.1] POST /api/v1/users/signin 500 - Something went wrong!
+2024-07-12T08:49:48.376Z - [127.0.0.1] GET /api/v1/tours?price[lt]=1500&page=10&fields=name,price,duration&pagination=0&names=g-dargon&sort=name&imageCover=tour-20-cover.jpg&duration[gte]=8&price[lt]=1000&sort=price 404 - This page does not exist
+2024-07-12T08:50:00.031Z - [127.0.0.1] GET /api/v1/tours?price[lt]=1500&page=10&fields=name,price,duration&pagination=0&names=g-dargon&sort=name&imageCover=tour-20-cover.jpg&duration[gte]=8 404 - This page does not exist
+2024-07-12T08:50:04.160Z - [127.0.0.1] GET /api/v1/tours?price[lt]=1500&page=10&fields=name,price,duration&pagination=0&names=g-dargon&sort=name&duration[gte]=8 404 - This page does not exist
+2024-07-12T08:50:08.579Z - [127.0.0.1] GET /api/v1/tours?price[lt]=1500&page=10&fields=name,price,duration&pagination=0&names=g-dargon&duration[gte]=8 404 - This page does not exist
+2024-07-12T08:50:12.101Z - [127.0.0.1] GET /api/v1/tours?price[lt]=1500&page=10&fields=name,price,duration&pagination=0&duration[gte]=8 404 - This page does not exist
+2024-07-12T08:50:15.670Z - [127.0.0.1] GET /api/v1/tours?price[lt]=1500&page=10&fields=name,price,duration&duration[gte]=8 404 - This page does not exist
+2024-07-12T08:50:20.334Z - [127.0.0.1] GET /api/v1/tours?price[lt]=1500&page=10&duration[gte]=8 404 - This page does not exist
+2024-07-12T09:37:39.221Z - [127.0.0.1] GET / 500 - Something went wrong!
+2024-07-12T09:38:54.052Z - [127.0.0.1] GET / 500 - Something went wrong!
+2024-07-12T09:38:58.311Z - [127.0.0.1] GET / 500 - Something went wrong!
+2024-07-12T09:53:36.388Z - [127.0.0.1] GET /_next/static/css/app/globals.css.map 404 - Can't find /_next/static/css/app/globals.css.map on this server!
