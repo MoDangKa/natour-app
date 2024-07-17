@@ -830,6 +830,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  justify-content: flex-end;
 }
 .footer__nav li {
   margin-left: 1.5rem;
@@ -839,6 +840,7 @@ body {
   text-decoration: none !important;
   -webkit-transition: all 0.2s;
   transition: all 0.2s;
+  font-weight: 400;
 }
 .footer__nav a:hover,
 .footer__nav a:active {

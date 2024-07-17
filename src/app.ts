@@ -14,6 +14,7 @@ import apiV1Router from '@/routes/apiV1Router';
 import apiV2Router from '@/routes/apiV2Router';
 import connectDatabase from '@/utils/connectDatabase';
 import { HOSTNAME, NODE_ENV, PORT } from './config';
+import viewRouter from '@/routes/viewRoutes';
 
 // Create express application instance
 const app = express();
@@ -74,13 +75,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
  */
 
 // Mount API routes
-app.get('/', (req: Request, res: Response) => {
-  res.status(200).render('base', {
-    tour: 'The Forest Hiker',
-    user: 'Jonas',
-  });
-});
-
+app.use('/', viewRouter);
 app.use('/api/v1', apiV1Router);
 app.use('/api/v2', apiV2Router);
 
