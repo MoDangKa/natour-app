@@ -141,13 +141,13 @@ body {
 }
 
 .heading-primary,
-.heading-tertirary {
+.heading-tertiary {
   color: #fff;
   text-transform: uppercase;
   font-weight: 300;
 }
 .heading-primary span,
-.heading-tertirary span {
+.heading-tertiary span {
   padding: 1rem 1.5rem;
   line-height: 1;
   -webkit-box-decoration-break: clone;
@@ -173,7 +173,7 @@ body {
   margin: 0 auto;
 }
 
-.heading-tertirary {
+.heading-tertiary {
   font-size: 2.75rem;
   text-align: right;
   position: absolute;
@@ -1174,8 +1174,12 @@ body {
   grid-row-gap: 1rem;
   margin-top: auto;
 }
+
 .card__footer-value {
   font-weight: 700;
+}
+.card__footer-value::after {
+  content: ' ';
 }
 .card__footer-text {
   color: #999;

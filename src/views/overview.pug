@@ -1,0 +1,9 @@
+extends base
+
+block content
+    main.main
+        .card-container
+
+            each tour in tours
+                include templates/tourCardTemplate
+                    - var tour = tour
