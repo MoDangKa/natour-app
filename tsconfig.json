@@ -12,14 +12,20 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "typeRoots": ["./node_modules/@types", "./src/@types"]
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/@types",
+      "./types",
+      "./node_modules/@types"
+    ]
   },
   "include": [
     "src/**/*.ts",
     "src/@types/**/*",
     "src/dev-data/data/import-and-delete.ts",
     "src/eslintrc.ts",
-    "src/@types/*.d.ts"
+    "src/@types/*.d.ts",
+    "src/public/scripts/mapbox.js"
   ],
   "exclude": ["node_modules"]
 }

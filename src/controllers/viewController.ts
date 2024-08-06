@@ -22,10 +22,16 @@ const getTour = asyncHandler(async (req: Request, res: Response) => {
     return res.redirect('/');
   }
 
-  res.status(200).render('tour', {
-    title: tour.name,
-    tour,
-  });
+  res
+    .status(200)
+    .set(
+      'Content-Security-Policy',
+      'connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com',
+    )
+    .render('tour', {
+      title: `${tour.name} Tour`,
+      tour,
+    });
 });
 
 const viewController = {
