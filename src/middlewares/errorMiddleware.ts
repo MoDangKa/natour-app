@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 
 import { NODE_ENV } from '@/config';
-import { writeErrorLog } from '@/utils/logger';
+import { writeErrorLog, writeLog } from '@/utils/logger';
 
 interface CustomError extends Error {
   statusCode?: number;
@@ -44,7 +44,7 @@ const errorMiddleware = (
   res: Response,
   next: NextFunction,
 ): Response | void => {
-  console.error('Error:', err); // Changed to console.error for logging errors
+  // console.error('Error:', err); // Changed to console.error for logging errors
 
   // Default to 500 Server Error
   let statusCode = 500;
@@ -86,7 +86,8 @@ const errorMiddleware = (
     error = err.errorResponse;
   }
 
-  writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
+  writeLog(req, statusCode, message);
+  // writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
   const response = organize(status, message, error, err.stack);
   return res.status(statusCode).json(response);
 };

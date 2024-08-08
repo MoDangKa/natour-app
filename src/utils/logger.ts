@@ -1,10 +1,14 @@
+import { Request } from 'express';
 import fs from 'fs';
+import moment from 'moment';
 import path from 'path';
+import { createLogger, format, transports } from 'winston';
 
 type LogType = 'error';
 
+const currentDate: string = moment().format('YYYY-MM-DD');
+
 const getLogFilePath = (logType?: LogType): string | null => {
-  const currentDate: string = new Date().toISOString().split('T')[0];
   let logFileName: string;
   let logsDirectory: string;
 
@@ -35,7 +39,7 @@ export const writeLogFile = async (message: string, logType?: LogType) => {
     return;
   }
 
-  const timestamp: string = new Date().toISOString();
+  const timestamp: string = moment().format('YYYY-MM-DD HH:mm:ss');
   const logMessage: string = `${timestamp} - ${message}\n`;
 
   try {
@@ -54,4 +58,28 @@ export const writeErrorLog = async (
 ) => {
   const logMessage: string = `[${ip}] ${method} ${pathname} ${stateCode} - ${errorMessage}`;
   await writeLogFile(logMessage, 'error');
+};
+
+const logger = createLogger({
+  format: format.combine(
+    format.timestamp({
+      format: 'YYYY-MM-DD HH:mm:ss',
+    }),
+    format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`),
+  ),
+  defaultMeta: { service: 'user-service' },
+  transports: [
+    new transports.File({
+      filename: path.join(__dirname, '../logs', currentDate, 'error.log'),
+      level: 'error',
+    }),
+    new transports.File({
+      filename: path.join(__dirname, '../logs', currentDate, 'combined.log'),
+    }),
+  ],
+});
+
+export const writeLog = (req: Request, statusCode: number, message: string) => {
+  const msg = `[${req.ip}] ${req.method} ${req.originalUrl} ${statusCode} : ${message}`;
+  logger.info(msg);
 };

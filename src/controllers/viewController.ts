@@ -34,9 +34,16 @@ const getTour = asyncHandler(async (req: Request, res: Response) => {
     });
 });
 
+const login = asyncHandler(async (req: Request, res: Response) => {
+  res.status(200).render('login', {
+    title: 'Login',
+  });
+});
+
 const viewController = {
   getOverview,
   getTour,
+  login,
 };
 
 export default viewController;

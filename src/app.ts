@@ -1,5 +1,7 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import crypto from 'crypto';
+import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import mongoSanitize from 'express-mongo-sanitize';
 import rateLimit from 'express-rate-limit';
@@ -15,20 +17,57 @@ import apiV1Router from '@/routes/apiV1Router';
 import apiV2Router from '@/routes/apiV2Router';
 import viewRouter from '@/routes/viewRoutes';
 import connectDatabase from '@/utils/connectDatabase';
-import { HOSTNAME, NODE_ENV, PORT } from './config';
+import { HOSTNAME, PORT } from './config';
 
 const app = express();
+dotenv.config();
 
 app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, '/views'));
+app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(cors());
-app.options('*', cors());
-app.use(helmet());
+const allowedOrigins = ['http://example.com', 'https://example.com'];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+  }),
+);
 
-if (NODE_ENV === 'development' || NODE_ENV === 'alpha') {
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: [],
+      },
+    },
+    crossOriginEmbedderPolicy: true,
+    crossOriginOpenerPolicy: true,
+    crossOriginResourcePolicy: true,
+    dnsPrefetchControl: true,
+    frameguard: true,
+    hidePoweredBy: true,
+    hsts: true,
+    ieNoOpen: true,
+    noSniff: true,
+    originAgentCluster: true,
+    permittedCrossDomainPolicies: true,
+    referrerPolicy: true,
+    xssFilter: true,
+  }),
+);
+
+if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
 
@@ -41,6 +80,8 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+
 app.use(cookieParser());
 
 app.use(mongoSanitize());
@@ -54,8 +95,11 @@ app.use(
   // }),
 );
 
+app.set('trust proxy', 1);
+
 app.use((req: Request, res: Response, next: NextFunction) => {
   req.requestTime = new Date().toISOString();
+  res.locals.nonce = Buffer.from(crypto.randomBytes(16)).toString('base64');
   next();
 });
 
@@ -92,6 +136,17 @@ const startServer = async () => {
         process.exit(1);
       });
     });
+
+    function gracefulShutdown(signal: string) {
+      console.log(`Received ${signal}. Shutting down gracefully.`);
+      server.close(() => {
+        console.log('HTTP server closed.');
+        process.exit(0);
+      });
+    }
+
+    process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+    process.on('SIGINT', () => gracefulShutdown('SIGINT'));
   } catch (err) {
     if (err instanceof Error) {
       console.error('Error connecting to the database:', err.message);

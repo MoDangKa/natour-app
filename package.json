@@ -29,10 +29,12 @@
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^7.3.1",
     "express-validator": "^7.1.0",
+    "express-winston": "^4.2.0",
     "helmet": "^7.1.0",
     "hpp": "^0.2.3",
     "jose": "^5.4.0",
     "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
     "mongoose": "^8.4.1",
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.13",
@@ -65,7 +67,8 @@
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "winston": "^3.14.0"
   },
   "engines": {
     "node": ">=10.0.0"

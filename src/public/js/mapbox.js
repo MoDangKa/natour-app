@@ -36,15 +36,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   try {
+    // mapboxgl.accessToken =
+    //   'pk.eyJ1IjoicG95c2lhbjMwOSIsImEiOiJjbHpjNTZweHAwYTBjMmxzNnI3MzQ4MjhhIn0.5gk2wURy_7AgPL7y3400CA';
     mapboxgl.accessToken =
-      'pk.eyJ1IjoicG95c2lhbjMwOSIsImEiOiJjbHpjNTZweHAwYTBjMmxzNnI3MzQ4MjhhIn0.5gk2wURy_7AgPL7y3400CA';
+      'pk.eyJ1IjoicG95c2lhbjMwOSIsImEiOiJjbHpjNHBxNGowN3YwMmlwd2s0N3ZicTZwIn0.12403CN-2niO08iRcy4uxw';
 
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
+      scrollZoom: false,
+      // style: 'mapbox://styles/poysian309/clzchvhue009v01qtgz2p7yf7',
       // center: [-118.113491, 34.111745],
       // zoom: 4,
       // interactive: false,
+    });
+
+    map.on('error', function (e) {
+      console.error('Mapbox GL Error:', e);
+    });
+
+    map.on('style.load', function () {
+      console.log('Style loaded successfully');
     });
 
     const bounds = new mapboxgl.LngLatBounds();

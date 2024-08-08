@@ -1,3 +1,0 @@
-2024-06-23T08:37:26.690Z - [127.0.0.1] POST /api/v1/users/signin 401 - Incorrect email or password.
-2024-06-23T08:42:58.600Z - [127.0.0.1] POST /api/v2/users/signup 400 - Validation Error: [{},{},{},{},{}]
-2024-06-23T10:29:37.535Z - [127.0.0.1] POST /api/v1/users/signup 400 - Duplicate field value: "solutionx100cc@gmail.com". Please use another value!

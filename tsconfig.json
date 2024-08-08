@@ -25,7 +25,7 @@
     "src/dev-data/data/import-and-delete.ts",
     "src/eslintrc.ts",
     "src/@types/*.d.ts",
-    "src/public/scripts/mapbox.js"
+    "src/public/js/mapbox.js"
   ],
   "exclude": ["node_modules"]
 }
