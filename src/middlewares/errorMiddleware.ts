@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 
 import { NODE_ENV } from '@/config';
-import { writeErrorLog, writeLog } from '@/utils/logger';
+import { recordLog, recordLog2 } from '@/utils/logger';
 
 interface CustomError extends Error {
   statusCode?: number;
@@ -25,7 +25,7 @@ const organize = (
 ) => {
   const response: any = { status, message };
 
-  if (NODE_ENV === 'development' || NODE_ENV === 'alpha') {
+  if (process.env.NODE_ENV !== 'production') {
     if (error) {
       response.error = error;
     }
@@ -86,8 +86,8 @@ const errorMiddleware = (
     error = err.errorResponse;
   }
 
-  writeLog(req, statusCode, message);
-  // writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
+  // recordLog(req, statusCode, message);
+  recordLog2(req, statusCode, message);
   const response = organize(status, message, error, err.stack);
   return res.status(statusCode).json(response);
 };

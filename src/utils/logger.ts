@@ -1,85 +1,120 @@
-import { Request } from 'express';
 import fs from 'fs';
 import moment from 'moment';
 import path from 'path';
-import { createLogger, format, transports } from 'winston';
+import { createLogger, format } from 'winston';
+import DailyRotateFile from 'winston-daily-rotate-file';
 
-type LogType = 'error';
+interface LogRequest {
+  ip?: string;
+  method: string;
+  originalUrl: string;
+}
 
-const currentDate: string = moment().format('YYYY-MM-DD');
+enum LogLevel {
+  Info = 'info',
+  Error = 'error',
+}
 
-const getLogFilePath = (logType?: LogType): string | null => {
-  let logFileName: string;
-  let logsDirectory: string;
-
-  if (logType) {
-    logFileName = `${logType}_${currentDate}.log`;
-    logsDirectory = path.join(__dirname, '../logs', `${logType}s`);
-  } else {
-    logFileName = `log_${currentDate}.log`;
-    logsDirectory = path.join(__dirname, '../logs');
-  }
+const getFilePath = (level: LogLevel): string | null => {
+  const currentDate: string = moment().format('YYYY-MM-DD');
+  const logFileName: string = `${level}_${currentDate}.log`;
+  const logsDirectory: string = path.join(__dirname, '../logs', `${level}s`);
 
   try {
     if (!fs.existsSync(logsDirectory)) {
       fs.mkdirSync(logsDirectory, { recursive: true });
     }
-  } catch (error: any) {
-    console.error(`Error creating logs directory: ${error.message}`);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(`Error creating logs directory: ${error.message}`);
+    } else {
+      console.error(`An unknown error occurred while creating logs directory`);
+    }
     return null;
   }
 
   return path.join(logsDirectory, logFileName);
 };
 
-export const writeLogFile = async (message: string, logType?: LogType) => {
-  const logFilePath: string | null = getLogFilePath(logType);
-
-  if (!logFilePath) {
-    return;
-  }
+export const writeFile = async (
+  message: string,
+  level: LogLevel = LogLevel.Info,
+) => {
+  const logFilePath: string | null = getFilePath(level);
+  if (!logFilePath) return;
 
   const timestamp: string = moment().format('YYYY-MM-DD HH:mm:ss');
-  const logMessage: string = `${timestamp} - ${message}\n`;
+  const logMessage: string = `${level.toUpperCase()}: ${timestamp} - ${message}\n`;
 
   try {
     await fs.promises.appendFile(logFilePath, logMessage, 'utf8');
-  } catch (error: any) {
-    console.error(`Error writing to log file: ${error.message}`);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(`Error writing to log file: ${error.message}`);
+    } else {
+      console.error(`An unknown error occurred while writing to log file`);
+    }
+    throw error; // Re-throw the error if you want to propagate it
   }
 };
 
-export const writeErrorLog = async (
-  ip: string = '',
-  method: string,
-  pathname: string,
-  stateCode: number,
-  errorMessage: string,
+export const recordLog = async (
+  req: LogRequest,
+  statusCode: number,
+  message: string,
+  level: LogLevel = LogLevel.Info,
 ) => {
-  const logMessage: string = `[${ip}] ${method} ${pathname} ${stateCode} - ${errorMessage}`;
-  await writeLogFile(logMessage, 'error');
+  let msg: string = req.ip ? `[${req.ip}] ` : '';
+  msg += `${req.method} ${req.originalUrl} ${statusCode} - ${message}`;
+  await writeFile(msg, level);
 };
 
-const logger = createLogger({
+const transport = (level: LogLevel = LogLevel.Info) =>
+  new DailyRotateFile({
+    level,
+    filename: path.join(
+      __dirname,
+      '../logs',
+      `${level}s`,
+      `${level}_%DATE%.log`,
+    ),
+    datePattern: 'YYYY-MM-DD',
+    zippedArchive: true,
+    maxSize: '20m',
+    maxFiles: '14d',
+    // maxFiles: 14, // Limit to 14 files
+  });
+
+export const logger = createLogger({
   format: format.combine(
     format.timestamp({
       format: 'YYYY-MM-DD HH:mm:ss',
     }),
-    format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`),
+    format.printf(
+      (info) =>
+        `${info.level.toUpperCase()}: ${info.timestamp} - ${info.message}`,
+    ),
   ),
   defaultMeta: { service: 'user-service' },
-  transports: [
-    new transports.File({
-      filename: path.join(__dirname, '../logs', currentDate, 'error.log'),
-      level: 'error',
-    }),
-    new transports.File({
-      filename: path.join(__dirname, '../logs', currentDate, 'combined.log'),
-    }),
-  ],
+  transports: [transport(LogLevel.Info), transport(LogLevel.Error)],
 });
 
-export const writeLog = (req: Request, statusCode: number, message: string) => {
-  const msg = `[${req.ip}] ${req.method} ${req.originalUrl} ${statusCode} : ${message}`;
-  logger.info(msg);
+export const log = (message: string, level: LogLevel = LogLevel.Info) => {
+  switch (level) {
+    case LogLevel.Error:
+      logger.error(message);
+      break;
+    default:
+      logger.info(message);
+  }
+};
+
+export const recordLog2 = (
+  req: LogRequest,
+  statusCode: number,
+  message: string,
+) => {
+  let msg: string = req.ip ? `[${req.ip}] ` : '';
+  msg += `${req.method} ${req.originalUrl} ${statusCode} - ${message}`;
+  log(msg);
 };

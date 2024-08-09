@@ -47,6 +47,9 @@ validateEnvVariable('JWT_EXPIRES_IN', JWT_EXPIRES_IN);
 validateEnvVariable('JWT_COOKIE_EXPIRES_IN', JWT_COOKIE_EXPIRES_IN);
 validateEnvVariable('HASHING_SALT_ROUNDS', HASHING_SALT_ROUNDS);
 
+const port = parseInt(PORT!, 10) || 3000;
+const hostname = HOSTNAME || 'localhost';
+
 export {
   EMAIL_HOST,
   EMAIL_PASSWORD,
@@ -65,4 +68,6 @@ export {
   MONGO_URI,
   NODE_ENV,
   PORT,
+  hostname,
+  port,
 };

@@ -1,6 +1,6 @@
 import { NODE_ENV } from '@/config';
 import CustomError from '@/utils/customError';
-import { writeErrorLog } from '@/utils/logger';
+import { recordLog } from '@/utils/logger';
 import { NextFunction, Request, Response } from 'express';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 import { MongoError } from 'mongodb';
@@ -86,7 +86,7 @@ const errorMiddleware = (
   next: NextFunction,
 ): Response | void => {
   if (err?.isOperational) {
-    writeErrorLog(
+    recordLog(
       req.ip,
       req.method,
       req.originalUrl,
@@ -117,7 +117,7 @@ const errorMiddleware = (
     message,
     errorDetail,
   );
-  writeErrorLog(req.ip, req.method, req.originalUrl, statusCode, message);
+  recordLog(req.ip, req.method, req.originalUrl, statusCode, message);
 
   return res.status(statusCode).json(jsonResponse);
 };

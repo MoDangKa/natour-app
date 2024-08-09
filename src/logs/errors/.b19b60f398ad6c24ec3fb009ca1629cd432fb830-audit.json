@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Users/art/Documents/GitHub/natour-app/src/logs/errors/.b19b60f398ad6c24ec3fb009ca1629cd432fb830-audit.json",
+    "files": [
+        {
+            "date": 1723178285709,
+            "name": "/Users/art/Documents/GitHub/natour-app/src/logs/errors/error_2024-08-09.log",
+            "hash": "058416681517b980c9a6e79f3bed6a516ac74c513d35430b36acc3fc7cb14d21"
+        }
+    ],
+    "hashType": "sha256"
+}
