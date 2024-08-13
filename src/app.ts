@@ -21,6 +21,11 @@ app.set('views', path.join(__dirname, 'views'));
 
 applyMiddleware(app);
 
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain');
+  res.send('User-agent: *\nAllow: /');
+});
+
 app.use('/', viewRouter);
 app.use('/api/v1', apiV1Router);
 app.use('/api/v2', apiV2Router);

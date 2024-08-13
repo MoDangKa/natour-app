@@ -12,9 +12,18 @@ import path from 'path';
 import favicon from 'serve-favicon';
 import xss from 'xss-clean';
 
+import { hostname, NODE_ENV, port } from './config';
+
 export const applyMiddleware = (app: Application) => {
   // CORS
-  const allowedOrigins = ['http://example.com', 'https://example.com'];
+  const allowedOrigins = [
+    'http://example.com',
+    'https://example.com',
+    'http://localhost:3000',
+    'https://*.tiles.mapbox.com',
+    'https://api.mapbox.com',
+    'https://events.mapbox.com',
+  ];
   app.use(
     cors({
       origin: function (origin, callback) {
@@ -25,23 +34,65 @@ export const applyMiddleware = (app: Application) => {
         }
       },
       credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
     }),
   );
 
   // Security headers
+  const apiUrl =
+    NODE_ENV === 'production'
+      ? 'https://your-production-api-url.com'
+      : `http://${hostname}:${port}`;
+
+  const connectSrcUrls = [
+    'https://api.mapbox.com/',
+    'https://a.tiles.mapbox.com/',
+    'https://b.tiles.mapbox.com/',
+    'https://events.mapbox.com/',
+    'https://cdnjs.cloudflare.com',
+    apiUrl,
+  ];
+
+  const scriptSrcUrls = [
+    'https://api.tiles.mapbox.com/',
+    'https://api.mapbox.com/',
+    'https://cdnjs.cloudflare.com',
+    'https://domain-hosting-source-maps.com',
+  ];
+
+  const styleSrcUrls = [
+    'https://api.mapbox.com/',
+    'https://api.tiles.mapbox.com/',
+    'https://fonts.googleapis.com/',
+  ];
+
+  const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
   app.use(
     helmet({
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
-          scriptSrc: ["'self'", "'unsafe-inline'"],
+          connectSrc: ["'self'", ...connectSrcUrls],
+          scriptSrc: [
+            "'self'",
+            "'unsafe-inline'",
+            "'unsafe-eval'",
+            ...scriptSrcUrls,
+          ],
+          styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+          workerSrc: ["'self'", 'blob:'],
           objectSrc: ["'none'"],
-          upgradeInsecureRequests: [],
+          imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
+          fontSrc: ["'self'", ...fontSrcUrls],
+          frameSrc: ["'self'"],
+          baseUri: ["'self'"],
+          formAction: ["'self'"],
         },
       },
-      crossOriginEmbedderPolicy: true,
-      crossOriginOpenerPolicy: true,
-      crossOriginResourcePolicy: true,
+      crossOriginEmbedderPolicy: false,
+      crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
       dnsPrefetchControl: true,
       frameguard: true,
       hidePoweredBy: true,
@@ -53,6 +104,7 @@ export const applyMiddleware = (app: Application) => {
       referrerPolicy: true,
       xssFilter: true,
     }),
+    // helmet()
   );
 
   // Compression

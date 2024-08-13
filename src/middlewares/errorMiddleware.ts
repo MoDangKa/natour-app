@@ -44,7 +44,7 @@ const errorMiddleware = (
   res: Response,
   next: NextFunction,
 ): Response | void => {
-  // console.error('Error:', err); // Changed to console.error for logging errors
+  console.error('Error middleware called:', err);
 
   // Default to 500 Server Error
   let statusCode = 500;
@@ -89,7 +89,8 @@ const errorMiddleware = (
   // recordLog(req, statusCode, message);
   recordLog2(req, statusCode, message);
   const response = organize(status, message, error, err.stack);
-  return res.status(statusCode).json(response);
+  res.status(statusCode).json(response);
+  return next();
 };
 
 export default errorMiddleware;

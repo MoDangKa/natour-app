@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { SignJWT } from 'jose';
 import jwt from 'jsonwebtoken';
 
@@ -127,3 +127,8 @@ export const filterObj = (obj: TObject, ...allowedFields: string[]) => {
   });
   return newObj;
 };
+
+export const asyncHandler =
+  (fn: Function) => (req: Request, res: Response, next: NextFunction) => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+  };

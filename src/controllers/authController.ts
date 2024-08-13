@@ -60,7 +60,10 @@ const protect = asyncHandler(
     const cookie = req.cookies && req.cookies[JWT_TOKEN!];
     const token = authHeader?.split(' ')[1] || cookie;
 
+    console.log('Token:', token);
+
     if (!token) {
+      console.log('No token found');
       return next(
         new CustomError(
           'You are not logged in! Please log in to get access.',
@@ -70,28 +73,38 @@ const protect = asyncHandler(
     }
 
     try {
+      console.log('Verifying token');
       const secret: Uint8Array = new TextEncoder().encode(JWT_SECRET!);
       const { payload } = await jwtVerify(token, secret);
 
+      console.log('Token payload:', payload);
+
       if (!payload.sub || !payload.iat) {
+        console.log('Invalid payload');
         return next(
           new CustomError('User ID not found in the JWT payload.', 401),
         );
       }
 
+      console.log('Finding user');
       const user = await User.findById(payload.sub).select('+active');
 
+      console.log('User found:', user);
+
       if (!user) {
+        console.log('User not found');
         return next(
           new CustomError('User not found or unauthorized access.', 401),
         );
       }
 
       if (!user.active) {
+        console.log('User inactive');
         return next(new CustomError('The user is inactive!', 403));
       }
 
       if (user.changedPasswordAfter(payload.iat)) {
+        console.log('Password changed after token issued');
         return next(
           new CustomError(
             'User recently changed password! Please log in again.',
@@ -100,9 +113,11 @@ const protect = asyncHandler(
         );
       }
 
+      console.log('User authenticated successfully');
       req.user = user;
       next();
     } catch (err) {
+      console.error('Token verification failed:', err);
       return next(new CustomError('Token verification failed!', 401));
     }
   },

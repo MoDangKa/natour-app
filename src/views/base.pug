@@ -12,12 +12,14 @@ html
 
     body
         //- Header
-        include _header
+        include components/_header
 
         //- Content
         block content
 
         //- Footer
-        include _footer
+        include components/_footer
 
+        //- Script
+        block script
         script(src='/js/header.js')

@@ -48,7 +48,7 @@ validateEnvVariable('JWT_COOKIE_EXPIRES_IN', JWT_COOKIE_EXPIRES_IN);
 validateEnvVariable('HASHING_SALT_ROUNDS', HASHING_SALT_ROUNDS);
 
 const port = parseInt(PORT!, 10) || 3000;
-const hostname = HOSTNAME || 'localhost';
+const hostname = HOSTNAME || 'http://localhost';
 
 export {
   EMAIL_HOST,

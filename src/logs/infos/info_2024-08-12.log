@@ -1,0 +1,62 @@
+INFO: 2024-08-12 09:09:44 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:09:54 - [127.0.0.1] GET /api/v1/users/66727279b228c8acf45468f1 404 - No document found with that ID
+INFO: 2024-08-12 09:10:05 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:10:06 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:10:08 - [127.0.0.1] GET /api/v1/users/66727279b228c8acf45468f1 404 - No document found with that ID
+INFO: 2024-08-12 09:11:25 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:11:26 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:11:42 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:11:43 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:11:48 - [127.0.0.1] GET /api/v1/users/66727279b228c8acf45468f1 404 - No document found with that ID
+INFO: 2024-08-12 09:11:49 - [127.0.0.1] GET /api/v1/users/66727279b228c8acf45468f1 404 - No document found with that ID
+INFO: 2024-08-12 09:11:56 - Received SIGINT. Shutting down gracefully.
+INFO: 2024-08-12 09:12:02 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:12:11 - [127.0.0.1] GET /api/v1/users/66727279b228c8acf45468f1 404 - No document found with that ID
+INFO: 2024-08-12 09:13:00 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:13:00 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:13:12 - [127.0.0.1] GET /api/v1/users/66727279b228c8acf45468f1 404 - No document found with that ID
+INFO: 2024-08-12 09:13:31 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:13:32 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:14:22 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:14:23 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:14:31 - [127.0.0.1] GET /api/v1/users/66727279b228c8acf45468f1 404 - No document found with that ID
+INFO: 2024-08-12 09:14:44 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:14:45 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:14:50 - [127.0.0.1] GET /api/v1/users/66727279b228c8acf45468f1 404 - No document found with that ID
+INFO: 2024-08-12 09:16:32 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:16:33 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:16:37 - [127.0.0.1] GET /api/v1/users/66727279b228c8acf45468f1 404 - No document found with that ID
+INFO: 2024-08-12 09:16:45 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:16:46 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:17:58 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:17:58 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:18:12 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:18:12 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:18:16 - [127.0.0.1] GET /api/v1/users/66727279b228c8acf45468f1 404 - No document found with that ID
+INFO: 2024-08-12 09:18:17 - [127.0.0.1] GET /api/v1/users/66727279b228c8acf45468f1 404 - No document found with that ID
+INFO: 2024-08-12 09:22:20 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:22:21 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:22:45 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:22:46 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:24:28 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:24:29 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:25:25 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:25:25 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:25:30 - [127.0.0.1] GET /api/v1/users/66727279b228c8acf45468f1 404 - No document found with that ID
+INFO: 2024-08-12 09:27:00 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:27:00 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:27:08 - [127.0.0.1] GET /api/v1/users/66727279b228c8acf45468f1 404 - No document found with that ID
+INFO: 2024-08-12 09:28:03 - [127.0.0.1] GET /api/v1/users/me 401 - You are not logged in! Please log in to get access.
+INFO: 2024-08-12 09:28:59 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:29:00 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:29:12 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:29:12 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:29:50 - [127.0.0.1] GET /api/v1/reviews/6676729d20abef5bf129f868 404 - No document found with that ID
+INFO: 2024-08-12 09:29:56 - [127.0.0.1] GET /api/v1/tours/668668e955f24f677ef6e800/reviews 403 - You do not have permission to perform this action.
+INFO: 2024-08-12 09:30:40 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:30:40 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:30:59 - Received SIGTERM. Shutting down gracefully.
+INFO: 2024-08-12 09:30:59 - Server running on http://127.0.0.1:3000
+INFO: 2024-08-12 09:33:13 - [127.0.0.1] GET /api/v1/tours/monthly-plan/2022 401 - You are not logged in! Please log in to get access.
+INFO: 2024-08-12 09:33:39 - [127.0.0.1] GET /api/v1/tours/monthly-plan/2022 401 - You are not logged in! Please log in to get access.
+INFO: 2024-08-12 20:42:41 - Received SIGINT. Shutting down gracefully.

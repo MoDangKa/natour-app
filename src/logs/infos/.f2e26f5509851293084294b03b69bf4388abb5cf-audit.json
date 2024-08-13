@@ -6,9 +6,9 @@
     "auditLog": "/Users/art/Documents/GitHub/natour-app/src/logs/infos/.f2e26f5509851293084294b03b69bf4388abb5cf-audit.json",
     "files": [
         {
-            "date": 1723178285708,
-            "name": "/Users/art/Documents/GitHub/natour-app/src/logs/infos/info_2024-08-09.log",
-            "hash": "099273a0ac533bb723eb6d57f06f110c435aa205a1a5a213fe3fc9e3ed0116f4"
+            "date": 1723428583822,
+            "name": "/Users/art/Documents/GitHub/natour-app/src/logs/infos/info_2024-08-12.log",
+            "hash": "60d5c3109cdee96ce6bc43099fec2c9b7357f5c17a2a88b02146233e006a10d2"
         }
     ],
     "hashType": "sha256"

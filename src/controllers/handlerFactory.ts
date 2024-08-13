@@ -64,7 +64,6 @@ const getOne = <T extends Document>(
 ) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     let query = Model.findById(req.params.id);
-    console.log('query: ', query);
     if (popOptions) query = query.populate(popOptions);
     const doc = await query;
 
