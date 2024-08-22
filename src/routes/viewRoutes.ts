@@ -5,6 +5,8 @@ import viewController from '@/controllers/viewController';
 
 const router = Router();
 
+router.get('/me', authController.protect, viewController.getAccount);
+
 router.use(authController.isLoggedIn);
 
 router.get('/', viewController.getOverview);
