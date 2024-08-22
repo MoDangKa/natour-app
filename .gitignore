@@ -2,9 +2,15 @@
 /node_modules
 /.pnp
 .pnp.js
+/.parcel-cache
+.cache
 
 # production
 /dist
+/src/logs
+
+# development
+/archive
 
 # misc
 .DS_Store

@@ -7,10 +7,12 @@ const getOverview = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const tours = await Tour.find();
 
-    res.status(200).render('overview', {
-      title: 'All Tour',
-      tours,
-    });
+    res
+      .status(200)
+      .render('overview', {
+        title: 'All Tour',
+        tours,
+      });
   },
 );
 
@@ -46,9 +48,12 @@ const getTour = asyncHandler(
 
 const getLoginForm = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).render('login', {
-      title: 'Log into your account',
-    });
+    res
+      .status(200)
+      // .set('Content-Type', 'application/javascript')
+      .render('login', {
+        title: 'Log into your account',
+      });
   },
 );
 

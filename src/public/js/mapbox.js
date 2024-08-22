@@ -1,22 +1,14 @@
-document.addEventListener('DOMContentLoaded', () => {
-  if (typeof mapboxgl === 'undefined') {
-    console.error('Mapbox GL JS did not load correctly.');
-    return;
-  }
-
+export const displayMap = (locationsData) => {
   console.log('Mapbox script loaded.');
-
-  const mapElement = document.getElementById('map');
-
-  if (!mapElement) {
-    console.error('Map element not found.');
-    return;
-  }
-
-  const locationsData = mapElement.dataset.locations;
+  console.log('Locations data:', locationsData);
 
   if (!locationsData) {
     console.error('No locations data found in map element.');
+    return;
+  }
+
+  if (typeof mapboxgl === 'undefined') {
+    console.error('Mapbox GL JS did not load correctly.');
     return;
   }
 
@@ -26,12 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
     locations = JSON.parse(locationsData);
   } catch (error) {
     console.error('Error parsing locations data: ', error);
-    return; // Exit if there's an error parsing the locations data.
+    return;
   }
 
   if (locations.length === 0) {
     console.error('No locations found in the dataset.');
-    return; // Exit if no locations are found.
+    return;
   }
 
   try {
@@ -86,4 +78,4 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch (error) {
     console.error('Error parsing locations data: ', error);
   }
-});
+};

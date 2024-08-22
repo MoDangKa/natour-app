@@ -123,6 +123,54 @@ const protect = asyncHandler(
   },
 );
 
+// Only for rendered pages, no errors!
+const isLoggedIn = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const token = req.cookies && req.cookies[JWT_TOKEN!];
+
+    if (!token) {
+      // No token found, user is not logged in
+      return next();
+    }
+
+    try {
+      console.log('Verifying token');
+      const secret: Uint8Array = new TextEncoder().encode(JWT_SECRET!);
+      const { payload } = await jwtVerify(token, secret);
+
+      console.log('Token payload:', payload);
+
+      if (!payload.sub || !payload.iat) {
+        console.log('Invalid payload');
+        return next(
+          new CustomError('User ID not found in the JWT payload.', 401),
+        );
+      }
+
+      console.log('Finding user');
+      const user = await User.findById(payload.sub).select('+active');
+
+      console.log('User found:', user);
+
+      if (!user || !user.active) {
+        console.log('User not found or inactive');
+        return next();
+      }
+
+      if (user.changedPasswordAfter(payload.iat)) {
+        console.log('Password changed after token issued');
+        return next();
+      }
+
+      res.locals.user = user;
+      return next();
+    } catch (error) {
+      console.error('Token verification failed:', error);
+      return next(new CustomError('Invalid token', 401));
+    }
+  },
+);
+
 const restrictTo = (...roles: TRole[]) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     if (req.user?.role && !roles.includes(req.user.role)) {
@@ -230,6 +278,7 @@ const authController = {
   forgotPassword,
   resetPassword,
   updatePassword,
+  isLoggedIn,
 };
 
 export default authController;

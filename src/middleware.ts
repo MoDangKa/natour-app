@@ -2,7 +2,7 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import crypto from 'crypto';
-import express, { Application } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import mongoSanitize from 'express-mongo-sanitize';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
@@ -59,6 +59,7 @@ export const applyMiddleware = (app: Application) => {
     'https://api.mapbox.com/',
     'https://cdnjs.cloudflare.com',
     'https://domain-hosting-source-maps.com',
+    'https://trusted-external-source.com',
   ];
 
   const styleSrcUrls = [
@@ -149,9 +150,21 @@ export const applyMiddleware = (app: Application) => {
   app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
   // Custom middleware
-  app.use((req, res, next) => {
-    req.requestTime = new Date().toISOString();
+  app.use((req: Request, res: Response, next: NextFunction) => {
     res.locals.nonce = Buffer.from(crypto.randomBytes(16)).toString('base64');
+    next();
+  });
+
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    res.setHeader(
+      'Content-Security-Policy',
+      `script-src 'self' 'nonce-${res.locals.nonce}';`,
+    );
+    next();
+  });
+
+  app.get('*.js', function (req: Request, res: Response, next: NextFunction) {
+    res.set('Content-Type', 'application/javascript');
     next();
   });
 };
