@@ -21,3 +21,15 @@ export interface PopOptions {
   select?: string;
   model?: string;
 }
+
+export interface CustomError extends Error {
+  statusCode?: number;
+  status?: string;
+  isOperational?: boolean;
+  errorResponse?: {
+    code?: number;
+    errmsg?: string;
+  };
+  errors?: any;
+  error?: any;
+}

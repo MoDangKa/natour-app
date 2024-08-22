@@ -2,17 +2,16 @@ import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 
 import { Tour } from '@/models/tourModel';
+import CustomError from '@/utils/customError';
 
 const getOverview = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const tours = await Tour.find();
 
-    res
-      .status(200)
-      .render('overview', {
-        title: 'All Tour',
-        tours,
-      });
+    res.status(200).render('overview', {
+      title: 'All Tour',
+      tours,
+    });
   },
 );
 
@@ -24,36 +23,22 @@ const getTour = asyncHandler(
     });
 
     if (!tour) {
-      return res.redirect('/');
+      // return res.redirect('/');
+      return next(new CustomError('There is no tour with that name.', 404));
     }
 
-    res
-      .status(200)
-      .set(
-        'Content-Security-Policy',
-        "default-src 'self' https:; " +
-          "script-src 'self' 'unsafe-inline' https://api.mapbox.com; " +
-          "style-src 'self' 'unsafe-inline' https:; " +
-          "img-src 'self' data: https:; " +
-          "font-src 'self' https:; " +
-          "connect-src 'self' https://api.mapbox.com https://*.tiles.mapbox.com https://events.mapbox.com; " +
-          'worker-src blob:;',
-      )
-      .render('tour', {
-        title: `${tour.name} Tour`,
-        tour,
-      });
+    res.status(200).render('tour', {
+      title: `${tour.name} Tour`,
+      tour,
+    });
   },
 );
 
 const getLoginForm = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    res
-      .status(200)
-      // .set('Content-Type', 'application/javascript')
-      .render('login', {
-        title: 'Log into your account',
-      });
+    res.status(200).render('login', {
+      title: 'Log into your account',
+    });
   },
 );
 

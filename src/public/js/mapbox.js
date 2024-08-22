@@ -1,9 +1,9 @@
-export const displayMap = (locationsData) => {
+export const displayMap = (locations) => {
   console.log('Mapbox script loaded.');
-  console.log('Locations data:', locationsData);
+  console.log('Locations data:', locations);
 
-  if (!locationsData) {
-    console.error('No locations data found in map element.');
+  if (!locations || locations.length === 0) {
+    console.error('No valid locations data found.');
     return;
   }
 
@@ -12,30 +12,21 @@ export const displayMap = (locationsData) => {
     return;
   }
 
-  let locations = [];
-
-  try {
-    locations = JSON.parse(locationsData);
-  } catch (error) {
-    console.error('Error parsing locations data: ', error);
-    return;
-  }
-
-  if (locations.length === 0) {
-    console.error('No locations found in the dataset.');
-    return;
-  }
-
   try {
     mapboxgl.accessToken =
       'pk.eyJ1IjoicG95c2lhbjMwOSIsImEiOiJjbHpjNHBxNGowN3YwMmlwd2s0N3ZicTZwIn0.12403CN-2niO08iRcy4uxw';
-    // 'pk.eyJ1IjoicG95c2lhbjMwOSIsImEiOiJjbHpjNTZweHAwYTBjMmxzNnI3MzQ4MjhhIn0.5gk2wURy_7AgPL7y3400CA';
 
     const map = new mapboxgl.Map({
-      container: 'map',
+      container: 'map-box',
       style: 'mapbox://styles/mapbox/streets-v11',
       // style: 'mapbox://styles/poysian309/clzchvhue009v01qtgz2p7yf7',
       scrollZoom: false,
+      center: locations[0].coordinates, // Center on the first location
+      zoom: 6, // Set an initial zoom level
+    });
+
+    map.on('load', function () {
+      console.log('Map loaded successfully');
     });
 
     map.on('style.load', function () {
@@ -61,7 +52,7 @@ export const displayMap = (locationsData) => {
 
       new mapboxgl.Popup({ offset: 30 })
         .setLngLat(loc.coordinates)
-        .setHTML(`<p>Day ${loc.day}: ${loc.coordinates}</p>`)
+        .setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`)
         .addTo(map);
 
       bounds.extend(loc.coordinates);
@@ -76,6 +67,6 @@ export const displayMap = (locationsData) => {
       },
     });
   } catch (error) {
-    console.error('Error parsing locations data: ', error);
+    console.error('Error initializing map:', error);
   }
 };

@@ -10311,56 +10311,78 @@
     mergeConfig: mergeConfig2
   } = axios_default;
 
+  // src/public/js/alerts.js
+  var hideAlert = () => {
+    const el = document.querySelector(".alert");
+    if (el) el.parentElement.removeChild(el);
+  };
+  var showAlert = (type, msg) => {
+    hideAlert();
+    const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    document.querySelector("body").insertAdjacentHTML("afterbegin", markup);
+    window.setTimeout(hideAlert, 5e3);
+  };
+
   // src/public/js/login.js
-  var login = async (email2, password2) => {
-    console.log({ email: email2, password: password2 });
+  var login = async (email, password) => {
+    console.log({ email, password });
     try {
       const { data } = await axios_default({
         method: "POST",
         url: "http://localhost:3000/api/v1/users/signin",
-        data: { email: email2, password: password2 }
+        data: { email, password }
       });
       if (data.status === "success") {
-        alert("Logged in successfully!");
+        showAlert("success", "Logged in successfully!");
         setTimeout(() => {
           location.assign("/");
         }, 1500);
       }
     } catch (error) {
-      alert(error.response.data.message);
+      showAlert("error", error.response?.data?.message || "An error occurred");
+    }
+  };
+  var logout = async () => {
+    try {
+      const { data } = await axios_default({
+        method: "GET",
+        url: "http://localhost:3000/api/v1/users/sign-out"
+      });
+      if (data.status === "success") {
+        location.reload(true);
+      }
+    } catch (error) {
+      console.log("error: ", error?.response);
+      showAlert("error", "Error logging out! Try again.");
     }
   };
 
   // src/public/js/mapbox.js
-  var displayMap = (locationsData) => {
+  var displayMap = (locations) => {
     console.log("Mapbox script loaded.");
-    console.log("Locations data:", locationsData);
-    if (!locationsData) {
-      console.error("No locations data found in map element.");
+    console.log("Locations data:", locations);
+    if (!locations || locations.length === 0) {
+      console.error("No valid locations data found.");
       return;
     }
     if (typeof mapboxgl === "undefined") {
       console.error("Mapbox GL JS did not load correctly.");
       return;
     }
-    let locations = [];
-    try {
-      locations = JSON.parse(locationsData);
-    } catch (error) {
-      console.error("Error parsing locations data: ", error);
-      return;
-    }
-    if (locations.length === 0) {
-      console.error("No locations found in the dataset.");
-      return;
-    }
     try {
       mapboxgl.accessToken = "pk.eyJ1IjoicG95c2lhbjMwOSIsImEiOiJjbHpjNHBxNGowN3YwMmlwd2s0N3ZicTZwIn0.12403CN-2niO08iRcy4uxw";
       const map = new mapboxgl.Map({
-        container: "map",
+        container: "map-box",
         style: "mapbox://styles/mapbox/streets-v11",
         // style: 'mapbox://styles/poysian309/clzchvhue009v01qtgz2p7yf7',
-        scrollZoom: false
+        scrollZoom: false,
+        center: locations[0].coordinates,
+        // Center on the first location
+        zoom: 6
+        // Set an initial zoom level
+      });
+      map.on("load", function() {
+        console.log("Map loaded successfully");
       });
       map.on("style.load", function() {
         console.log("Style loaded successfully");
@@ -10376,7 +10398,7 @@
           element: el,
           anchor: "bottom"
         }).setLngLat(loc.coordinates).addTo(map);
-        new mapboxgl.Popup({ offset: 30 }).setLngLat(loc.coordinates).setHTML(`<p>Day ${loc.day}: ${loc.coordinates}</p>`).addTo(map);
+        new mapboxgl.Popup({ offset: 30 }).setLngLat(loc.coordinates).setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`).addTo(map);
         bounds.extend(loc.coordinates);
       });
       map.fitBounds(bounds, {
@@ -10388,27 +10410,34 @@
         }
       });
     } catch (error) {
-      console.error("Error parsing locations data: ", error);
+      console.error("Error initializing map:", error);
     }
   };
 
   // src/public/js/index.js
   console.log("Hello form Parcel");
-  var mapBox = document.getElementById("map");
+  var mapBox = document.getElementById("map-box");
   if (mapBox) {
     const locations = JSON.parse(mapBox.dataset.locations);
     displayMap(locations);
   }
   var loginForm = document.querySelector(".form");
-  var email = document.getElementById("email").value;
-  var password = document.getElementById("password").value;
   if (loginForm) {
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
+      const email = document.getElementById("email")?.value || "";
+      const password = document.getElementById("password")?.value || "";
       login(email, password);
     });
   }
-  document.getElementById("loginBtn").addEventListener("click", function() {
-    window.location.href = "/login";
-  });
+  var loginBtn = document.getElementById("loginBtn");
+  if (loginBtn) {
+    loginBtn.addEventListener("click", function() {
+      window.location.href = "/login";
+    });
+  }
+  var logOutBtn = document.querySelector(".nav__el.nav__el--logout");
+  if (logOutBtn) {
+    logOutBtn.addEventListener("click", logout);
+  }
 })();

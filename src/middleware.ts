@@ -23,6 +23,7 @@ export const applyMiddleware = (app: Application) => {
     'https://*.tiles.mapbox.com',
     'https://api.mapbox.com',
     'https://events.mapbox.com',
+    'https://*.tile.openstreetmap.org',
   ];
   app.use(
     cors({
@@ -51,6 +52,7 @@ export const applyMiddleware = (app: Application) => {
     'https://b.tiles.mapbox.com/',
     'https://events.mapbox.com/',
     'https://cdnjs.cloudflare.com',
+    'https://tile.openstreetmap.org',
     apiUrl,
   ];
 
@@ -60,12 +62,19 @@ export const applyMiddleware = (app: Application) => {
     'https://cdnjs.cloudflare.com',
     'https://domain-hosting-source-maps.com',
     'https://trusted-external-source.com',
+    'https://unpkg.com',
   ];
+
+  const scriptSrc =
+    NODE_ENV === 'production'
+      ? ["'self'", "'unsafe-inline'", ...scriptSrcUrls]
+      : ["'self'", "'unsafe-inline'", "'unsafe-eval'", 'https:', 'http:'];
 
   const styleSrcUrls = [
     'https://api.mapbox.com/',
     'https://api.tiles.mapbox.com/',
     'https://fonts.googleapis.com/',
+    'https://unpkg.com',
   ];
 
   const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
@@ -75,16 +84,17 @@ export const applyMiddleware = (app: Application) => {
         directives: {
           defaultSrc: ["'self'"],
           connectSrc: ["'self'", ...connectSrcUrls],
-          scriptSrc: [
-            "'self'",
-            "'unsafe-inline'",
-            "'unsafe-eval'",
-            ...scriptSrcUrls,
-          ],
+          scriptSrc: scriptSrc,
           styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
           workerSrc: ["'self'", 'blob:'],
           objectSrc: ["'none'"],
-          imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
+          imgSrc: [
+            "'self'",
+            'blob:',
+            'data:',
+            'https:',
+            'https://*.tile.openstreetmap.org',
+          ],
           fontSrc: ["'self'", ...fontSrcUrls],
           frameSrc: ["'self'"],
           baseUri: ["'self'"],
@@ -105,7 +115,6 @@ export const applyMiddleware = (app: Application) => {
       referrerPolicy: true,
       xssFilter: true,
     }),
-    // helmet()
   );
 
   // Compression
@@ -152,14 +161,6 @@ export const applyMiddleware = (app: Application) => {
   // Custom middleware
   app.use((req: Request, res: Response, next: NextFunction) => {
     res.locals.nonce = Buffer.from(crypto.randomBytes(16)).toString('base64');
-    next();
-  });
-
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    res.setHeader(
-      'Content-Security-Policy',
-      `script-src 'self' 'nonce-${res.locals.nonce}';`,
-    );
     next();
   });
 

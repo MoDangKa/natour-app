@@ -14,6 +14,8 @@ const router = Router();
 
 router.post('/signup', validateCreateUser, authController.signup);
 router.post('/signin', authController.signin);
+router.get('/sign-out', authController.signOut);
+
 router.post(
   '/forgotPassword',
   validateForgotPassword,

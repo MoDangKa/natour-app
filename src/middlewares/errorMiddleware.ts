@@ -3,18 +3,7 @@ import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 
 import { NODE_ENV } from '@/config';
 import { recordLog, recordLog2 } from '@/utils/logger';
-
-interface CustomError extends Error {
-  statusCode?: number;
-  status?: string;
-  isOperational?: boolean;
-  errorResponse?: {
-    code?: number;
-    errmsg?: string;
-  };
-  errors?: any;
-  error?: any;
-}
+import { CustomError } from '@/@types/types';
 
 // Response Organizer
 const organize = (
