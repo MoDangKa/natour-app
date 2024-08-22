@@ -42,10 +42,20 @@ const getLoginForm = asyncHandler(
   },
 );
 
+const getAccount = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.status(200).render('account', {
+      title: 'Your account',
+      user: req.user,
+    });
+  },
+);
+
 const viewController = {
   getOverview,
   getTour,
   getLoginForm,
+  getAccount,
 };
 
 export default viewController;
