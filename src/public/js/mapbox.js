@@ -17,7 +17,7 @@ export const displayMap = (locations) => {
       'pk.eyJ1IjoicG95c2lhbjMwOSIsImEiOiJjbHpjNHBxNGowN3YwMmlwd2s0N3ZicTZwIn0.12403CN-2niO08iRcy4uxw';
 
     const map = new mapboxgl.Map({
-      container: 'map-box',
+      container: 'mapBox',
       style: 'mapbox://styles/mapbox/streets-v11',
       // style: 'mapbox://styles/poysian309/clzchvhue009v01qtgz2p7yf7',
       scrollZoom: false,

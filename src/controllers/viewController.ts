@@ -34,28 +34,41 @@ const getTour = asyncHandler(
   },
 );
 
-const getLoginForm = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).render('login', {
-      title: 'Log into your account',
-    });
-  },
-);
+const getLoginForm = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  res.status(200).render('login', {
+    title: 'Log into your account',
+  });
+};
 
-const getAccount = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).render('account', {
-      title: 'Your account',
-      user: req.user,
-    });
-  },
-);
+const getAccount = async (req: Request, res: Response, next: NextFunction) => {
+  res.status(200).render('account', {
+    title: 'Your account',
+    user: req.user,
+  });
+};
+
+const updateUserData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  console.log('Updating user', req.body);
+  // res.status(200).render('account', {
+  //   title: 'Your account',
+  //   user: req.user,
+  // });
+};
 
 const viewController = {
   getOverview,
   getTour,
   getLoginForm,
   getAccount,
+  updateUserData,
 };
 
 export default viewController;

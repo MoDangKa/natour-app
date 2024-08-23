@@ -1,17 +1,17 @@
 import '@babel/polyfill';
 
-import { login, logout } from './login';
+import { login, logout } from './auth';
 import { displayMap } from './mapbox';
 
 console.log('Hello form Parcel');
 
-const mapBox = document.getElementById('map-box');
+const mapBox = document.getElementById('mapBox');
 if (mapBox) {
   const locations = JSON.parse(mapBox.dataset.locations);
   displayMap(locations);
 }
 
-const loginForm = document.querySelector('.form');
+const loginForm = document.getElementById('loginForm');
 if (loginForm) {
   loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -28,7 +28,16 @@ if (loginBtn) {
   });
 }
 
-const logOutBtn = document.querySelector('.nav__el.nav__el--logout');
+const logOutBtn = document.getElementById('logOutBtn');
 if (logOutBtn) {
   logOutBtn.addEventListener('click', logout);
+}
+
+const updateUserDataForm = document.getElementById('updateUserDataForm');
+if (updateUserDataForm) {
+  updateUserDataForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    console.log('first', e);
+  });
 }

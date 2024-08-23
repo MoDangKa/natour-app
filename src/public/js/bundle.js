@@ -10323,7 +10323,7 @@
     window.setTimeout(hideAlert, 5e3);
   };
 
-  // src/public/js/login.js
+  // src/public/js/auth.js
   var login = async (email, password) => {
     console.log({ email, password });
     try {
@@ -10372,7 +10372,7 @@
     try {
       mapboxgl.accessToken = "pk.eyJ1IjoicG95c2lhbjMwOSIsImEiOiJjbHpjNHBxNGowN3YwMmlwd2s0N3ZicTZwIn0.12403CN-2niO08iRcy4uxw";
       const map = new mapboxgl.Map({
-        container: "map-box",
+        container: "mapBox",
         style: "mapbox://styles/mapbox/streets-v11",
         // style: 'mapbox://styles/poysian309/clzchvhue009v01qtgz2p7yf7',
         scrollZoom: false,
@@ -10416,12 +10416,12 @@
 
   // src/public/js/index.js
   console.log("Hello form Parcel");
-  var mapBox = document.getElementById("map-box");
+  var mapBox = document.getElementById("mapBox");
   if (mapBox) {
     const locations = JSON.parse(mapBox.dataset.locations);
     displayMap(locations);
   }
-  var loginForm = document.querySelector(".form");
+  var loginForm = document.getElementById("loginForm");
   if (loginForm) {
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -10436,8 +10436,15 @@
       window.location.href = "/login";
     });
   }
-  var logOutBtn = document.querySelector(".nav__el.nav__el--logout");
+  var logOutBtn = document.getElementById("logOutBtn");
   if (logOutBtn) {
     logOutBtn.addEventListener("click", logout);
+  }
+  var updateUserDataForm = document.getElementById("updateUserDataForm");
+  if (updateUserDataForm) {
+    updateUserDataForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      console.log("first", e);
+    });
   }
 })();

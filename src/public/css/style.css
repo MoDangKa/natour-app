@@ -544,7 +544,7 @@ body {
   margin-top: calc(0px - var(--section-rotate));
 }
 
-#map-box {
+#mapBox {
   position: absolute;
   top: 0;
   bottom: 0;
