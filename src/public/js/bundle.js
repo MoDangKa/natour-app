@@ -10325,7 +10325,6 @@
 
   // src/public/js/auth.js
   var login = async (email, password) => {
-    console.log({ email, password });
     try {
       const { data } = await axios_default({
         method: "POST",
@@ -10352,8 +10351,10 @@
         location.reload(true);
       }
     } catch (error) {
-      console.log("error: ", error?.response);
-      showAlert("error", "Error logging out! Try again.");
+      showAlert(
+        "error",
+        error.response?.data?.message || "Error logging out! Try again."
+      );
     }
   };
 
@@ -10414,6 +10415,28 @@
     }
   };
 
+  // src/public/js/updateSetting.js
+  var updateSetting = async (formData, type) => {
+    try {
+      const url = type === "password" ? "http://localhost:3000/api/v1/users/updateMyPassword" : "http://localhost:3000/api/v1/users/updateMe";
+      const { data } = await axios_default({
+        method: "PATCH",
+        url,
+        data: formData,
+        withCredentials: true,
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+      if (data.status === "success") {
+        showAlert("success", `${type.toUpperCase()} updated successfully!`);
+      }
+    } catch (error) {
+      showAlert(
+        "error",
+        error.response?.data?.message || "Error updating data! Try again."
+      );
+    }
+  };
+
   // src/public/js/index.js
   console.log("Hello form Parcel");
   var mapBox = document.getElementById("mapBox");
@@ -10440,11 +10463,23 @@
   if (logOutBtn) {
     logOutBtn.addEventListener("click", logout);
   }
-  var updateUserDataForm = document.getElementById("updateUserDataForm");
-  if (updateUserDataForm) {
-    updateUserDataForm.addEventListener("submit", (e) => {
+  var updateUserInfoForm = document.getElementById("updateUserInfoForm");
+  if (updateUserInfoForm) {
+    updateUserInfoForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      console.log("first", e);
+      const formData = new FormData(e.target);
+      updateSetting(formData, "data");
+    });
+  }
+  var updateUserPasswordForm = document.getElementById(
+    "updateUserPasswordForm"
+  );
+  if (updateUserPasswordForm) {
+    updateUserPasswordForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      updateSetting(formData, "password");
+      updateUserPasswordForm.reset();
     });
   }
 })();

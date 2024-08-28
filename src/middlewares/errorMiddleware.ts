@@ -1,11 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 
-import { NODE_ENV } from '@/config';
-import { recordLog, recordLog2 } from '@/utils/logger';
 import { CustomError } from '@/@types/types';
+import { recordLog2 } from '@/utils/logger';
 
-// Response Organizer
 const organize = (
   status: string,
   message: string,
@@ -26,7 +24,6 @@ const organize = (
   return response;
 };
 
-// Error Middleware
 const errorMiddleware = (
   err: CustomError,
   req: Request,

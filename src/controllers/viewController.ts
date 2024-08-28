@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 
 import { Tour } from '@/models/tourModel';
+import { User } from '@/models/userModel';
 import CustomError from '@/utils/customError';
 
 const getOverview = asyncHandler(
@@ -51,17 +52,28 @@ const getAccount = async (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-const updateUserData = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  console.log('Updating user', req.body);
-  // res.status(200).render('account', {
-  //   title: 'Your account',
-  //   user: req.user,
-  // });
-};
+const updateUserData = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log('data: ', req.body);
+    // const updateUser = await User.findByIdAndUpdate(
+    //   req.user.id,
+    //   {
+    //     name: req.body.name,
+    //     email: req.body.email,
+    //   },
+    //   {
+    //     new: true,
+    //     runValidators: true,
+    //   },
+    // );
+
+    res.status(200).render('account', {
+      title: 'Your account',
+      // user: updateUser,
+    });
+    // res.status(200).json({ status: 'success', user: updateUser });
+  },
+);
 
 const viewController = {
   getOverview,

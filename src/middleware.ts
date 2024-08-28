@@ -11,6 +11,7 @@ import morgan from 'morgan';
 import path from 'path';
 import favicon from 'serve-favicon';
 import xss from 'xss-clean';
+import timeout from 'connect-timeout';
 
 import { hostname, NODE_ENV, port } from './config';
 
@@ -143,6 +144,8 @@ export const applyMiddleware = (app: Application) => {
   // Data sanitization
   app.use(mongoSanitize());
   app.use(xss());
+
+  app.use(timeout('5s'));
 
   // Prevent parameter pollution
   app.use(

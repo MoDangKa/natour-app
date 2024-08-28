@@ -2,6 +2,7 @@ import '@babel/polyfill';
 
 import { login, logout } from './auth';
 import { displayMap } from './mapbox';
+import { updateSetting } from './updateSetting';
 
 console.log('Hello form Parcel');
 
@@ -33,11 +34,23 @@ if (logOutBtn) {
   logOutBtn.addEventListener('click', logout);
 }
 
-const updateUserDataForm = document.getElementById('updateUserDataForm');
-if (updateUserDataForm) {
-  updateUserDataForm.addEventListener('submit', (e) => {
+const updateUserInfoForm = document.getElementById('updateUserInfoForm');
+if (updateUserInfoForm) {
+  updateUserInfoForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const formData = new FormData(e.target);
+    updateSetting(formData, 'data');
+  });
+}
 
-    console.log('first', e);
+const updateUserPasswordForm = document.getElementById(
+  'updateUserPasswordForm',
+);
+if (updateUserPasswordForm) {
+  updateUserPasswordForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    updateSetting(formData, 'password');
+    updateUserPasswordForm.reset();
   });
 }

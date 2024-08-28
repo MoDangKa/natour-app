@@ -1,12 +1,13 @@
 import { ValidationChain, body } from 'express-validator';
 
 import { requiredUserKeys, userKeys } from '@/models/userModel';
-import { TRole, userV2Keys } from '@/models/userV2Model';
+import { userV2Keys } from '@/models/userV2Model';
 import {
   handleValidationErrors,
   validateNoExtraFields,
   validateRequiredFields,
 } from './validationMiddleware';
+import { TRole } from '@/@types/types';
 
 const requireValidations: Record<string, ValidationChain> = {
   name: body('name').isString().withMessage('Please tell us your name!'),
