@@ -10474,12 +10474,15 @@
   var updateUserPasswordForm = document.getElementById(
     "updateUserPasswordForm"
   );
+  var btnSavePassword = document.querySelector(".btn--save-password");
   if (updateUserPasswordForm) {
-    updateUserPasswordForm.addEventListener("submit", (e) => {
+    updateUserPasswordForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      btnSavePassword.textContent = "Updating...";
       const formData = new FormData(e.target);
-      updateSetting(formData, "password");
+      await updateSetting(formData, "password");
       updateUserPasswordForm.reset();
+      btnSavePassword.textContent = "Save password";
     });
   }
 })();

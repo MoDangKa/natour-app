@@ -15,6 +15,8 @@ const updateMe = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const filteredBody = filterObj(req.body, 'name', 'email', 'role', 'photo');
 
+    if (req.file) filteredBody.photo = req.file.filename;
+
     const updatedUser = await User.findByIdAndUpdate(
       req.user?.id,
       filteredBody,

@@ -1,6 +1,4 @@
 import { Router } from 'express';
-import multer from 'multer';
-import path from 'path';
 
 import authController from '@/controllers/authController';
 import userController from '@/controllers/userController';
@@ -11,9 +9,9 @@ import {
   validateUpdateMe,
   validateUpdatePassword,
 } from '@/middlewares/validationUserMiddleware';
+import { uploadNoFile, uploadSingleUserPhoto } from '@/utils/upload';
 
 const router = Router();
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
 router.post('/signup', validateCreateUser, authController.signup);
 router.post('/signin', authController.signin);
@@ -34,15 +32,15 @@ router.use(authController.protect);
 
 router.patch(
   '/updateMyPassword',
-  upload.none(),
   validateUpdatePassword,
+  uploadNoFile,
   authController.updatePassword,
 );
 router.get('/me', userController.getMe, userController.getUser);
 router.patch(
   '/updateMe',
   validateUpdateMe,
-  upload.none(),
+  uploadSingleUserPhoto,
   userController.updateMe,
 );
 router.delete('/deleteMe', userController.deleteMe);

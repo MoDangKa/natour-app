@@ -63,10 +63,6 @@ export const validateResetPassword = [
 
 export const validateUpdatePassword = [
   validateNoExtraFields(['passwordCurrent', 'password', 'passwordConfirm']),
-  body('passwordCurrent')
-    .isStrongPassword()
-    .isLength({ min: 8 })
-    .withMessage('Please provide a current password'),
   requireValidations.password,
   requireValidations.passwordConfirm,
   handleValidationErrors,
