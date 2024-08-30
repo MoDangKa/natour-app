@@ -10417,6 +10417,7 @@
 
   // src/public/js/updateSetting.js
   var updateSetting = async (formData, type) => {
+    console.log("formData: ", formData);
     try {
       const url = type === "password" ? "http://localhost:3000/api/v1/users/updateMyPassword" : "http://localhost:3000/api/v1/users/updateMe";
       const { data } = await axios_default({
@@ -10463,26 +10464,50 @@
   if (logOutBtn) {
     logOutBtn.addEventListener("click", logout);
   }
+  var userPhoto = document.getElementById("userPhoto");
+  var imgElement = document.getElementById("imagePreview");
+  if (userPhoto && imgElement) {
+    userPhoto.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const imageUrl = URL.createObjectURL(file);
+        imgElement.src = imageUrl;
+      }
+    });
+  }
   var updateUserInfoForm = document.getElementById("updateUserInfoForm");
-  if (updateUserInfoForm) {
-    updateUserInfoForm.addEventListener("submit", (e) => {
+  var btnSaveSetting = document.getElementById("btnSaveSetting");
+  if (updateUserInfoForm && btnSaveSetting) {
+    updateUserInfoForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const formData = new FormData(e.target);
-      updateSetting(formData, "data");
+      btnSaveSetting.textContent = "Updating...";
+      try {
+        const formData = new FormData(updateUserInfoForm);
+        await updateSetting(formData, "data");
+        location.reload();
+      } catch (error) {
+        console.error("Error updating settings:", error);
+        btnSaveSetting.textContent = "Error occurred!";
+      }
     });
   }
   var updateUserPasswordForm = document.getElementById(
     "updateUserPasswordForm"
   );
-  var btnSavePassword = document.querySelector(".btn--save-password");
-  if (updateUserPasswordForm) {
+  var btnSavePassword = document.getElementById("btnSavePassword");
+  if (updateUserPasswordForm && btnSavePassword) {
     updateUserPasswordForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       btnSavePassword.textContent = "Updating...";
-      const formData = new FormData(e.target);
-      await updateSetting(formData, "password");
-      updateUserPasswordForm.reset();
-      btnSavePassword.textContent = "Save password";
+      try {
+        const formData = new FormData(e.target);
+        await updateSetting(formData, "password");
+        updateUserPasswordForm.reset();
+        btnSavePassword.textContent = "Save password";
+      } catch (error) {
+        console.error("Error updating password:", error);
+        btnSaveSetting.textContent = "Error occurred!";
+      }
     });
   }
 })();

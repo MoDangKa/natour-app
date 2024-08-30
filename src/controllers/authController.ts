@@ -7,7 +7,7 @@ import { TRole } from '@/@types/types';
 import { JWT_SECRET, JWT_TOKEN } from '@/config';
 import { IUser, User } from '@/models/userModel';
 import CustomError from '@/utils/customError';
-import sendEmail from '@/utils/email';
+import { sendEmail } from '@/utils/email';
 import { correctPassword, createSendToken, hashPassword } from '@/utils/utils';
 
 const signup = asyncHandler(

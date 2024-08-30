@@ -17,5 +17,6 @@ declare namespace NodeJS {
     EMAIL_PASSWORD: string;
     GMAIL_USERNAME: string;
     GMAIL_PASSWORD: string;
+    EMAIL_FROM: string;
   }
 }

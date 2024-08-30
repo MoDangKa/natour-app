@@ -24,7 +24,6 @@ const getTour = asyncHandler(
     });
 
     if (!tour) {
-      // return res.redirect('/');
       return next(new CustomError('There is no tour with that name.', 404));
     }
 

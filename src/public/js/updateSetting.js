@@ -2,6 +2,7 @@ import axios from 'axios';
 import { showAlert } from './alerts';
 
 export const updateSetting = async (formData, type) => {
+  console.log('formData: ', formData);
   try {
     const url =
       type === 'password'

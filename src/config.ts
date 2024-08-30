@@ -27,6 +27,7 @@ const {
   GMAIL_PASSWORD,
   HASHING_SALT_ROUNDS,
   JWT_COOKIE_EXPIRES_IN,
+  EMAIL_FROM,
 } = process.env as Record<string, string | undefined>;
 
 const validateEnvVariable = (
@@ -51,6 +52,7 @@ const port = parseInt(PORT!, 10) || 3000;
 const hostname = HOSTNAME || 'http://localhost';
 
 export {
+  EMAIL_FROM,
   EMAIL_HOST,
   EMAIL_PASSWORD,
   EMAIL_PORT,

@@ -7,6 +7,7 @@ import {
   validateUpdateTour,
 } from '@/middlewares/validationTourMiddleware';
 import reviewRoutes from './reviewRoutes';
+import { uploadTourImages } from '@/middlewares/uploadMiddleware';
 // import { createReview } from '@/controllers/reviewController';
 // import { validateCreateReviewV2 } from '@/middlewares/validationReviewMiddleware';
 
@@ -54,6 +55,7 @@ router
     authController.protect,
     authController.restrictTo('admin', 'lead-guide'),
     validateUpdateTour,
+    uploadTourImages,
     tourController.updateTour,
   )
   .delete(
