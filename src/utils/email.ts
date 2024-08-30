@@ -82,7 +82,7 @@ export default class Email {
   private async send(template: string, subject: string) {
     // 1) Render HTML from Pug template
     const html = pug.renderFile(
-      path.resolve(__dirname, '..', 'view', 'emails', `${template}.pug`),
+      path.resolve(__dirname, '..', 'views', 'email', `${template}.pug`),
       {
         firstName: this.firstName,
         url: this.url,

@@ -7,7 +7,7 @@ import { TRole } from '@/@types/types';
 import { JWT_SECRET, JWT_TOKEN } from '@/config';
 import { IUser, User } from '@/models/userModel';
 import CustomError from '@/utils/customError';
-import { sendEmail } from '@/utils/email';
+import Email, { sendEmail } from '@/utils/email';
 import { correctPassword, createSendToken, hashPassword } from '@/utils/utils';
 
 const signup = asyncHandler(
@@ -25,6 +25,11 @@ const signup = asyncHandler(
       password: hashedPassword,
       email,
     });
+
+    const url = `${req.protocol}://${req.get('host')}/me`;
+    console.log('url: ', url);
+
+    await new Email(newUser, url).sendWelcome();
 
     createSendToken(newUser, 201, res);
   },
