@@ -3,15 +3,7 @@ import nodemailer from 'nodemailer';
 import path from 'path';
 import pug from 'pug';
 
-import {
-  EMAIL_FROM,
-  EMAIL_HOST,
-  EMAIL_PASSWORD,
-  EMAIL_PORT,
-  EMAIL_USERNAME,
-  GMAIL_USERNAME,
-  NODE_ENV,
-} from '@/config';
+import { emailConfig, NODE_ENV } from '@/config';
 import { IUser } from '@/models/userModel';
 import { IUserV2 } from '@/models/userV2Model';
 
@@ -23,21 +15,26 @@ interface EmailOptions {
 
 export const sendEmail = async (options: EmailOptions): Promise<void> => {
   try {
-    if (!EMAIL_HOST || !EMAIL_PORT || !EMAIL_USERNAME || !EMAIL_PASSWORD) {
+    if (
+      !emailConfig.EMAIL_HOST ||
+      !emailConfig.EMAIL_PORT ||
+      !emailConfig.EMAIL_USERNAME ||
+      !emailConfig.EMAIL_PASSWORD
+    ) {
       throw new Error('Missing email configuration environment variables');
     }
 
     const transporter = nodemailer.createTransport({
-      host: EMAIL_HOST,
-      port: parseInt(EMAIL_PORT, 10),
+      host: emailConfig.EMAIL_HOST,
+      port: parseInt(emailConfig.EMAIL_PORT, 10),
       auth: {
-        user: EMAIL_USERNAME,
-        pass: EMAIL_PASSWORD,
+        user: emailConfig.EMAIL_USERNAME,
+        pass: emailConfig.EMAIL_PASSWORD,
       },
     });
 
     const mailOptions = {
-      from: `Thanaphon Phumthan <${GMAIL_USERNAME}>`,
+      from: `Thanaphon Phumthan <${emailConfig.GMAIL_USERNAME}>`,
       to: options.email,
       subject: options.subject,
       text: options.message,
@@ -60,21 +57,34 @@ export default class Email {
     this.to = user.email;
     this.firstName = user.name.split(' ')[0];
     this.url = url;
-    this.from = `Thanaphon Phumthan <${EMAIL_FROM}>`;
+    this.from = `Thanaphon Phumthan <${emailConfig.EMAIL_FROM}>`;
   }
 
   private newTransport() {
-    if (NODE_ENV === 'production') {
-      // Production transport handling e.g., SendGrid
-      // return nodemailer.createTransport({...});
+    if (NODE_ENV !== 'development') {
+      return nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: emailConfig.GMAIL_USERNAME,
+          pass: emailConfig.GMAIL_PASSWORD,
+        },
+      });
     }
 
     return nodemailer.createTransport({
-      host: EMAIL_HOST,
-      port: parseInt(EMAIL_PORT!, 10),
+      service: 'Gmail',
       auth: {
-        user: EMAIL_USERNAME,
-        pass: EMAIL_PASSWORD,
+        user: emailConfig.GMAIL_USERNAME,
+        pass: emailConfig.GMAIL_PASSWORD,
+      },
+    });
+
+    return nodemailer.createTransport({
+      host: emailConfig.EMAIL_HOST,
+      port: parseInt(emailConfig.EMAIL_PORT!, 10),
+      auth: {
+        user: emailConfig.EMAIL_USERNAME,
+        pass: emailConfig.EMAIL_PASSWORD,
       },
     });
   }
@@ -105,5 +115,12 @@ export default class Email {
 
   async sendWelcome() {
     await this.send('welcome', 'Welcome to the Natours Family!');
+  }
+
+  async sendPasswordReset() {
+    await this.send(
+      'passwordReset',
+      'Your password reset token (valid for only 10 minutes',
+    );
   }
 }

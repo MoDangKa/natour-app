@@ -2,6 +2,7 @@ import '@babel/polyfill';
 
 import { login, logout } from './auth';
 import { displayMap } from './mapbox';
+import { bookTour } from './stripe';
 import { updateSetting } from './updateSetting';
 
 console.log('Hello form Parcel');
@@ -12,7 +13,7 @@ if (mapBox) {
   displayMap(locations);
 }
 
-const loginForm = document.getElementById('loginForm');
+const loginForm = document.getElementById('login-form');
 if (loginForm) {
   loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -22,32 +23,32 @@ if (loginForm) {
   });
 }
 
-const loginBtn = document.getElementById('loginBtn');
-if (loginBtn) {
-  loginBtn.addEventListener('click', function () {
+const BTNLogin = document.getElementById('btn-login');
+if (BTNLogin) {
+  BTNLogin.addEventListener('click', function () {
     window.location.href = '/login';
   });
 }
 
-const logOutBtn = document.getElementById('logOutBtn');
-if (logOutBtn) {
-  logOutBtn.addEventListener('click', logout);
+const BTNLogOut = document.getElementById('btn-log-out');
+if (BTNLogOut) {
+  BTNLogOut.addEventListener('click', logout);
 }
 
-const userPhoto = document.getElementById('userPhoto');
-const imgElement = document.getElementById('imagePreview');
-if (userPhoto && imgElement) {
+const userPhoto = document.getElementById('user-photo');
+const imagePreview = document.getElementById('image-preview');
+if (userPhoto && imagePreview) {
   userPhoto.addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      imgElement.src = imageUrl;
+      imagePreview.src = imageUrl;
     }
   });
 }
 
-const updateUserInfoForm = document.getElementById('updateUserInfoForm');
-const btnSaveSetting = document.getElementById('btnSaveSetting');
+const updateUserInfoForm = document.getElementById('update-user-info-form');
+const btnSaveSetting = document.getElementById('btn-save-setting');
 if (updateUserInfoForm && btnSaveSetting) {
   updateUserInfoForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -65,9 +66,9 @@ if (updateUserInfoForm && btnSaveSetting) {
 }
 
 const updateUserPasswordForm = document.getElementById(
-  'updateUserPasswordForm',
+  'update-user-password-form',
 );
-const btnSavePassword = document.getElementById('btnSavePassword');
+const btnSavePassword = document.getElementById('btn-save-password');
 if (updateUserPasswordForm && btnSavePassword) {
   updateUserPasswordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -81,5 +82,15 @@ if (updateUserPasswordForm && btnSavePassword) {
       console.error('Error updating password:', error);
       btnSaveSetting.textContent = 'Error occurred!';
     }
+  });
+}
+
+const BTNBookTour = document.getElementById('btn-book-tour');
+if (BTNBookTour) {
+  console.log('Book Tour');
+  BTNBookTour.addEventListener('click', (e) => {
+    e.target.textContent = 'Processing...';
+    const { tourId } = e.target.dataset;
+    bookTour(tourId);
   });
 }

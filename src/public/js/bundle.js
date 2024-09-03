@@ -1540,11 +1540,13 @@
                 radix = 2;
                 maxCode = 49;
                 break;
+              // fast equal /^0b[01]+$/i
               case 79:
               case 111:
                 radix = 8;
                 maxCode = 55;
                 break;
+              // fast equal /^0o[0-7]+$/i
               default:
                 return +it;
             }
@@ -3060,10 +3062,13 @@
               else if (res) switch (TYPE) {
                 case 3:
                   return true;
+                // some
                 case 5:
                   return val;
+                // find
                 case 6:
                   return index;
+                // findIndex
                 case 2:
                   result.push(val);
               }
@@ -10329,6 +10334,7 @@
 
   // src/public/js/auth.js
   var login = async (email, password) => {
+    console.log("email, password: ", email, password);
     try {
       const { data } = await axios_default({
         method: "POST",
@@ -10419,6 +10425,30 @@
     }
   };
 
+  // src/public/js/stripe.js
+  var stripePublicKey = "pk_test_51PuXetRxeacq9AYDKvGapuiQ1KYnk4OqjOZlhhqxhkWPLJU7Bagr8QU6U9TRcJ63K2aEV76kcsLHp2OuRwYVPACM00R1k737o8";
+  var stripe = Stripe(stripePublicKey);
+  var bookTour = async (tourId) => {
+    try {
+      const { status, data } = await axios_default({
+        method: "GET",
+        url: `http://localhost:3000/api/v1/bookings/checkout-session/${tourId}`
+      });
+      if (status !== 200) {
+        throw new Error("Failed to get checkout session");
+      }
+      await stripe.redirectToCheckout({
+        sessionId: data.session.id
+      });
+    } catch (error) {
+      console.error("Error booking tour:", error);
+      showAlert(
+        "error",
+        error.message || "There was an error processing your request."
+      );
+    }
+  };
+
   // src/public/js/updateSetting.js
   var updateSetting = async (formData, type) => {
     console.log("formData: ", formData);
@@ -10449,7 +10479,7 @@
     const locations = JSON.parse(mapBox.dataset.locations);
     displayMap(locations);
   }
-  var loginForm = document.getElementById("loginForm");
+  var loginForm = document.getElementById("login-form");
   if (loginForm) {
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -10458,29 +10488,29 @@
       login(email, password);
     });
   }
-  var loginBtn = document.getElementById("loginBtn");
-  if (loginBtn) {
-    loginBtn.addEventListener("click", function() {
+  var BTNLogin = document.getElementById("btn-login");
+  if (BTNLogin) {
+    BTNLogin.addEventListener("click", function() {
       window.location.href = "/login";
     });
   }
-  var logOutBtn = document.getElementById("logOutBtn");
-  if (logOutBtn) {
-    logOutBtn.addEventListener("click", logout);
+  var BTNLogOut = document.getElementById("btn-log-out");
+  if (BTNLogOut) {
+    BTNLogOut.addEventListener("click", logout);
   }
-  var userPhoto = document.getElementById("userPhoto");
-  var imgElement = document.getElementById("imagePreview");
-  if (userPhoto && imgElement) {
+  var userPhoto = document.getElementById("user-photo");
+  var imagePreview = document.getElementById("image-preview");
+  if (userPhoto && imagePreview) {
     userPhoto.addEventListener("change", (event) => {
       const file = event.target.files[0];
       if (file) {
         const imageUrl = URL.createObjectURL(file);
-        imgElement.src = imageUrl;
+        imagePreview.src = imageUrl;
       }
     });
   }
-  var updateUserInfoForm = document.getElementById("updateUserInfoForm");
-  var btnSaveSetting = document.getElementById("btnSaveSetting");
+  var updateUserInfoForm = document.getElementById("update-user-info-form");
+  var btnSaveSetting = document.getElementById("btn-save-setting");
   if (updateUserInfoForm && btnSaveSetting) {
     updateUserInfoForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -10496,9 +10526,9 @@
     });
   }
   var updateUserPasswordForm = document.getElementById(
-    "updateUserPasswordForm"
+    "update-user-password-form"
   );
-  var btnSavePassword = document.getElementById("btnSavePassword");
+  var btnSavePassword = document.getElementById("btn-save-password");
   if (updateUserPasswordForm && btnSavePassword) {
     updateUserPasswordForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -10512,6 +10542,15 @@
         console.error("Error updating password:", error);
         btnSaveSetting.textContent = "Error occurred!";
       }
+    });
+  }
+  var BTNBookTour = document.getElementById("btn-book-tour");
+  if (BTNBookTour) {
+    console.log("Book Tour");
+    BTNBookTour.addEventListener("click", (e) => {
+      e.target.textContent = "Processing...";
+      const { tourId } = e.target.dataset;
+      bookTour(tourId);
     });
   }
 })();

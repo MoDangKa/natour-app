@@ -1,4 +1,5 @@
 import compression from 'compression';
+import timeout from 'connect-timeout';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import crypto from 'crypto';
@@ -11,7 +12,6 @@ import morgan from 'morgan';
 import path from 'path';
 import favicon from 'serve-favicon';
 import xss from 'xss-clean';
-import timeout from 'connect-timeout';
 
 import { hostname, NODE_ENV, port } from './config';
 
@@ -25,27 +25,27 @@ export const applyMiddleware = (app: Application) => {
     'https://api.mapbox.com',
     'https://events.mapbox.com',
     'https://*.tile.openstreetmap.org',
+    'https://js.stripe.com/v3',
   ];
   app.use(
     cors({
       origin: function (origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        if (!origin) return callback(null, true); // Allow non-origin requests (e.g., from same-origin)
+        if (allowedOrigins.indexOf(origin) !== -1) {
           callback(null, true);
         } else {
           callback(new Error('Not allowed by CORS'));
         }
       },
       credentials: true,
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
     }),
   );
 
   // Security headers
   const apiUrl =
     NODE_ENV === 'production'
-      ? 'https://your-production-api-url.com'
-      : `http://${hostname}:${port}`;
+      ? ['https://your-production-api-url.com']
+      : [`http://${hostname}:${port}`, `http://localhost:${port}`];
 
   const connectSrcUrls = [
     'https://api.mapbox.com/',
@@ -54,7 +54,8 @@ export const applyMiddleware = (app: Application) => {
     'https://events.mapbox.com/',
     'https://cdnjs.cloudflare.com',
     'https://tile.openstreetmap.org',
-    apiUrl,
+    'https://js.stripe.com/v3',
+    ...apiUrl,
   ];
 
   const scriptSrcUrls = [
@@ -64,6 +65,7 @@ export const applyMiddleware = (app: Application) => {
     'https://domain-hosting-source-maps.com',
     'https://trusted-external-source.com',
     'https://unpkg.com',
+    'https://js.stripe.com/v3',
   ];
 
   const scriptSrc =
@@ -97,7 +99,7 @@ export const applyMiddleware = (app: Application) => {
             'https://*.tile.openstreetmap.org',
           ],
           fontSrc: ["'self'", ...fontSrcUrls],
-          frameSrc: ["'self'"],
+          frameSrc: ["'self'", 'https://js.stripe.com'],
           baseUri: ["'self'"],
           formAction: ["'self'"],
         },

@@ -18,5 +18,7 @@ declare namespace NodeJS {
     GMAIL_USERNAME: string;
     GMAIL_PASSWORD: string;
     EMAIL_FROM: string;
+    STRIPE_PUBLISH_KEY: string;
+    STRIPE_SECRET_KEY: string;
   }
 }

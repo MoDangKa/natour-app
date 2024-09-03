@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import path from 'path';
 
+// Load environment variables from config.env file
 const ENV_FILE_PATH = path.resolve(__dirname, 'config.env');
 const dotenvResult = dotenv.config({ path: ENV_FILE_PATH });
 
@@ -28,8 +29,11 @@ const {
   HASHING_SALT_ROUNDS,
   JWT_COOKIE_EXPIRES_IN,
   EMAIL_FROM,
+  STRIPE_PUBLISH_KEY,
+  STRIPE_SECRET_KEY,
 } = process.env as Record<string, string | undefined>;
 
+// Helper function to validate environment variables
 const validateEnvVariable = (
   variableName: string,
   variableValue: string | undefined,
@@ -40,18 +44,27 @@ const validateEnvVariable = (
   }
 };
 
-validateEnvVariable('PORT', PORT);
-validateEnvVariable('HOSTNAME', HOSTNAME);
-validateEnvVariable('JWT_SECRET', JWT_SECRET);
-validateEnvVariable('JWT_TOKEN', JWT_TOKEN);
-validateEnvVariable('JWT_EXPIRES_IN', JWT_EXPIRES_IN);
-validateEnvVariable('JWT_COOKIE_EXPIRES_IN', JWT_COOKIE_EXPIRES_IN);
-validateEnvVariable('HASHING_SALT_ROUNDS', HASHING_SALT_ROUNDS);
+// Validate essential environment variables
+const essentialVariables = [
+  { name: 'PORT', value: PORT },
+  { name: 'HOSTNAME', value: HOSTNAME },
+  { name: 'JWT_SECRET', value: JWT_SECRET },
+  { name: 'JWT_TOKEN', value: JWT_TOKEN },
+  { name: 'JWT_EXPIRES_IN', value: JWT_EXPIRES_IN },
+  { name: 'JWT_COOKIE_EXPIRES_IN', value: JWT_COOKIE_EXPIRES_IN },
+  { name: 'HASHING_SALT_ROUNDS', value: HASHING_SALT_ROUNDS },
+];
 
+essentialVariables.forEach(({ name, value }) =>
+  validateEnvVariable(name, value),
+);
+
+// Default configurations
 const port = parseInt(PORT!, 10) || 3000;
 const hostname = HOSTNAME || 'http://localhost';
 
-export {
+// Exporting configurations
+const emailConfig = {
   EMAIL_FROM,
   EMAIL_HOST,
   EMAIL_PASSWORD,
@@ -59,17 +72,30 @@ export {
   EMAIL_USERNAME,
   GMAIL_PASSWORD,
   GMAIL_USERNAME,
-  HASHING_SALT_ROUNDS,
-  HOSTNAME,
+};
+
+const jwtConfig = {
   JWT_COOKIE_EXPIRES_IN,
   JWT_EXPIRES_IN,
   JWT_SECRET,
   JWT_TOKEN,
+};
+
+const databaseConfig = {
   MONGO_LOCAL,
-  MONGO_PASSWORD,
   MONGO_URI,
+  MONGO_PASSWORD,
+};
+
+// Exporting all configurations
+export {
+  HASHING_SALT_ROUNDS,
   NODE_ENV,
-  PORT,
+  STRIPE_PUBLISH_KEY,
+  STRIPE_SECRET_KEY,
+  databaseConfig,
+  emailConfig,
   hostname,
+  jwtConfig,
   port,
 };

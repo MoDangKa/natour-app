@@ -1,12 +1,15 @@
 import mongoose from 'mongoose';
 
-import { MONGO_LOCAL, MONGO_PASSWORD, MONGO_URI, NODE_ENV } from '@/config';
+import { databaseConfig, NODE_ENV } from '@/config';
 
 const connectDatabase = async () => {
   const databaseUrl =
     NODE_ENV === 'development'
-      ? MONGO_LOCAL
-      : MONGO_URI?.replace('<PASSWORD>', MONGO_PASSWORD!);
+      ? databaseConfig.MONGO_LOCAL
+      : databaseConfig.MONGO_URI?.replace(
+          '<PASSWORD>',
+          databaseConfig.MONGO_PASSWORD!,
+        );
 
   if (!databaseUrl) {
     throw new Error('Database connection URL is missing or invalid.');

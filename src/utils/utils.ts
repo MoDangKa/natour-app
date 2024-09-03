@@ -4,14 +4,7 @@ import { SignJWT } from 'jose';
 import jwt from 'jsonwebtoken';
 
 import { DecodedToken, ICleanUser, TObject } from '@/@types/types';
-import {
-  HASHING_SALT_ROUNDS,
-  JWT_COOKIE_EXPIRES_IN,
-  JWT_EXPIRES_IN,
-  JWT_SECRET,
-  JWT_TOKEN,
-  NODE_ENV,
-} from '@/config';
+import { HASHING_SALT_ROUNDS, jwtConfig, NODE_ENV } from '@/config';
 import { IUser } from '@/models/userModel';
 import { IUserV2 } from '@/models/userV2Model';
 import CustomError from './customError';
@@ -29,18 +22,18 @@ export const correctPassword = async function (
 };
 
 export const signToken = async (id: string): Promise<string> => {
-  const secret: Uint8Array = new TextEncoder().encode(JWT_SECRET);
+  const secret: Uint8Array = new TextEncoder().encode(jwtConfig.JWT_SECRET);
   return await new SignJWT({})
     .setProtectedHeader({ alg: 'HS256' })
     .setSubject(id)
     .setIssuedAt()
-    .setExpirationTime(JWT_EXPIRES_IN!)
+    .setExpirationTime(jwtConfig.JWT_EXPIRES_IN!)
     .sign(secret);
 };
 
 export const signTokenV2 = (id: string): string => {
-  return jwt.sign({ sub: id }, JWT_SECRET!, {
-    expiresIn: JWT_EXPIRES_IN,
+  return jwt.sign({ sub: id }, jwtConfig.JWT_SECRET!, {
+    expiresIn: jwtConfig.JWT_EXPIRES_IN,
   });
 };
 
@@ -65,7 +58,7 @@ const createSendTokenCommon = (
   statusCode: number,
   res: Response,
 ) => {
-  const cookieExpiresInDays = parseInt(JWT_COOKIE_EXPIRES_IN!, 10);
+  const cookieExpiresInDays = parseInt(jwtConfig.JWT_COOKIE_EXPIRES_IN!, 10);
 
   if (isNaN(cookieExpiresInDays)) {
     return new CustomError(
@@ -76,7 +69,7 @@ const createSendTokenCommon = (
 
   const maxAge = cookieExpiresInDays * 24 * 60 * 60 * 1000;
 
-  res.cookie(JWT_TOKEN!, token, {
+  res.cookie(jwtConfig.JWT_TOKEN!, token, {
     httpOnly: true,
     secure: NODE_ENV === 'production',
     sameSite: 'strict',

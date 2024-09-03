@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 
 import { TRole } from '@/@types/types';
-import { JWT_SECRET, JWT_TOKEN } from '@/config';
+import { jwtConfig } from '@/config';
 import { UserV2 } from '@/models/userV2Model';
 import CustomError from '@/utils/customError';
 import { sendEmail } from '@/utils/email';
@@ -43,7 +43,7 @@ const signin = asyncHandler(
 const protect = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
-    const cookie = req.cookies && req.cookies[JWT_TOKEN!];
+    const cookie = req.cookies && req.cookies[jwtConfig.JWT_TOKEN!];
     const token = authHeader?.split(' ')[1] || cookie;
 
     if (!token) {
@@ -55,7 +55,7 @@ const protect = asyncHandler(
       );
     }
 
-    const decoded = await verifyToken(token, JWT_SECRET!);
+    const decoded = await verifyToken(token, jwtConfig.JWT_SECRET!);
     if (!decoded.sub) {
       return next(
         new CustomError('User ID not found in the JWT payload.', 401),

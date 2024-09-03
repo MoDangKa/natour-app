@@ -4,10 +4,10 @@ import asyncHandler from 'express-async-handler';
 import { jwtVerify } from 'jose';
 
 import { TRole } from '@/@types/types';
-import { JWT_SECRET, JWT_TOKEN } from '@/config';
+import { jwtConfig } from '@/config';
 import { IUser, User } from '@/models/userModel';
 import CustomError from '@/utils/customError';
-import Email, { sendEmail } from '@/utils/email';
+import Email from '@/utils/email';
 import { correctPassword, createSendToken, hashPassword } from '@/utils/utils';
 
 const signup = asyncHandler(
@@ -61,7 +61,7 @@ const signin = asyncHandler(
 
 const signOut = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    res.cookie(JWT_TOKEN!, 'sign out', {
+    res.cookie(jwtConfig.JWT_TOKEN!, 'sign out', {
       expires: new Date(Date.now() + 10 * 1000),
       httpOnly: true,
     });
@@ -72,7 +72,7 @@ const signOut = asyncHandler(
 const protect = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
-    const cookie = req.cookies && req.cookies[JWT_TOKEN!];
+    const cookie = req.cookies && req.cookies[jwtConfig.JWT_TOKEN!];
     const token = authHeader?.split(' ')[1] || cookie;
 
     if (!token) {
@@ -86,7 +86,9 @@ const protect = asyncHandler(
     }
 
     try {
-      const secret: Uint8Array = new TextEncoder().encode(JWT_SECRET!);
+      const secret: Uint8Array = new TextEncoder().encode(
+        jwtConfig.JWT_SECRET!,
+      );
       const { payload } = await jwtVerify(token, secret);
 
       if (!payload.sub || !payload.iat) {
@@ -128,14 +130,14 @@ const protect = asyncHandler(
 
 // Only for rendered pages, no errors!
 const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies && req.cookies[JWT_TOKEN!];
+  const token = req.cookies && req.cookies[jwtConfig.JWT_TOKEN!];
 
   if (!token) {
     return next();
   }
 
   try {
-    const secret: Uint8Array = new TextEncoder().encode(JWT_SECRET!);
+    const secret: Uint8Array = new TextEncoder().encode(jwtConfig.JWT_SECRET!);
     const { payload } = await jwtVerify(token, secret);
 
     if (!payload.sub || !payload.iat) {
@@ -186,15 +188,19 @@ const forgotPassword = asyncHandler(
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
 
-    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
-    const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
-
     try {
-      await sendEmail({
-        email: user.email,
-        subject: 'Your password reset token (valid for 10 min)',
-        message,
-      });
+      const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+
+      // V1
+      // const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
+      // await sendEmail({
+      //   email: user.email,
+      //   subject: 'Your password reset token (valid for 10 min)',
+      //   message,
+      // });
+
+      // V2
+      await new Email(user, resetURL).sendPasswordReset();
 
       res.status(200).json({
         status: 'success',

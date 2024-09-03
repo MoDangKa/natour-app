@@ -5,10 +5,10 @@ header.header
         img(src='/img/logo-white.png' alt='Natours logo')
     .nav.nav.nav--user
         if user
-            button#logOutBtn.nav__el.nav__el--logout Log out
+            button#btn-log-out.nav__el.nav__el--logout Log out
             a.nav__el(href='/me')
                 img.nav__user-img(src=`/img/users/${user.photo}` alt=`Photo of user.name`)
                 span= user.name.split(' ')[0]
         else
-            button.nav__el#loginBtn Log in
+            button#btn-login.nav__el Log in
             a.nav__el.nav__el--cta(href='#') Sign up
