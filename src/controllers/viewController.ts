@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 
+import { Booking } from '@/models/bookingModel';
 import { Tour } from '@/models/tourModel';
-import { User } from '@/models/userModel';
 import CustomError from '@/utils/customError';
 
 const getOverview = asyncHandler(
@@ -39,6 +39,10 @@ const getLoginForm = async (
   res: Response,
   next: NextFunction,
 ) => {
+  if (res?.locals?.user) {
+    res.redirect('/');
+  }
+
   res.status(200).render('login', {
     title: 'Log into your account',
   });
@@ -51,26 +55,20 @@ const getAccount = async (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-const updateUserData = asyncHandler(
+const getMyTours = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log('data: ', req.body);
-    // const updateUser = await User.findByIdAndUpdate(
-    //   req.user.id,
-    //   {
-    //     name: req.body.name,
-    //     email: req.body.email,
-    //   },
-    //   {
-    //     new: true,
-    //     runValidators: true,
-    //   },
-    // );
+    // 1) Find all bookings
+    const bookings = await Booking.find({ user: req.user.id });
 
-    res.status(200).render('account', {
-      title: 'Your account',
-      // user: updateUser,
+    // 2) Find tours with the returned IDs
+    const tourIDs = bookings.map((el) => el.tour.id);
+    const tours = await Tour.find({ _id: { $in: tourIDs } });
+
+    res.status(200).render('overview', {
+      title: 'My Tours',
+      tours,
+      user: req.user,
     });
-    // res.status(200).json({ status: 'success', user: updateUser });
   },
 );
 
@@ -79,7 +77,7 @@ const viewController = {
   getTour,
   getLoginForm,
   getAccount,
-  updateUserData,
+  getMyTours,
 };
 
 export default viewController;

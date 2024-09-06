@@ -9,11 +9,9 @@ import CustomError from '@/utils/customError';
 const deleteOne = <T extends Document>(Model: Model<T>) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const doc = await Model.findByIdAndDelete(req.params.id);
-
     if (!doc) {
       return next(new CustomError('No document found with that ID', 404));
     }
-
     res.status(200).json({
       status: 'success',
       data: null,
@@ -29,11 +27,9 @@ const updateOne = <T extends Document>(
       new: true,
       runValidators: true,
     });
-
     if (!doc) {
       return next(new CustomError('No document found with that ID', 404));
     }
-
     res.status(200).json({
       status: 'success',
       data: {
@@ -46,9 +42,8 @@ const createOne = <T extends Document>(
   Model: Model<T>,
   keyName: string = 'data',
 ) =>
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const newDoc = await Model.create(req.body);
-
     res.status(201).json({
       status: 'success',
       data: {
@@ -66,11 +61,9 @@ const getOne = <T extends Document>(
     let query = Model.findById(req.params.id);
     if (popOptions) query = query.populate(popOptions);
     const doc = await query;
-
     if (!doc) {
       return next(new CustomError('No document found with that ID', 404));
     }
-
     res.status(200).json({
       status: 'success',
       data: {

@@ -3,7 +3,7 @@ import { Router } from 'express';
 import reviewRoutes from './reviewRoutes';
 import tourRoutes from './tourRoutes';
 import userRoutes from './userRoutes';
-import bookingRoutes from './bookingRoutes'
+import bookingRoutes from './bookingRoutes';
 
 const apiV1Router = Router();
 

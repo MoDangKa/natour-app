@@ -3,8 +3,10 @@ import asyncHandler from 'express-async-handler';
 import Stripe from 'stripe';
 
 import { STRIPE_SECRET_KEY } from '@/config';
+import { Booking, IBooking, requireBookingKeys } from '@/models/bookingModel';
 import { Tour } from '@/models/tourModel';
 import CustomError from '@/utils/customError';
+import factory from './handlerFactory';
 
 // Ensure STRIPE_SECRET_KEY is defined and is a secret key
 if (!STRIPE_SECRET_KEY || !STRIPE_SECRET_KEY.startsWith('sk_')) {
@@ -23,13 +25,13 @@ const getCheckoutSession = asyncHandler(
     }
 
     // 2) Create checkout session
-    const url = `${req.protocol}://${req.get('host')}/tour/${tour.slug}`;
+    const baseURL = `${req.protocol}://${req.get('host')}`;
     try {
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         mode: 'payment',
-        success_url: url,
-        cancel_url: url,
+        success_url: `${baseURL}/?tour=${req.params.tourId}&user=${req.user.id}&price=${tour.price}`,
+        cancel_url: `${baseURL}/tour/${tour.slug}`,
         customer_email: req.user.email,
         client_reference_id: req.params.tourId,
         line_items: [
@@ -62,6 +64,36 @@ const getCheckoutSession = asyncHandler(
   },
 );
 
-const bookingController = { getCheckoutSession };
+const createBookingCheckout = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // This is only TEMPORARY, because it's UNSECURE: everyone can make bookings without paying
+
+    const { tour, user, price } = req.query;
+    if (!tour || !user || !price) return next();
+    await Booking.create({ tour, user, price });
+
+    res.redirect(req.originalUrl.split('?')[0]);
+  },
+);
+
+const createBooking = factory.createOne(Booking, 'bookings');
+const getBooking = factory.getOne(Booking, undefined, 'bookings');
+const getAllBookings = factory.getAll<IBooking>(
+  Booking,
+  requireBookingKeys,
+  'bookings',
+);
+const updateBooking = factory.updateOne(Booking, 'bookings');
+const deleteBooking = factory.deleteOne(Booking);
+
+const bookingController = {
+  getCheckoutSession,
+  createBookingCheckout,
+  createBooking,
+  getBooking,
+  getAllBookings,
+  updateBooking,
+  deleteBooking,
+};
 
 export default bookingController;
