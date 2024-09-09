@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { Document, Model } from 'mongoose';
 
-import { PopOptions } from '@/@types/types';
-import APIFeatures from '@/utils/apiFeatures';
-import CustomError from '@/utils/customError';
+import { PopOptions } from '../@types/types';
+import APIFeatures from '../utils/apiFeatures';
+import CustomError from '../utils/customError';
 
 const deleteOne = <T extends Document>(Model: Model<T>) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {

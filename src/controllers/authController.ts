@@ -3,12 +3,12 @@ import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { jwtVerify } from 'jose';
 
-import { TRole } from '@/@types/types';
-import { jwtConfig } from '@/config';
-import { IUser, User } from '@/models/userModel';
-import CustomError from '@/utils/customError';
-import Email from '@/utils/email';
-import { correctPassword, createSendToken, hashPassword } from '@/utils/utils';
+import { TRole } from '../@types/types';
+import { jwtConfig } from '../config';
+import { IUser, User } from '../models/userModel';
+import CustomError from '../utils/customError';
+import Email from '../utils/email';
+import { correctPassword, createSendToken, hashPassword } from '../utils/utils';
 
 const signup = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {

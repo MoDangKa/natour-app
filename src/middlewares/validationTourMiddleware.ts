@@ -1,7 +1,7 @@
 import { body, ValidationChain } from 'express-validator';
 import mongoose from 'mongoose';
 
-import { requireTourKeys, TDifficulty, tourKeys } from '@/models/tourModel';
+import { requireTourKeys, TDifficulty, tourKeys } from '../models/tourModel';
 import {
   handleValidationErrors,
   validateNoExtraFields,

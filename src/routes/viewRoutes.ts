@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
-import authController from '@/controllers/authController';
-import bookingController from '@/controllers/bookingController';
-import viewController from '@/controllers/viewController';
+import authController from '../controllers/authController';
+import bookingController from '../controllers/bookingController';
+import viewController from '../controllers/viewController';
 
 const router = Router();
 

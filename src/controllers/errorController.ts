@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { NODE_ENV } from '@/config';
-import errorMiddleware from '@/middlewares/errorMiddleware';
-import CustomError from '@/utils/customError';
+import { NODE_ENV } from '../config';
+import errorMiddleware from '../middlewares/errorMiddleware';
+import CustomError from '../utils/customError';
 
 const handleGlobalError = (
   err: Error | CustomError,

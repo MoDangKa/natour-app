@@ -3,9 +3,9 @@ import nodemailer from 'nodemailer';
 import path from 'path';
 import pug from 'pug';
 
-import { emailConfig, NODE_ENV } from '@/config';
-import { IUser } from '@/models/userModel';
-import { IUserV2 } from '@/models/userV2Model';
+import { emailConfig, NODE_ENV } from '../config';
+import { IUser } from '../models/userModel';
+import { IUserV2 } from '../models/userV2Model';
 
 interface EmailOptions {
   email: string;

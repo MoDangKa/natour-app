@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
-import authController from '@/controllers/authController';
-import bookingController from '@/controllers/bookingController';
+import authController from '../controllers/authController';
+import bookingController from '../controllers/bookingController';
 
 const router = Router({ mergeParams: true });
 

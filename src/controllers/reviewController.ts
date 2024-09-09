@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { Review, reviewKeys } from '@/models/reviewModel';
+import { Review, reviewKeys } from '../models/reviewModel';
 import factory from './handlerFactory';
 
 /*

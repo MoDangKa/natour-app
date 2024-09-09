@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 
-import { Booking } from '@/models/bookingModel';
-import { Tour } from '@/models/tourModel';
-import CustomError from '@/utils/customError';
+import { Booking } from '../models/bookingModel';
+import { Tour } from '../models/tourModel';
+import CustomError from '../utils/customError';
 
 const getOverview = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {

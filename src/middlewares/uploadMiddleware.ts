@@ -6,7 +6,7 @@ import multer, { FileFilterCallback } from 'multer';
 import path from 'path';
 import sharp from 'sharp';
 
-import CustomError from '@/utils/customError';
+import CustomError from '../utils/customError';
 
 enum Category {
   Unspecified = 'unspecified',

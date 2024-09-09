@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { databaseConfig, NODE_ENV } from '@/config';
+import { databaseConfig, NODE_ENV } from '../config';
 
 const connectDatabase = async () => {
   const databaseUrl =

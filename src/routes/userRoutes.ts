@@ -1,18 +1,17 @@
 import { Router } from 'express';
 
-import authController from '@/controllers/authController';
-import userController from '@/controllers/userController';
+import authController from '../controllers/authController';
+import userController from '../controllers/userController';
 import {
   uploadNoFile,
   uploadSingleUserPhoto,
-} from '@/middlewares/uploadMiddleware';
+} from '../middlewares/uploadMiddleware';
 import {
   validateCreateUser,
   validateForgotPassword,
   validateResetPassword,
-  validateUpdateMe,
-  validateUpdatePassword,
-} from '@/middlewares/validationUserMiddleware';
+  validateUpdateMe
+} from '../middlewares/validationUserMiddleware';
 
 const router = Router();
 

@@ -1,7 +1,7 @@
 import { ValidationChain, body, checkSchema, param } from 'express-validator';
 import { isValidObjectId } from 'mongoose';
 
-import { reviewKeys, reviewSchema } from '@/models/reviewModel';
+import { reviewKeys, reviewSchema } from '../models/reviewModel';
 import {
   handleValidationErrors,
   validateNoExtraFields,

@@ -2,12 +2,12 @@ import dotenv from 'dotenv';
 import express from 'express';
 import path from 'path';
 
-import notFoundMiddleware from '@/middlewares/notFoundMiddleware';
-import apiV1Router from '@/routes/apiV1Router';
-import apiV2Router from '@/routes/apiV2Router';
-import viewRouter from '@/routes/viewRoutes';
-import connectDatabase from '@/utils/connectDatabase';
-import { logger } from '@/utils/logger';
+import notFoundMiddleware from './middlewares/notFoundMiddleware';
+import apiV1Router from './routes/apiV1Router';
+import apiV2Router from './routes/apiV2Router';
+import viewRouter from './routes/viewRoutes';
+import connectDatabase from './utils/connectDatabase';
+import { logger } from './utils/logger';
 import { hostname, port } from './config';
 import errorController from './controllers/errorController';
 import { applyMiddleware } from './middleware';

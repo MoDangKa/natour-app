@@ -1,12 +1,12 @@
 import { Router } from 'express';
 
-import authV2Controller from '@/controllers/authV2Controller';
+import authV2Controller from '../controllers/authV2Controller';
 import {
   validateCreateUserV2,
   validateForgotPassword,
   validateResetPassword,
   validateUpdatePassword,
-} from '@/middlewares/validationUserMiddleware';
+} from '../middlewares/validationUserMiddleware';
 
 const router = Router();
 

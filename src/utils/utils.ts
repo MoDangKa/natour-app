@@ -3,10 +3,10 @@ import { NextFunction, Response } from 'express';
 import { SignJWT } from 'jose';
 import jwt from 'jsonwebtoken';
 
-import { DecodedToken, ICleanUser, TObject } from '@/@types/types';
-import { HASHING_SALT_ROUNDS, jwtConfig, NODE_ENV } from '@/config';
-import { IUser } from '@/models/userModel';
-import { IUserV2 } from '@/models/userV2Model';
+import { DecodedToken, ICleanUser, TObject } from '../@types/types';
+import { HASHING_SALT_ROUNDS, jwtConfig, NODE_ENV } from '../config';
+import { IUser } from '../models/userModel';
+import { IUserV2 } from '../models/userV2Model';
 import CustomError from './customError';
 
 export const hashPassword = async (password: string): Promise<string> => {

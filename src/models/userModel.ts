@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import mongoose, { Document, Model } from 'mongoose';
 import validator from 'validator';
 
-import { TRole } from '@/@types/types';
+import { TRole } from '../@types/types';
 
 interface IUser extends Document {
   name: string;

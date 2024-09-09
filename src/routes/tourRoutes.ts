@@ -1,14 +1,14 @@
 import { Router } from 'express';
 
-import authController from '@/controllers/authController';
-import tourController from '@/controllers/tourController';
+import authController from '../controllers/authController';
+import tourController from '../controllers/tourController';
+import { uploadTourImages } from '../middlewares/uploadMiddleware';
 import {
   validateCreateTour,
   validateUpdateTour,
-} from '@/middlewares/validationTourMiddleware';
+} from '../middlewares/validationTourMiddleware';
 import reviewRoutes from './reviewRoutes';
-import { uploadTourImages } from '@/middlewares/uploadMiddleware';
-// import { createReview } from '@/controllers/reviewController';
+// import { createReview } from '../controllers/reviewController';
 // import { validateCreateReviewV2 } from '@/middlewares/validationReviewMiddleware';
 
 const router = Router();

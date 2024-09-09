@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 
-import { CustomError } from '@/@types/types';
-import { recordLog2 } from '@/utils/logger';
+import { CustomError } from '../@types/types';
+import { recordLog2 } from '../utils/logger';
 
 const organize = (
   status: string,

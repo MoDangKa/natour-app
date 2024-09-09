@@ -1,6 +1,6 @@
 import { Document, Query } from 'mongoose';
 
-import { TObject } from '@/@types/types';
+import { TObject } from '../@types/types';
 
 export default class APIFeatures<T extends Document> {
   private query: Query<T[], T>;
