@@ -15,7 +15,7 @@ const connectDatabase = async () => {
     throw new Error('Database connection URL is missing or invalid.');
   }
 
-  if (NODE_ENV === 'development' || NODE_ENV === 'alpha') {
+  if (NODE_ENV === 'development') {
     console.log(`Connecting to database at URL: ${databaseUrl}`);
   }
 

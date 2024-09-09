@@ -124,4 +124,10 @@ const Booking = mongoose.model<IBooking, IBookingModel>(
   bookingMongooseSchema,
 );
 
-export { Booking, bookingSchema, commonBookingKeys, requireBookingKeys };
+export {
+  Booking,
+  bookingSchema,
+  commonBookingKeys,
+  IBooking,
+  requireBookingKeys,
+};

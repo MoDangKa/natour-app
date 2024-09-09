@@ -15,16 +15,16 @@ import { applyMiddleware } from './middleware';
 const app = express();
 dotenv.config();
 
-app.set('trust proxy', 1);
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
-
 applyMiddleware(app);
 
 app.get('/robots.txt', (req, res) => {
   res.type('text/plain');
   res.send('User-agent: *\nAllow: /');
 });
+
+app.set('trust proxy', 1);
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 
 app.use('/', viewRouter);
 app.use('/api/v1', apiV1Router);

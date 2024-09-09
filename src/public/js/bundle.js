@@ -12293,7 +12293,7 @@
     try {
       const { data } = await axios_default({
         method: 'POST',
-        url: 'http://localhost:3000/api/v1/users/signin',
+        url: '/api/v1/users/signin',
         data: { email, password },
       });
       if (data.status === 'success') {
@@ -12310,7 +12310,7 @@
     try {
       const { data } = await axios_default({
         method: 'GET',
-        url: 'http://localhost:3000/api/v1/users/sign-out',
+        url: '/api/v1/users/sign-out',
       });
       if (data.status === 'success') {
         location.reload(true);
@@ -12394,7 +12394,7 @@
     try {
       const { status, data } = await axios_default({
         method: 'GET',
-        url: `http://localhost:3000/api/v1/bookings/checkout-session/${tourId}`,
+        url: `/api/v1/bookings/checkout-session/${tourId}`,
       });
       if (status !== 200) {
         throw new Error('Failed to get checkout session');
@@ -12417,8 +12417,8 @@
     try {
       const url =
         type === 'password'
-          ? 'http://localhost:3000/api/v1/users/updateMyPassword'
-          : 'http://localhost:3000/api/v1/users/updateMe';
+          ? '/api/v1/users/updateMyPassword'
+          : '/api/v1/users/updateMe';
       const { data } = await axios_default({
         method: 'PATCH',
         url,
