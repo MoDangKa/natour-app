@@ -91,7 +91,7 @@
     "winston": "^3.14.0"
   },
   "engines": {
-    "node": "20.x"
+    "node": "16.x"
   },
   "repository": "https://github.com/MoDangKa/natour-app.git"
 }
