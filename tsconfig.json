@@ -10,14 +10,8 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"]
-    },
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src/@types",
-      "./types",
-      "./node_modules/@types"
-    ]
+      "*": ["*"]
+    }
   },
   "include": [
     "src/**/*.ts",
@@ -27,5 +21,5 @@
     "src/@types/*.d.ts",
     "src/public/js/mapbox.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }
