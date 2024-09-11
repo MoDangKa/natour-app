@@ -15,6 +15,7 @@
     "build:assets": "cpx \"src/**/*.{html,json,evn}\" dist && npm run copy:env && npm run copy:assets",
     "build": "npm run clean && npm run build:ts && npm run build:assets",
     "build:ts": "tsc",
+    "heroku-postbuild": "npm run build",
     "start": "node -r tsconfig-paths/register dist/app.js",
     "import:dev-data": "ts-node src/dev-data/import-and-delete.ts --import",
     "delete:dev-data": "ts-node src/dev-data/import-and-delete.ts --delete",
