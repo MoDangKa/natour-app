@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 
 import { User, userKeys } from '../models/userModel';
-import CustomError from '../utils/customError';
+import { CustomError } from '../utils';
 import { filterObj } from '../utils/utils';
 import factory from './handlerFactory';
 

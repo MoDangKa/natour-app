@@ -5,7 +5,7 @@ import Stripe from 'stripe';
 import { STRIPE_SECRET_KEY } from '../config';
 import { Booking, IBooking, requireBookingKeys } from '../models/bookingModel';
 import { Tour } from '../models/tourModel';
-import CustomError from '../utils/customError';
+import { CustomError } from '../utils';
 import factory from './handlerFactory';
 
 // Ensure STRIPE_SECRET_KEY is defined and is a secret key

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 
-import CustomError from '../utils/customError';
+import { CustomError } from '../utils';
 
 export const validateRequiredFields = (requiredFields: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {

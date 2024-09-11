@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 
 import { ITour, Tour, tourKeys } from '../models/tourModel';
-import CustomError from '../utils/customError';
+import { CustomError } from '../utils';
 import factory from './handlerFactory';
 
 const aliasTopTours = (req: Request, res: Response, next: NextFunction) => {

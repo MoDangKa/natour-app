@@ -10,7 +10,7 @@ import {
   validateCreateUser,
   validateForgotPassword,
   validateResetPassword,
-  validateUpdateMe
+  validateUpdateMe,
 } from '../middlewares/validationUserMiddleware';
 
 const router = Router();

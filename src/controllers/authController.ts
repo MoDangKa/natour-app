@@ -6,7 +6,7 @@ import { jwtVerify } from 'jose';
 import { TRole } from '../@types/types';
 import { jwtConfig } from '../config';
 import { IUser, User } from '../models/userModel';
-import CustomError from '../utils/customError';
+import { CustomError } from '../utils';
 import Email from '../utils/email';
 import { correctPassword, createSendToken, hashPassword } from '../utils/utils';
 

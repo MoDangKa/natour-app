@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler';
 
 import { Booking } from '../models/bookingModel';
 import { Tour } from '../models/tourModel';
-import CustomError from '../utils/customError';
+import { CustomError } from '../utils';
 
 const getOverview = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
